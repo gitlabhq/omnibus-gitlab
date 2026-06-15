@@ -288,8 +288,8 @@ RSpec.describe 'nginx' do
                                                                                    "Connection" => "$connection_upgrade",
                                                                                    "X-Forwarded-For" => "$remote_addr"
                                                                                  }))
-        expect(chef_run.node['registry_nginx']['proxy_set_headers']).to eql(basic_nginx_headers)
-        expect(chef_run.node['pages_nginx']['proxy_set_headers']).to eql(basic_nginx_headers)
+        expect(chef_run.node['registry']['nginx']['proxy_set_headers']).to eql(basic_nginx_headers)
+        expect(chef_run.node['gitlab_pages']['nginx']['proxy_set_headers']).to eql(basic_nginx_headers)
       end
 
       it 'properly sets the default nginx proxy headers for gitlab_kas' do
@@ -303,7 +303,7 @@ RSpec.describe 'nginx' do
                                                              "X-Forwarded-Scheme" => "$scheme",
                                                              "X-Scheme" => "$scheme"
                                                            })
-        expect(chef_run.node['gitlab_kas_nginx']['proxy_set_headers']).to eql(expected_nginx_headers)
+        expect(chef_run.node['gitlab_kas']['nginx']['proxy_set_headers']).to eql(expected_nginx_headers)
       end
     end
 
@@ -318,10 +318,10 @@ RSpec.describe 'nginx' do
       expect_headers = nginx_headers(set_headers)
       expect(chef_run.node['nginx']['proxy_set_headers']).to(
         include(expect_headers.merge({ "X-Forwarded-For" => "$remote_addr" })))
-      expect(chef_run.node['registry_nginx']['proxy_set_headers']).to include(expect_headers)
+      expect(chef_run.node['registry']['nginx']['proxy_set_headers']).to include(expect_headers)
 
       # only test the headers that were overridden
-      expect(chef_run.node['gitlab_kas_nginx']['proxy_set_headers'].to_h).to include(set_headers)
+      expect(chef_run.node['gitlab_kas']['nginx']['proxy_set_headers'].to_h).to include(set_headers)
     end
   end
 
@@ -346,26 +346,26 @@ RSpec.describe 'nginx' do
                                                                                  "X-Forwarded-For" => "$remote_addr"
                                                                                }))
 
-      expect(chef_run.node['registry_nginx']['proxy_set_headers']).to eql(nginx_headers({
-                                                                                          "X-Forwarded-Proto" => "https",
-                                                                                          "X-Forwarded-Ssl" => "on"
-                                                                                        }))
+      expect(chef_run.node['registry']['nginx']['proxy_set_headers']).to eql(nginx_headers({
+                                                                                             "X-Forwarded-Proto" => "https",
+                                                                                             "X-Forwarded-Ssl" => "on"
+                                                                                           }))
 
-      expect(chef_run.node['pages_nginx']['proxy_set_headers']).to eql(nginx_headers({
-                                                                                       "X-Forwarded-Proto" => "https",
-                                                                                       "X-Forwarded-Ssl" => "on"
-                                                                                     }))
-      expect(chef_run.node['gitlab_kas_nginx']['proxy_set_headers']).to eql(nginx_headers({
-                                                                                            "Host" => "$http_host",
-                                                                                            "Upgrade" => "$http_upgrade",
-                                                                                            "Connection" => "$connection_upgrade",
-                                                                                            "X-Forwarded-For" => "$remote_addr",
-                                                                                            "X-Original-Forwarded-For" => "$http_x_forwarded_for",
-                                                                                            "X-Forwarded-Proto" => "$scheme",
-                                                                                            "X-Forwarded-Scheme" => "$scheme",
-                                                                                            "X-Scheme" => "$scheme",
-                                                                                            "X-Forwarded-Ssl" => "on"
-                                                                                          }))
+      expect(chef_run.node['gitlab_pages']['nginx']['proxy_set_headers']).to eql(nginx_headers({
+                                                                                                 "X-Forwarded-Proto" => "https",
+                                                                                                 "X-Forwarded-Ssl" => "on"
+                                                                                               }))
+      expect(chef_run.node['gitlab_kas']['nginx']['proxy_set_headers']).to eql(nginx_headers({
+                                                                                               "Host" => "$http_host",
+                                                                                               "Upgrade" => "$http_upgrade",
+                                                                                               "Connection" => "$connection_upgrade",
+                                                                                               "X-Forwarded-For" => "$remote_addr",
+                                                                                               "X-Original-Forwarded-For" => "$http_x_forwarded_for",
+                                                                                               "X-Forwarded-Proto" => "$scheme",
+                                                                                               "X-Forwarded-Scheme" => "$scheme",
+                                                                                               "X-Scheme" => "$scheme",
+                                                                                               "X-Forwarded-Ssl" => "on"
+                                                                                             }))
     end
 
     it 'supports overriding default nginx headers' do
@@ -379,11 +379,11 @@ RSpec.describe 'nginx' do
       )
 
       expect(chef_run.node['nginx']['proxy_set_headers']).to include(expect_headers.merge("X-Forwarded-For" => "$remote_addr"))
-      expect(chef_run.node['registry_nginx']['proxy_set_headers']).to include(expect_headers)
-      expect(chef_run.node['pages_nginx']['proxy_set_headers']).to include(expect_headers)
+      expect(chef_run.node['registry']['nginx']['proxy_set_headers']).to include(expect_headers)
+      expect(chef_run.node['gitlab_pages']['nginx']['proxy_set_headers']).to include(expect_headers)
 
       # only testing against the headers that were set
-      expect(chef_run.node['gitlab_kas_nginx']['proxy_set_headers'].to_h).to include(set_headers)
+      expect(chef_run.node['gitlab_kas']['nginx']['proxy_set_headers'].to_h).to include(set_headers)
     end
 
     it 'disables Connection header' do
@@ -397,8 +397,8 @@ RSpec.describe 'nginx' do
       )
 
       expect(chef_run.node['nginx']['proxy_set_headers']).to include(expect_headers.merge("X-Forwarded-For" => "$remote_addr"))
-      expect(chef_run.node['registry_nginx']['proxy_set_headers']).to include(expect_headers)
-      expect(chef_run.node['pages_nginx']['proxy_set_headers']).to include(expect_headers)
+      expect(chef_run.node['registry']['nginx']['proxy_set_headers']).to include(expect_headers)
+      expect(chef_run.node['gitlab_pages']['nginx']['proxy_set_headers']).to include(expect_headers)
     end
 
     context 'with default ssl settings' do
@@ -561,6 +561,33 @@ RSpec.describe 'nginx' do
             }
           end
         end
+      end
+    end
+
+    describe 'old service_nginx key deprecation' do
+      # Pins the translate_service_nginx_settings wiring in each
+      # service library. A regression that drops the call from
+      # registry.rb:236, gitlab-pages.rb:161, or gitlab-kas.rb:228
+      # would still pass the unit tests in nginx_spec library spec;
+      # this end-to-end converge catches it.
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://localhost',
+          registry_external_url: 'https://registry.localhost',
+          pages_external_url: 'https://pages.localhost',
+          gitlab_kas_external_url: 'wss://kas.localhost',
+          pages_nginx: { redirect_http_to_https: true },
+          registry_nginx: { redirect_http_to_https: true },
+          gitlab_kas_nginx: { redirect_http_to_https: true }
+        )
+        allow(LoggingHelper).to receive(:deprecation)
+      end
+
+      it 'logs a deprecation for each old service_nginx key' do
+        chef_run
+        expect(LoggingHelper).to have_received(:deprecation).with("pages_nginx has been deprecated. Please use gitlab_pages['nginx'] instead.")
+        expect(LoggingHelper).to have_received(:deprecation).with("registry_nginx has been deprecated. Please use registry['nginx'] instead.")
+        expect(LoggingHelper).to have_received(:deprecation).with("gitlab_kas_nginx has been deprecated. Please use gitlab_kas['nginx'] instead.")
       end
     end
 

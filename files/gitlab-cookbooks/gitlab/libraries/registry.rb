@@ -21,6 +21,7 @@ require_relative 'postgresql.rb'
 module Registry
   class << self
     def parse_variables
+      translate_old_nginx_settings
       # first registry_external_url
       parse_registry_external_url
       # Enable the registry automatically if appropriate
@@ -30,6 +31,7 @@ module Registry
       # parsing the registry notifications
       parse_registry_notifications
       parse_database_configuration
+      parse_nginx_settings
     end
 
     ##
@@ -51,10 +53,10 @@ module Registry
       return unless Gitlab['gitlab_rails']['gitlab_relative_url'].nil?
 
       Gitlab['registry']['enable'] = true
-      Gitlab['registry_nginx']['listen_port'] ||= '5050'
-      Gitlab['registry_nginx']['redirect_http_to_https'] = false
-      Gitlab['registry_nginx']['fqdn'] = uri.host
-      Gitlab['gitlab_rails']['registry_port'] ||= Gitlab['registry_nginx']['listen_port']
+      Gitlab['registry']['nginx']['listen_port'] ||= '5050'
+      Gitlab['registry']['nginx']['redirect_http_to_https'] = false
+      Gitlab['registry']['nginx']['fqdn'] = uri.host
+      Gitlab['gitlab_rails']['registry_port'] ||= Gitlab['registry']['nginx']['listen_port']
       set_ssl(uri.to_s)
       parse_defaults(uri)
     end
@@ -83,7 +85,7 @@ module Registry
     def parse_defaults(uri)
       Gitlab['gitlab_rails']['registry_enabled'] = true if Gitlab['registry']['enable']
       Gitlab['gitlab_rails']['registry_host'] = uri.host
-      Gitlab['registry_nginx']['listen_port'] ||= uri.port
+      Gitlab['registry']['nginx']['listen_port'] ||= uri.port
       Gitlab['registry']['registry_http_addr'] ||= "127.0.0.1:5000"
       Gitlab['registry']['registry_http_addr'].gsub(/^https?\:\/\/(www.)?/, '')
       Gitlab['registry']['token_realm'] ||= Gitlab['external_url']
@@ -93,16 +95,22 @@ module Registry
     def set_ssl(url)
       uri = URI(url)
 
+      parse_proxy_headers_default_args = [
+        Gitlab['registry']['nginx'],
+        Gitlab['node']['registry']['nginx'],
+        Gitlab['node'].default['registry']['nginx']
+      ]
+
       case uri.scheme
       when "http"
-        Gitlab['registry_nginx']['https'] ||= false
-        Nginx.parse_proxy_headers('registry_nginx', false)
+        Gitlab['registry']['nginx']['https'] ||= false
+        Gitlab['registry']['nginx']['proxy_set_headers'] = Nginx.parse_proxy_headers(*parse_proxy_headers_default_args, false)
       when "https"
-        Gitlab['registry_nginx']['https'] ||= true
-        Gitlab['registry_nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
-        Gitlab['registry_nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
+        Gitlab['registry']['nginx']['https'] ||= true
+        Gitlab['registry']['nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
+        Gitlab['registry']['nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
 
-        Nginx.parse_proxy_headers('registry_nginx', true)
+        Gitlab['registry']['nginx']['proxy_set_headers'] = Nginx.parse_proxy_headers(*parse_proxy_headers_default_args, true)
       else
         raise "Unsupported GitLab Registry external URL scheme: #{uri.scheme}"
       end
@@ -222,6 +230,14 @@ module Registry
       warn(warning)
 
       address_list.split(',')[0]
+    end
+
+    def translate_old_nginx_settings
+      Nginx.translate_service_nginx_settings('registry')
+    end
+
+    def parse_nginx_settings
+      Gitlab['registry']['nginx']['real_ip_header'] ||= 'proxy_protocol' if Gitlab['registry']['nginx']['proxy_protocol']
     end
 
     def generate_registry_keypair

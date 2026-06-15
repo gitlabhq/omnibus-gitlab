@@ -62,3 +62,27 @@ default['gitlab_kas']['redis_tls_client_cert_file'] = nil
 default['gitlab_kas']['redis_tls_client_key_file'] = nil
 
 default['gitlab_kas']['extra_config_command'] = nil
+
+####
+# GitLab KAS NGINX
+####
+default['gitlab_kas']['nginx'] = OmnibusGitlab::NginxHelper.new(node).default_values.dup
+default['gitlab_kas']['nginx']['enable'] = false
+default['gitlab_kas']['nginx']['https'] = false
+default['gitlab_kas']['nginx']['port'] = 80
+default['gitlab_kas']['nginx']['host'] = "kas.gitlab.example.com"
+default['gitlab_kas']['nginx']['proxy_set_headers'] = {
+  "Host" => "$http_host",
+  "Upgrade" => "$http_upgrade",
+  "Connection" => "$connection_upgrade",
+  "X-Real-IP" => "$remote_addr",
+  "X-Forwarded-For" => "$remote_addr",
+  "X-Forwarded-Proto" => "$scheme",
+  "X-Forwarded-Scheme" => "$scheme",
+  "X-Scheme" => "$scheme",
+  "X-Original-Forwarded-For" => "$http_x_forwarded_for"
+}
+default['gitlab_kas']['nginx']['k8s_proxy_connect_timeout'] = "5"
+default['gitlab_kas']['nginx']['k8s_proxy_send_timeout'] = "60"
+default['gitlab_kas']['nginx']['k8s_proxy_read_timeout'] = "7200"
+default['gitlab_kas']['nginx']['k8s_proxy_max_temp_file_size'] = "1024m"

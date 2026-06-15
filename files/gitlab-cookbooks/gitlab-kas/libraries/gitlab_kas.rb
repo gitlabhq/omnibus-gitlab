@@ -20,6 +20,7 @@ require_relative '../../package/libraries/helpers/secrets_helper'
 module GitlabKas
   class << self
     def parse_variables
+      translate_old_nginx_settings
       parse_address
       parse_gitlab_external_url
       parse_gitlab_kas_enabled
@@ -27,6 +28,7 @@ module GitlabKas
       parse_gitlab_kas_internal_url
       parse_redis_settings
       parse_upstream_tls
+      parse_nginx_settings
     end
 
     def parse_address
@@ -183,8 +185,8 @@ module GitlabKas
 
       use_ssl = kas_uri.scheme == 'wss'
 
-      Gitlab['gitlab_kas_nginx']['host'] ||= kas_uri.host
-      Gitlab['gitlab_kas_nginx']['port'] ||= use_ssl ? '443' : '80'
+      Gitlab['gitlab_kas']['nginx']['host'] ||= kas_uri.host
+      Gitlab['gitlab_kas']['nginx']['port'] ||= use_ssl ? '443' : '80'
 
       # set gitlab_kas_nginx configs
       parse_gitlab_kas_nginx(kas_uri, use_ssl)
@@ -193,18 +195,23 @@ module GitlabKas
     end
 
     def parse_gitlab_kas_nginx(kas_uri, use_ssl)
-      Gitlab['gitlab_kas_nginx']['enable'] = true
+      Gitlab['gitlab_kas']['nginx']['enable'] = true
 
-      Gitlab['gitlab_kas_nginx']['https'] ||= use_ssl
+      Gitlab['gitlab_kas']['nginx']['https'] ||= use_ssl
 
       if use_ssl
-        Gitlab['gitlab_kas_nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{kas_uri.host}.crt"
-        Gitlab['gitlab_kas_nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{kas_uri.host}.key"
+        Gitlab['gitlab_kas']['nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{kas_uri.host}.crt"
+        Gitlab['gitlab_kas']['nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{kas_uri.host}.key"
 
         LetsEncryptHelper.add_service_alt_name('gitlab_kas')
       end
 
-      Nginx.parse_proxy_headers('gitlab_kas_nginx', use_ssl, true)
+      parse_proxy_headers_default_args = [
+        Gitlab['gitlab_kas']['nginx'],
+        Gitlab['node']['gitlab_kas']['nginx'],
+        Gitlab['node'].default['gitlab_kas']['nginx']
+      ]
+      Gitlab['gitlab_kas']['nginx']['proxy_set_headers'] = Nginx.parse_proxy_headers(*parse_proxy_headers_default_args, use_ssl, true)
     end
 
     def parse_gitlab_kas_external_k8s_proxy_url_using_own_subdomain
@@ -215,6 +222,14 @@ module GitlabKas
       scheme = kas_uri.scheme == 'wss' ? 'https' : 'http'
 
       Gitlab['gitlab_rails'][key] = "#{scheme}://#{kas_uri.host}/k8s-proxy/"
+    end
+
+    def translate_old_nginx_settings
+      Nginx.translate_service_nginx_settings('gitlab_kas')
+    end
+
+    def parse_nginx_settings
+      Gitlab['gitlab_kas']['nginx']['real_ip_header'] ||= 'proxy_protocol' if Gitlab['gitlab_kas']['nginx']['proxy_protocol']
     end
 
     def build_default_gitlab_kas_external_url

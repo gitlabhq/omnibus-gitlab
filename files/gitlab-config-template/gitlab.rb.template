@@ -2323,13 +2323,13 @@ external_url 'GENERATED_EXTERNAL_URL'
 ################################################################################
 
 ##! All the settings defined in the "GitLab Nginx" section are also available in
-##! this "GitLab Pages NGINX" section, using the key `pages_nginx`.  However,
+##! this "GitLab Pages NGINX" section, using the key `gitlab_pages['nginx']`.  However,
 ##! those settings should be explicitly set. That is, settings given as
 ##! `nginx['some_setting']` WILL NOT be automatically replicated as
-##! `pages_nginx['some_setting']` and should be set separately.
+##! `gitlab_pages['nginx']['some_setting']` and should be set separately.
 
 ##! Below you can find settings that are exclusive to "GitLab Pages NGINX"
-# pages_nginx['enable'] = true
+# gitlab_pages['nginx']['enable'] = true
 
 # gitlab_rails['pages_path'] = "/var/opt/gitlab/gitlab-rails/shared/pages"
 
@@ -2456,19 +2456,35 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_kas['extra_config_command'] = nil
 
 ################################################################################
+## GitLab KAS NGINX
+################################################################################
+
+##! All the settings defined in the "GitLab Nginx" section are also available in
+##! this "GitLab KAS NGINX" section, using the key `gitlab_kas['nginx']`.  However,
+##! those settings should be explicitly set. That is, settings given as
+##! `nginx['some_setting']` WILL NOT be automatically replicated as
+##! `gitlab_kas['nginx']['some_setting']` and should be set separately.
+
+##! Below you can find settings that are exclusive to "GitLab KAS NGINX"
+# gitlab_kas['nginx']['enable'] = false
+# gitlab_kas['nginx']['host'] = "kas.gitlab.example.com"
+# gitlab_kas['nginx']['port'] = 80
+# gitlab_kas['nginx']['https'] = false
+
+################################################################################
 ## Registry NGINX
 ################################################################################
 
 ##! All the settings defined in the "GitLab Nginx" section are also available in
-##! this "Registry NGINX" section, using the key `registry_nginx`.  However, those
+##! this "Registry NGINX" section, using the key `registry['nginx']`.  However, those
 ##! settings should be explicitly set. That is, settings given as
 ##! `nginx['some_setting']` WILL NOT be automatically replicated as
-##! `registry_nginx['some_setting']` and should be set separately.
+##! `registry['nginx']['some_setting']` and should be set separately.
 
 ##! Below you can find settings that are exclusive to "Registry NGINX"
-# registry_nginx['enable'] = false
+# registry['nginx']['enable'] = false
 
-# registry_nginx['proxy_set_headers'] = {
+# registry['nginx']['proxy_set_headers'] = {
 #  "Host" => "$http_host",
 #  "X-Real-IP" => "$remote_addr",
 #  "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
@@ -2478,7 +2494,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! When the registry is automatically enabled using the same domain as `external_url`,
 ##! it listens on this port
-# registry_nginx['listen_port'] = 5050
+# registry['nginx']['listen_port'] = 5050
 
 ################################################################################
 ## Prometheus

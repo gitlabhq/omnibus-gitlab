@@ -89,3 +89,15 @@ default['gitlab_pages']['namespace_in_path'] = false
 default['gitlab_pages']['client_cert'] = nil
 default['gitlab_pages']['client_key'] = nil
 default['gitlab_pages']['client_ca_certs'] = nil
+
+####
+# GitLab Pages NGINX
+####
+default['gitlab_pages']['nginx'] = OmnibusGitlab::NginxHelper.new(node).default_values.dup
+default['gitlab_pages']['nginx']['enable'] = true
+default['gitlab_pages']['nginx']['proxy_set_headers'] = {
+  "Host" => "$http_host",
+  "X-Real-IP" => "$remote_addr",
+  "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
+  "X-Forwarded-Proto" => "$scheme"
+}
