@@ -25,15 +25,17 @@ class LetsEncryptHelper
     node['letsencrypt']['contact_emails'].map { |x| "mailto:#{x}" }
   end
 
-  def self.add_service_alt_name(service)
+  def self.add_service_alt_name(service, node_key: nil)
     # Adds a service's external URL to the certificate's alt_name list so the
     # generated certificate is applicable to that domain also.
+
+    node_key ||= service
 
     return unless Gitlab['letsencrypt']['enable']
 
     uri = URI(Gitlab["#{service}_external_url"].to_s)
 
-    return if !Gitlab['external_url'] || File.exist?(Gitlab["#{service}_nginx"]["ssl_certificate"])
+    return if !Gitlab['external_url'] || File.exist?(Gitlab[node_key]['nginx']["ssl_certificate"])
 
     external_uri = URI(Gitlab['external_url'])
 
@@ -43,11 +45,11 @@ class LetsEncryptHelper
     Gitlab['letsencrypt']['alt_names'] ||= [external_uri.host]
     Gitlab['letsencrypt']['alt_names'] << uri.host
 
-    Gitlab["#{service}_nginx"]["ssl_certificate"] = "/etc/gitlab/ssl/#{external_uri.host}.crt"
-    Gitlab["#{service}_nginx"]["ssl_certificate_key"] = "/etc/gitlab/ssl/#{external_uri.host}.key"
+    Gitlab[node_key]["nginx"]["ssl_certificate"] = "/etc/gitlab/ssl/#{external_uri.host}.crt"
+    Gitlab[node_key]["nginx"]["ssl_certificate_key"] = "/etc/gitlab/ssl/#{external_uri.host}.key"
 
     # Set HTTP to HTTPS redirection automatically, if not explicitly disabled
     # by user
-    Gitlab["#{service}_nginx"]['redirect_http_to_https'] = true unless Gitlab["#{service}_nginx"].key?('redirect_http_to_https')
+    Gitlab[node_key]['nginx']['redirect_http_to_https'] = true unless Gitlab[node_key]['nginx'].key?('redirect_http_to_https')
   end
 end

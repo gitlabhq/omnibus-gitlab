@@ -125,7 +125,7 @@ end
 
 include_recipe 'nginx::directory'
 
-pages_nginx_vars = node['pages_nginx'].to_hash
+pages_nginx_vars = node['gitlab_pages']['nginx'].to_hash
 pages_nginx_vars['https'] = pages_nginx_vars['listen_https'].nil? ? node['gitlab']['gitlab_rails']['pages_https'] : pages_nginx_vars['listen_https']
 generate_nginx_conf = if node['nginx']['enable']
                         !!pages_nginx_vars['enable']

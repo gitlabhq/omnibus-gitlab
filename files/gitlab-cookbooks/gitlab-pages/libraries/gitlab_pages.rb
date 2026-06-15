@@ -26,14 +26,16 @@ module GitlabPages
     include AuthorizeHelper
 
     def parse_variables
+      translate_old_nginx_settings
       parse_pages_external_url
       parse_gitlab_pages_daemon
       # Only call parse_secrets when not generating a defaults secrets file.
       parse_secrets unless Gitlab['node'][SecretsHelper::SECRETS_FILE_CHEF_ATTR]
       parse_automatic_oauth_registration
+      parse_nginx_settings
     end
 
-    def parse_pages_external_url
+    def parse_pages_external_url # rubocop:disable Metrics/AbcSize
       return unless Gitlab['pages_external_url']
 
       Gitlab['gitlab_rails']['pages_enabled'] = true if Gitlab['gitlab_rails']['pages_enabled'].nil?
@@ -46,19 +48,25 @@ module GitlabPages
       Gitlab['gitlab_rails']['pages_host'] = uri.host
       Gitlab['gitlab_rails']['pages_port'] = uri.port
 
+      parse_proxy_headers_default_args = [
+        Gitlab['gitlab_pages']['nginx'],
+        Gitlab['node']['gitlab_pages']['nginx'],
+        Gitlab['node'].default['gitlab_pages']['nginx']
+      ]
+
       case uri.scheme
       when "http"
         Gitlab['gitlab_rails']['pages_https'] = false
-        Nginx.parse_proxy_headers('pages_nginx', false)
+        Gitlab['gitlab_pages']['nginx']['proxy_set_headers'] = Nginx.parse_proxy_headers(*parse_proxy_headers_default_args, false)
       when "https"
         Gitlab['gitlab_rails']['pages_https'] = true
-        Gitlab['pages_nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
-        Gitlab['pages_nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
+        Gitlab['gitlab_pages']['nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
+        Gitlab['gitlab_pages']['nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
 
         # LetsEncrypt can only be used with single-domain sites and not wildcard domains
-        LetsEncryptHelper.add_service_alt_name("pages") if Gitlab['gitlab_pages']['namespace_in_path']
+        LetsEncryptHelper.add_service_alt_name("pages", node_key: "gitlab_pages") if Gitlab['gitlab_pages']['namespace_in_path']
 
-        Nginx.parse_proxy_headers('pages_nginx', true)
+        Gitlab['gitlab_pages']['nginx']['proxy_set_headers'] = Nginx.parse_proxy_headers(*parse_proxy_headers_default_args, true)
       else
         raise "Unsupported GitLab Pages external URL scheme: #{uri.scheme}"
       end
@@ -66,7 +74,7 @@ module GitlabPages
       raise "Unsupported GitLab Pages external URL path: #{uri.path}" unless ["", "/"].include?(uri.path)
 
       # FQDN are prepared to be used as regexp: the dot is escaped
-      Gitlab['pages_nginx']['fqdn_regex'] = uri.host.gsub('.', '\.')
+      Gitlab['gitlab_pages']['nginx']['fqdn_regex'] = uri.host.gsub('.', '\.')
     end
 
     def parse_gitlab_pages_daemon
@@ -84,7 +92,7 @@ module GitlabPages
       Gitlab['gitlab_pages']['gitlab_server'] ||= Gitlab['external_url']
       Gitlab['gitlab_pages']['artifacts_server_url'] ||= Gitlab['gitlab_pages']['gitlab_server'].chomp('/') + '/api/v4'
 
-      Gitlab['pages_nginx']['namespace_in_path'] = Gitlab['gitlab_pages']['namespace_in_path'] if Gitlab['gitlab_pages']['namespace_in_path']
+      Gitlab['gitlab_pages']['nginx']['namespace_in_path'] = Gitlab['gitlab_pages']['namespace_in_path'] if Gitlab['gitlab_pages']['namespace_in_path']
 
       parse_auth_redirect_uri
     end
@@ -147,6 +155,15 @@ module GitlabPages
       Gitlab['gitlab_pages']['register_as_oauth_app'] = false
 
       LoggingHelper.warning("Writing secrets to `gitlab-secrets.json` file is disabled. Hence, not automatically registering GitLab Pages as an Oauth App. So, GitLab SSO will not be available as a login option.")
+    end
+
+    def translate_old_nginx_settings
+      Nginx.translate_service_nginx_settings('pages', node_key: 'gitlab_pages')
+    end
+
+    def parse_nginx_settings
+      Gitlab['gitlab_pages']['nginx']['real_ip_header'] ||= 'proxy_protocol' if Gitlab['gitlab_pages']['nginx']['proxy_protocol']
+      Gitlab['gitlab_pages']['nginx']['listen_port'] ||= Gitlab['gitlab_rails']['pages_port'] || Gitlab['node']['gitlab']['gitlab_rails']['pages_port']
     end
   end
 end

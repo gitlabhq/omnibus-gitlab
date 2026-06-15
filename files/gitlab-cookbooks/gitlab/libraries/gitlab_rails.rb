@@ -41,6 +41,7 @@ module GitlabRails
       parse_registry_postgresql_settings
       validate_smtp_settings!
       validate_ssh_settings!
+      parse_nginx_settings
     end
 
     def parse_directories
@@ -125,7 +126,7 @@ module GitlabRails
       raise 'initial_root_password: Length is too short, minimum is 8 characters' if Gitlab['gitlab_rails']['initial_root_password'] && Gitlab['gitlab_rails']['initial_root_password'].length < 8
     end
 
-    def parse_external_url
+    def parse_external_url # rubocop:disable Metrics/AbcSize
       return unless Gitlab['external_url']
 
       uri = URI(Gitlab['external_url'].to_s)
@@ -138,15 +139,21 @@ module GitlabRails
       Gitlab['gitlab_rails']['gitlab_host'] = uri.host
       Gitlab['gitlab_rails']['gitlab_email_from'] ||= "gitlab@#{uri.host}"
 
+      parse_proxy_headers_default_args = [
+        Gitlab['nginx'],
+        Gitlab['node']['nginx'],
+        Gitlab['node'].default['nginx']
+      ]
+
       case uri.scheme
       when "http"
         Gitlab['gitlab_rails']['gitlab_https'] = false
-        Nginx.parse_proxy_headers('nginx', false)
+        Gitlab['nginx']['proxy_set_headers'] = Nginx.parse_proxy_headers(*parse_proxy_headers_default_args, false)
       when "https"
         Gitlab['gitlab_rails']['gitlab_https'] = true
         Gitlab['nginx']['ssl_certificate'] ||= "/etc/gitlab/ssl/#{uri.host}.crt"
         Gitlab['nginx']['ssl_certificate_key'] ||= "/etc/gitlab/ssl/#{uri.host}.key"
-        Nginx.parse_proxy_headers('nginx', true)
+        Gitlab['nginx']['proxy_set_headers'] = Nginx.parse_proxy_headers(*parse_proxy_headers_default_args, true)
       else
         raise "Unsupported external URL scheme: #{uri.scheme}"
       end
@@ -486,6 +493,11 @@ gitlab_rails['gitlab_shell_ssh_port'] = 2222
       user_config = Gitlab[service]
       service_config = Gitlab['node']['gitlab'][service]
       (user_config['worker_timeout'] || service_config['worker_timeout']).to_i
+    end
+
+    def parse_nginx_settings
+      Gitlab['nginx']['listen_port'] ||= Gitlab['gitlab_rails']['gitlab_port'] || Gitlab['node']['gitlab']['gitlab_rails']['gitlab_port']
+      Gitlab['nginx']['real_ip_header'] ||= 'proxy_protocol' if Gitlab['nginx']['proxy_protocol']
     end
   end
 end

@@ -68,3 +68,17 @@ default['registry']['redis'] = {
     'enabled' => false
   }
 }
+
+####
+# GitLab Registry NGINX
+####
+default['registry']['nginx'] = OmnibusGitlab::NginxHelper.new(node).default_values.dup
+default['registry']['nginx']['enable'] = true
+default['registry']['nginx']['https'] = false
+default['registry']['nginx']['http2_enabled'] = false
+default['registry']['nginx']['proxy_set_headers'] = {
+  "Host" => "$http_host",
+  "X-Real-IP" => "$remote_addr",
+  "X-Forwarded-For" => "$proxy_add_x_forwarded_for",
+  "X-Forwarded-Proto" => "$scheme"
+}

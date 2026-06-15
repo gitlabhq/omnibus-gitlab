@@ -25,21 +25,21 @@ To configure NGINX settings for different services, edit the `gitlab.rb` file.
 
 Use `nginx['<setting>']` keys to configure settings for the GitLab Rails application.
 GitLab provides similar keys for other services like
-`pages_nginx` and `registry_nginx`.
-Configurations for `nginx` are also available for these `<service_nginx>` settings, and
-share the same default values as GitLab NGINX.
+`gitlab_pages['nginx']`, `registry['nginx']`, and `gitlab_kas['nginx']`.
+Configurations for `nginx` are also available for these `<service>['nginx']` settings, and
+share the same default values as GitLab Rails NGINX.
 
 When you modify the `gitlab.rb` file, configure NGINX settings for each
 service separately.
 Settings specified using `nginx['foo']` are not replicated to
-service-specific NGINX configurations (such as `registry_nginx['foo']`).
+service-specific NGINX configurations (such as `registry['nginx']['foo']`).
 For example, to configure HTTP to HTTPS
 redirection for GitLab and Registry, add the following settings
 to `gitlab.rb`:
 
 ```ruby
 nginx['redirect_http_to_https'] = true
-registry_nginx['redirect_http_to_https'] = true
+registry['nginx']['redirect_http_to_https'] = true
 ```
 
 ## Enable HTTPS
@@ -237,8 +237,8 @@ To change the list of addresses:
    ```ruby
    # Listen on all IPv4 and IPv6 addresses
    nginx['listen_addresses'] = ["0.0.0.0", "[::]"]
-   registry_nginx['listen_addresses'] = ['*', '[::]']
-   pages_nginx['listen_addresses'] = ['*', '[::]']
+   registry['nginx']['listen_addresses'] = ['*', '[::]']
+   gitlab_pages['nginx']['listen_addresses'] = ['*', '[::]']
    ```
 
 1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)

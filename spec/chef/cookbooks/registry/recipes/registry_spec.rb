@@ -59,8 +59,10 @@ RSpec.describe 'registry recipe' do
           stub_gitlab_rb(
             external_url: 'https://gitlab.example.com',
             registry_external_url: 'https://registry.example.com',
-            registry_nginx: {
-              redirect_http_to_https: false
+            registry: {
+              nginx: {
+                redirect_http_to_https: false
+              }
             }
           )
         end

@@ -17,6 +17,7 @@
 module Package
   class << self
     def parse_variables
+      instantiate_nginx_settings
       parse_systemd_variables
     end
 
@@ -26,6 +27,18 @@ module Package
       return unless Gitlab['package']['systemd_wanted_by']
 
       Gitlab['package']['systemd_after'] ||= Gitlab['package']['systemd_wanted_by']
+    end
+
+    def instantiate_nginx_settings
+      Gitlab['nginx'] ||= {}
+
+      Gitlab['registry'] ||= {}
+      Gitlab['gitlab_pages'] ||= {}
+      Gitlab['gitlab_kas'] ||= {}
+
+      Gitlab['registry']['nginx'] ||= {}
+      Gitlab['gitlab_pages']['nginx'] ||= {}
+      Gitlab['gitlab_kas']['nginx'] ||= {}
     end
   end
 end

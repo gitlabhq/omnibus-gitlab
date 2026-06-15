@@ -72,7 +72,7 @@ To enable Let's Encrypt:
 
    ## Container Registry (optional), must use https protocol
    registry_external_url "https://registry.example.com"
-   #registry_nginx['ssl_certificate'] = "path/to/cert"      # Must be absent or commented out
+   #registry['nginx']['ssl_certificate'] = "path/to/cert"      # Must be absent or commented out
 
    ## GitLab Pages (optional), must use https protocol
    pages_external_url "https://pages.example.com"
@@ -448,11 +448,11 @@ GitLab Container Registry configuration is prefixed with `registry_`:
    ```ruby
    registry_external_url 'https://registry.example.com'
 
-   registry_nginx['listen_port'] = 80
-   registry_nginx['listen_https'] = false
+   registry['nginx']['listen_port'] = 80
+   registry['nginx']['listen_https'] = false
    ```
 
-   The same format can be used for Pages (`pages_` prefix).
+   The same format can be used for Pages (`gitlab_pages['nginx']`).
 
 1. Reconfigure GitLab:
 

@@ -116,7 +116,7 @@ end
 
 include_recipe 'nginx::directory'
 
-registry_nginx_vars = node['registry_nginx'].to_hash
+registry_nginx_vars = node['registry']['nginx'].to_hash
 registry_nginx_vars['https'] = registry_nginx_vars['listen_https'] unless registry_nginx_vars['listen_https'].nil?
 generate_nginx_conf = if node['nginx']['enable']
                         !!registry_nginx_vars['enable']
@@ -133,7 +133,7 @@ nginx_configuration 'registry' do
                 port: node['gitlab']['gitlab_rails']['registry_port'],
                 registry_http_addr: node['registry']['registry_http_addr'],
                 letsencrypt_enable: node['letsencrypt']['enable'],
-                redirect_http_to_https: node['registry_nginx']['redirect_http_to_https']
+                redirect_http_to_https: node['registry']['nginx']['redirect_http_to_https']
               }
             ))
   action generate_nginx_conf ? :create : :delete

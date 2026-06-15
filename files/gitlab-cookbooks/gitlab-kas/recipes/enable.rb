@@ -170,7 +170,7 @@ end
 
 include_recipe 'nginx::directory'
 
-gitlab_kas_nginx_vars = node['gitlab_kas_nginx'].to_hash
+gitlab_kas_nginx_vars = node['gitlab_kas']['nginx'].to_hash
 gitlab_kas_nginx_vars['https'] = gitlab_kas_nginx_vars['listen_https'] unless gitlab_kas_nginx_vars['listen_https'].nil?
 generate_nginx_conf = if node['nginx']['enable']
                         !!gitlab_kas_nginx_vars['enable']
@@ -182,8 +182,8 @@ nginx_configuration 'kas' do
   cookbook 'gitlab-kas'
   variables(gitlab_kas_nginx_vars.merge(
               {
-                fqdn: node['gitlab_kas_nginx']['host'],
-                listen_port: node['gitlab_kas_nginx']['port'],
+                fqdn: node['gitlab_kas']['nginx']['host'],
+                listen_port: node['gitlab_kas']['nginx']['port'],
                 gitlab_kas_listen_address: node['gitlab_kas']['listen_address'],
                 gitlab_kas_k8s_proxy_listen_address: node['gitlab_kas']['kubernetes_api_listen_address'],
                 gitlab_kas_k8s_proxy_connect_timeout: gitlab_kas_nginx_vars['k8s_proxy_connect_timeout'],

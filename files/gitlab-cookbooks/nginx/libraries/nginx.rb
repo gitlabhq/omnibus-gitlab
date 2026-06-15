@@ -20,8 +20,6 @@ require_relative '../../package/libraries/settings_dsl.rb'
 module Nginx
   class << self
     def parse_variables
-      parse_nginx_listen_ports
-      parse_nginx_proxy_protocol
       parse_nginx_listen_addresses
     end
 
@@ -47,72 +45,40 @@ module Nginx
       header
     end
 
-    def parse_nginx_listen_ports
-      [
-        [%w(nginx listen_port), %w(gitlab_rails gitlab_port)],
-        [%w(pages_nginx listen_port), %w(gitlab_rails pages_port)],
+    def parse_proxy_headers(gitlab_rb, normal_values, default_values, ssl, allow_other_schemes = false)
+      values_from_gitlab_rb = gitlab_rb['proxy_set_headers']
+      default_from_attributes = normal_values['proxy_set_headers']
 
-      ].each do |left, right|
-        next unless Gitlab[left.first][left.last].nil?
+      applicable_values = default_from_attributes.dup.to_hash
 
-        # This conditional is required until all services are extracted to
-        # their own cookbook. Some attributes are on node['gitlab'] and
-        # others are exposed directly on node.
-        node_attribute_key = SettingsDSL::Utils.node_attribute_key(right.first)
-        service_attribute_key = right.last
-        default_set_gitlab_port = if Gitlab['node']['gitlab'].key?(node_attribute_key)
-                                    Gitlab['node']['gitlab'][node_attribute_key][service_attribute_key]
-                                  else
-                                    Gitlab['node'][node_attribute_key][service_attribute_key]
-                                  end
-        user_set_gitlab_port = Gitlab[right.first][right.last]
-
-        Gitlab[left.first][left.last] = user_set_gitlab_port || default_set_gitlab_port
-      end
-    end
-
-    def parse_nginx_proxy_protocol
-      [
-        'nginx',
-        'pages_nginx',
-        'registry_nginx',
-        'gitlab_kas_nginx'
-      ].each do |app|
-        Gitlab[app]['real_ip_header'] ||= 'proxy_protocol' if Gitlab[app]['proxy_protocol']
-      end
-    end
-
-    def parse_proxy_headers(app, ssl, allow_other_schemes = false)
-      values_from_gitlab_rb = Gitlab[app]['proxy_set_headers']
-      dashed_app = SettingsDSL::Utils.node_attribute_key(app)
-      default_from_attributes = Gitlab['node'][dashed_app]['proxy_set_headers'].to_hash
-
-      default_from_attributes['X-Forwarded-Ssl'] = 'on' if ssl
+      applicable_values['X-Forwarded-Ssl'] = 'on' if ssl
 
       unless allow_other_schemes
         scheme = ssl ? 'https' : 'http'
-        default_from_attributes['X-Forwarded-Proto'] = scheme
+        applicable_values['X-Forwarded-Proto'] = scheme
       end
 
-      if Gitlab[app]['proxy_protocol']
-        default_from_attributes = default_from_attributes.merge({
-                                                                  'X-Real-IP' => '$proxy_protocol_addr',
-                                                                  'X-Forwarded-For' => '$proxy_protocol_addr'
-                                                                })
+      if gitlab_rb['proxy_protocol']
+        applicable_values = applicable_values.merge({
+                                                      'X-Real-IP' => '$proxy_protocol_addr',
+                                                      'X-Forwarded-For' => '$proxy_protocol_addr'
+                                                    })
       end
 
+      # If user has unset any header, we respect that and delete it from the
+      # default value list
       if values_from_gitlab_rb
         values_from_gitlab_rb.each do |key, value|
           if value.nil?
-            default_attrs = Gitlab['node'].default[dashed_app]['proxy_set_headers']
-            default_attrs.delete(key)
+            item = default_values['proxy_set_headers']
+            item.delete(key)
           end
         end
 
-        default_from_attributes = default_from_attributes.merge(values_from_gitlab_rb.to_hash)
+        applicable_values = applicable_values.merge(values_from_gitlab_rb.to_hash)
       end
 
-      Gitlab[app]['proxy_set_headers'] = default_from_attributes
+      applicable_values
     end
 
     def parse_error_pages
@@ -124,6 +90,22 @@ module Nginx
         end
       end
       errors
+    end
+
+    def translate_service_nginx_settings(service, node_key: nil)
+      # Return if user hasn't specified anything for the service nginx
+      return if Gitlab["#{service}_nginx"].nil? || Gitlab["#{service}_nginx"].empty?
+
+      node_key ||= service
+
+      Gitlab[node_key] ||= {}
+      Gitlab[node_key]['nginx'] ||= {}
+
+      LoggingHelper.deprecation("#{service}_nginx has been deprecated. Please use #{node_key}['nginx'] instead.")
+
+      Gitlab["#{service}_nginx"].each do |setting, value|
+        Gitlab[node_key]['nginx'][setting] = value if Gitlab[node_key]['nginx'][setting].nil?
+      end
     end
   end
 end
