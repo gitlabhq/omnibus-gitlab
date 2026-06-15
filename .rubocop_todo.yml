@@ -428,14 +428,14 @@ Style/WordArray:
     - 'files/gitlab-cookbooks/package/libraries/config/services.rb'
     - 'files/gitlab-cookbooks/package/libraries/deprecations.rb'
     - 'files/gitlab-ctl-commands-ee/lib/gitlab_ctl/postgresql/ee.rb'
-    - 'files/gitlab-ctl-commands/lib/praefect.rb'
+    - 'files/gitlab-ctl-commands/lib/gitlab_ctl/praefect.rb'
     - 'lib/gitlab/ohai_helper.rb'
     - 'spec/chef/cookbooks/gitlab/recipes/gitlab-rails/gitlab_yml/omniauth_spec.rb'
     - 'spec/chef/cookbooks/nginx/recipes/nginx_spec.rb'
     - 'spec/chef/cookbooks/logrotate/recipes/folders_and_configs_spec.rb'
     - 'spec/chef/cookbooks/monitoring/recipes/prometheus_spec.rb'
     - 'spec/chef/cookbooks/package/libraries/deprecations_spec.rb'
-    - 'spec/chef/gitlab-ctl-commands/lib/praefect_spec.rb'
+    - 'spec/chef/gitlab-ctl-commands/lib/gitlab_ctl/praefect_spec.rb'
 
 # Offense count: 806
 # This cop supports safe autocorrection (--autocorrect).
