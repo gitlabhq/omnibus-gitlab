@@ -1,0 +1,167 @@
+services:
+  consul:
+    image: ${IMAGE}
+    hostname: consul
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        roles ['consul_role']
+        consul['configuration'] = {
+          server: true,
+          bootstrap_expect: 1,
+          client_addr: '0.0.0.0',
+        }
+        logging['svlogd_size'] = 200 * 1024 * 1024
+    networks:
+      ha-logical-net:
+        ipv4_address: 10.31.51.2
+    healthcheck:
+      test: ["CMD", "/opt/gitlab/embedded/bin/consul", "members"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  postgres-primary:
+    image: ${IMAGE}
+    hostname: postgres-primary
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        roles ['patroni_role']
+        patroni['enable'] = true
+        patroni['replication_password'] = 'replication_password'
+        patroni['listen_address'] = '0.0.0.0'
+        patroni['connect_address'] = 'postgres-primary'
+        patroni['consul']['url'] = 'http://10.31.51.2:8500'
+        consul['configuration'] = { retry_join: %w(10.31.51.2) }
+        # Register the omnibus-managed `postgresql` consul service with
+        # the `gitlab-ctl patroni check-leader` script-check. This is
+        # what the watcher's LeaderFinder relies on -- not Patroni's
+        # own `postgresql-ha` registration.
+        consul['services'] = %w(postgresql)
+        postgresql['listen_address'] = '*'
+        postgresql['trust_auth_cidr_addresses'] = %w(10.31.51.0/24 127.0.0.1/32)
+        postgresql['md5_auth_cidr_addresses'] = %w(10.31.51.0/24 127.0.0.1/32)
+        postgresql['pgbouncer_user_password'] = '8796d87d74d0291ed6a0018a4f9ecbe1'
+        postgresql['connect_port'] = 5432
+        gitlab_rails['auto_migrate'] = false
+        logging['svlogd_size'] = 200 * 1024 * 1024
+        postgresql['component_databases'] = {
+          'gate' => {
+            'enable'     => true,
+            'database'   => 'gate_production',
+            'user'       => 'gate',
+            'password'   => 'gatesekrit',
+            'extensions' => ['pg_trgm'],
+          }
+        }
+    networks:
+      ha-logical-net:
+        ipv4_address: 10.31.51.10
+    depends_on:
+      consul:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8008/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  postgres-replica:
+    image: ${IMAGE}
+    hostname: postgres-replica
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        roles ['patroni_role']
+        patroni['enable'] = true
+        patroni['replication_password'] = 'replication_password'
+        patroni['listen_address'] = '0.0.0.0'
+        patroni['connect_address'] = 'postgres-replica'
+        patroni['consul']['url'] = 'http://10.31.51.2:8500'
+        consul['configuration'] = { retry_join: %w(10.31.51.2) }
+        consul['services'] = %w(postgresql)
+        postgresql['listen_address'] = '*'
+        postgresql['trust_auth_cidr_addresses'] = %w(10.31.51.0/24 127.0.0.1/32)
+        postgresql['md5_auth_cidr_addresses'] = %w(10.31.51.0/24 127.0.0.1/32)
+        postgresql['pgbouncer_user_password'] = '8796d87d74d0291ed6a0018a4f9ecbe1'
+        postgresql['connect_port'] = 5432
+        gitlab_rails['auto_migrate'] = false
+        logging['svlogd_size'] = 200 * 1024 * 1024
+        postgresql['component_databases'] = {
+          'gate' => {
+            'enable'     => true,
+            'database'   => 'gate_production',
+            'user'       => 'gate',
+            'password'   => 'gatesekrit',
+            'extensions' => ['pg_trgm'],
+          }
+        }
+    networks:
+      ha-logical-net:
+        ipv4_address: 10.31.51.11
+    depends_on:
+      postgres-primary:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8008/replica || curl -sf http://localhost:8008/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  pgbouncer:
+    image: ${IMAGE}
+    hostname: pgbouncer-node
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        roles ['pgbouncer_role']
+        consul['configuration'] = { retry_join: %w(10.31.51.2) }
+        # The watcher uses the default service name 'postgresql' which
+        # is registered by each patroni node via `consul['services']`.
+        # The check is the omnibus `gitlab-ctl patroni check-leader`
+        # script, distinct from Patroni's own `postgresql-ha` consul
+        # registration.
+        consul['watchers'] = %w(postgresql)
+        pgbouncer['listen_addr'] = '0.0.0.0'
+        pgbouncer['databases'] = {
+          gitlabhq_production: {
+            host: '10.31.51.10',
+            port: 5432,
+          },
+          gate_production: {
+            host: '10.31.51.10',
+            port: 5432,
+            user: 'pgbouncer',
+            password: '8796d87d74d0291ed6a0018a4f9ecbe1',
+          }
+        }
+        postgresql['pgbouncer_user_password'] = '8796d87d74d0291ed6a0018a4f9ecbe1'
+        postgresql['md5_auth_cidr_addresses'] = %w(10.31.51.0/24 127.0.0.1/32)
+        logging['svlogd_size'] = 200 * 1024 * 1024
+        postgresql['component_databases'] = {
+          'gate' => {
+            'enable'     => true,
+            'database'   => 'gate_production',
+            'user'       => 'gate',
+            'password'   => 'gatesekrit',
+            'extensions' => ['pg_trgm'],
+          }
+        }
+    networks:
+      ha-logical-net:
+        ipv4_address: 10.31.51.20
+    depends_on:
+      postgres-primary:
+        condition: service_healthy
+      postgres-replica:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/gitlab/embedded/bin/pg_isready -h 127.0.0.1 -p 6432 -U pgbouncer || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+networks:
+  ha-logical-net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 10.31.51.0/24

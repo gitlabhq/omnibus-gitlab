@@ -51,6 +51,7 @@ RSpec.shared_context 'recipes' do
       "postgresql::user",
       "postgresql::sysctl",
       "postgresql::standalone",
+      "postgresql::managed_databases",
       "gitlab-kas::enable",
       "gitlab::database_migrations",
       "gitlab::puma",

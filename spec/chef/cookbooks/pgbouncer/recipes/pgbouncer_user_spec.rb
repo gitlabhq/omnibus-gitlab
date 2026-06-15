@@ -209,4 +209,45 @@ RSpec.describe 'gitlab-ee::pgbouncer_user' do
       expect(chef_run).not_to create_pgbouncer_user('registry')
     end
   end
+
+  context 'with component databases registered' do
+    before do
+      allow(Gitlab).to receive(:[]).and_call_original
+      stub_gitlab_rb(
+        {
+          postgresql: {
+            enable: true,
+            pgbouncer_user: 'pgbouncer-rails',
+            pgbouncer_user_password: 'fakepassword',
+            component_databases: {
+              'gate' => {
+                'enable' => true, 'user' => 'gate', 'password' => 'secret',
+                'database' => 'gate_production'
+              },
+              'analytics' => {
+                'enable' => true, 'user' => 'analytics', 'password' => 'secret'
+              },
+              'disabled_one' => {
+                'enable' => false, 'user' => 'nope', 'password' => 'x'
+              }
+            }
+          }
+        }
+      )
+    end
+
+    it 'creates a pgbouncer_user with auth function for each enabled entry' do
+      expect(chef_run).to create_pgbouncer_user('component:gate').with(
+        database: 'gate_production',
+        user: 'pgbouncer-rails',
+        password: 'fakepassword',
+        add_auth_function: true
+      )
+      expect(chef_run).to create_pgbouncer_user('component:analytics').with(
+        database: 'analytics',
+        user: 'pgbouncer-rails'
+      )
+      expect(chef_run).not_to create_pgbouncer_user('component:disabled_one')
+    end
+  end
 end

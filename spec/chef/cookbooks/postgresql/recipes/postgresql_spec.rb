@@ -12,6 +12,7 @@ RSpec.describe 'postgresql' do
   let(:postgresql_conf) { File.join(postgresql_data_dir, 'postgresql.conf') }
   let(:runtime_conf) { '/var/opt/gitlab/postgresql/data/runtime.conf' }
   let(:pg_hba_conf) { '/var/opt/gitlab/postgresql/data/pg_hba.conf' }
+  let(:pg_ident_conf) { '/var/opt/gitlab/postgresql/data/pg_ident.conf' }
 
   before do
     allow(Gitlab).to receive(:[]).and_call_original
@@ -388,6 +389,38 @@ RSpec.describe 'postgresql' do
         expect(chef_run).to render_file(pg_hba_conf).with_content { |content|
           expect(content).to_not match(/cert$/)
         }
+      end
+    end
+
+    context 'when rendering pg_ident.conf with component_databases registered' do
+      before do
+        stub_gitlab_rb(
+          postgresql: {
+            component_databases: {
+              'gate' => { 'enable' => true, 'user' => 'gate_role', 'system_user' => 'gate' },
+              'openbao' => { 'enable' => true, 'user' => 'openbao' },
+              'disabled' => { 'enable' => false, 'user' => 'never' }
+            }
+          }
+        )
+      end
+
+      it 'emits a gitlab map line per enabled entry using system_user -> user' do
+        expect(chef_run).to render_file(pg_ident_conf)
+          .with_content(/^gitlab  gate  gate_role$/)
+        expect(chef_run).to render_file(pg_ident_conf)
+          .with_content(/^gitlab  openbao  openbao$/)
+      end
+
+      it 'omits disabled entries' do
+        expect(chef_run).to render_file(pg_ident_conf).with_content { |content|
+          expect(content).not_to match(/^gitlab  .*  never$/)
+        }
+      end
+
+      it 'keeps the catch-all 1:1 mapping' do
+        expect(chef_run).to render_file(pg_ident_conf)
+          .with_content(%r{^gitlab  /\^\(\.\*\)\$  \\1$})
       end
     end
   end

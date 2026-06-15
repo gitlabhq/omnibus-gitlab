@@ -44,5 +44,8 @@ gitlab  <%= node['gitlab']['user']['username'] %>  <%= @sql_user %>
 <% if node.key?('registry') %>
 gitlab  <%= node['registry']['username'] %>  <%= node['registry']['database']['user'] %>
 <% end %>
+<% ComponentDatabaseRegistry.system_user_mappings(node['postgresql']['component_databases']).each do |system_user, pg_user| %>
+gitlab  <%= system_user %>  <%= pg_user %>
+<% end %>
 # Default to a 1-1 mapping between system usernames and Postgres usernames
 gitlab  /^(.*)$  \1

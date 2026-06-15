@@ -132,6 +132,8 @@ database_objects 'patroni' do
   not_if { pg_helper.replica? }
 end
 
+include_recipe 'postgresql::managed_databases'
+
 execute 'signal to restart postgresql' do
   command "#{patroni_helper.ctl_command} -c #{patroni_config_file} restart --force #{node['patroni']['scope']} #{node['patroni']['name']}"
   only_if { omnibus_helper.service_dir_enabled?('postgresql') && patroni_helper.node_status == 'running' }

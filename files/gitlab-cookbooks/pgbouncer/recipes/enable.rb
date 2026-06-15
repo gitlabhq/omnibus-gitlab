@@ -22,6 +22,37 @@ pgbouncer_static_etc_dir = node['pgbouncer']['env_directory']
 
 node.default['pgbouncer']['unix_socket_dir'] ||= node['pgbouncer']['data_directory']
 
+# Merge any registered component databases into the pool. Operator-supplied
+# entries under pgbouncer['databases'] take precedence and are left alone.
+#
+# The `user`/`password` keys (not `auth_user`) match the convention used in
+# the gitlab.rb template -- pgbouncer_helper renames `user` to `auth_user`
+# for databases.ini and also picks up the pair for pg_auth, so a single
+# pair of fields populates both surfaces.
+if node['pgbouncer']['pool_component_databases']
+  # Template the host/port from the Rails DB pgbouncer entry when it
+  # exists, so HA setups (where pgbouncer and Patroni live on different
+  # hosts) inherit the same primary-pointing address that Rails already
+  # uses for `gitlabhq_production`. Falls back to the local PG instance
+  # for single-node configs where no Rails pool entry is declared.
+  rails_db = node['gitlab']['gitlab_rails']['db_database']
+  rails_pool_entry = node['pgbouncer']['databases'][rails_db] || {}
+  default_host = rails_pool_entry['host'] || '127.0.0.1'
+  default_port = rails_pool_entry['port'] || node['postgresql']['port']
+
+  ComponentDatabaseRegistry.enabled_entries(node['postgresql']['component_databases']).each do |key, entry|
+    db_name = entry['database'] || key
+    next if node['pgbouncer']['databases'].key?(db_name)
+
+    node.default['pgbouncer']['databases'][db_name] = {
+      'host' => default_host,
+      'port' => default_port,
+      'user' => node['postgresql']['pgbouncer_user'],
+      'password' => node['postgresql']['pgbouncer_user_password']
+    }
+  end
+end
+
 include_recipe 'postgresql::user'
 
 [

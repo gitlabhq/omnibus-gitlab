@@ -36,6 +36,7 @@ database_objects 'postgresql' do
 end
 
 include_recipe 'registry::database_objects' if node.dig('postgresql', 'registry', 'auto_create')
+include_recipe 'postgresql::managed_databases'
 
 ruby_block 'warn registry auto_create is disabled' do
   block do

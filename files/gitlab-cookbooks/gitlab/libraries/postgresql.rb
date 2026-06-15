@@ -21,6 +21,8 @@ module Postgresql
       parse_connect_port
       parse_registry_postgresql_settings
       parse_wal_keep_size
+
+      ComponentDatabaseRegistry.parse_variables
     end
 
     def parse_secrets

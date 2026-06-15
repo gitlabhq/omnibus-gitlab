@@ -59,4 +59,21 @@ if pgb_helper.create_pgbouncer_user?('postgresql') || pgb_helper.create_pgbounce
       action :create
     end
   end
+
+  # Auto-instantiate the pgbouncer auth function (pg_shadow_lookup) for
+  # every database in the component database registry. The actual PG user
+  # owning each database is created by postgresql::managed_databases; the
+  # resource below is responsible only for the pgbouncer-side auth path.
+  ComponentDatabaseRegistry.enabled_entries(node['postgresql']['component_databases']).each do |key, entry|
+    db_name = entry['database'] || key
+
+    pgbouncer_user "component:#{key}" do
+      helper lazy { PgHelper.new(node) }
+      user node['postgresql']['pgbouncer_user']
+      password node['postgresql']['pgbouncer_user_password']
+      database db_name
+      add_auth_function default_auth_query.eql?(auth_query)
+      action :create
+    end
+  end
 end

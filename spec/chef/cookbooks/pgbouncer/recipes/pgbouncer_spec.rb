@@ -231,6 +231,176 @@ RSpec.describe 'pgbouncer' do
         expect(chef_run).to create_file('databases.json')
           .with(user: 'fakeuser', group: 'gitlab-psql')
       end
+
+      context 'with component_databases registered' do
+        before do
+          stub_gitlab_rb(
+            pgbouncer: { enable: true },
+            postgresql: {
+              component_databases: {
+                'gate' => {
+                  'enable' => true, 'user' => 'gate', 'password' => 'secret',
+                  'database' => 'gate_production'
+                }
+              }
+            }
+          )
+        end
+
+        it 'merges a pool entry for the component database into databases.json' do
+          content = chef_run.file(databases_json).content
+          parsed = JSON.parse(content)
+
+          expect(parsed).to include('gate_production')
+          # `user` (not `auth_user`) is the documented gitlab.rb shape;
+          # pgbouncer_helper renames it to `auth_user` for databases.ini and
+          # picks up `password` from the same entry for pg_auth.
+          expect(parsed['gate_production']).to include(
+            'host' => '127.0.0.1',
+            'user' => 'pgbouncer'
+          )
+          # password key must be present so pg_auth is populated; the value
+          # is whatever the operator put in postgresql['pgbouncer_user_password']
+          # -- usually nil in this spec stub, but never absent.
+          expect(parsed['gate_production']).to have_key('password')
+        end
+
+        it 'respects an operator-supplied pgbouncer.databases override' do
+          stub_gitlab_rb(
+            pgbouncer: {
+              enable: true,
+              databases: { 'gate_production' => { host: '10.0.0.1' } }
+            },
+            postgresql: {
+              component_databases: {
+                'gate' => {
+                  'enable' => true, 'user' => 'gate', 'password' => 'secret',
+                  'database' => 'gate_production'
+                }
+              }
+            }
+          )
+
+          parsed = JSON.parse(chef_run.file(databases_json).content)
+          expect(parsed['gate_production']).to eq('host' => '10.0.0.1')
+        end
+
+        it 'does not merge when pool_component_databases is disabled' do
+          stub_gitlab_rb(
+            pgbouncer: { enable: true, pool_component_databases: false },
+            postgresql: {
+              component_databases: {
+                'gate' => {
+                  'enable' => true, 'user' => 'gate', 'password' => 'secret',
+                  'database' => 'gate_production'
+                }
+              }
+            }
+          )
+
+          parsed = JSON.parse(chef_run.file(databases_json).content)
+          expect(parsed).not_to include('gate_production')
+        end
+
+        it 'falls back to the registry key when no database field is set' do
+          stub_gitlab_rb(
+            pgbouncer: { enable: true },
+            postgresql: {
+              component_databases: {
+                'analytics' => { 'enable' => true, 'user' => 'analytics', 'password' => 'x' }
+              }
+            }
+          )
+
+          parsed = JSON.parse(chef_run.file(databases_json).content)
+          expect(parsed).to include('analytics')
+        end
+
+        context 'with a Rails DB pool entry already declared (HA shape)' do
+          # In a typical HA setup the operator points the Rails DB pool
+          # entry at the Patroni primary instead of localhost. The
+          # registry's auto-merged component-DB entries must inherit the
+          # same host/port so failover behaves identically across all
+          # logical DBs on the cluster -- otherwise the component DB pool
+          # entry would point at 127.0.0.1 on the pgbouncer node, where
+          # nothing is listening.
+          it 'inherits host and port from the Rails DB entry' do
+            stub_gitlab_rb(
+              pgbouncer: {
+                enable: true,
+                databases: {
+                  'gitlabhq_production' => {
+                    host: '10.0.0.1',
+                    port: 5433,
+                    user: 'pgbouncer',
+                    password: 'fakepassword'
+                  }
+                }
+              },
+              postgresql: {
+                component_databases: {
+                  'gate' => {
+                    'enable' => true, 'user' => 'gate', 'password' => 'secret',
+                    'database' => 'gate_production'
+                  }
+                }
+              }
+            )
+
+            parsed = JSON.parse(chef_run.file(databases_json).content)
+            expect(parsed['gate_production']).to include(
+              'host' => '10.0.0.1',
+              'port' => 5433
+            )
+          end
+
+          it 'falls back to 127.0.0.1 + local PG port when no Rails entry is declared' do
+            stub_gitlab_rb(
+              pgbouncer: { enable: true },
+              postgresql: {
+                component_databases: {
+                  'gate' => {
+                    'enable' => true, 'user' => 'gate', 'password' => 'secret',
+                    'database' => 'gate_production'
+                  }
+                }
+              }
+            )
+
+            parsed = JSON.parse(chef_run.file(databases_json).content)
+            expect(parsed['gate_production']).to include('host' => '127.0.0.1')
+            # port = node['postgresql']['port'] default (5432); just assert
+            # *some* numeric port is present rather than coupling the test
+            # to the postgres attribute default.
+            expect(parsed['gate_production']['port']).to be_a(Integer)
+          end
+
+          it 'uses the configured Rails DB name, not a hardcoded gitlabhq_production' do
+            # If an operator renames the Rails DB via
+            # gitlab_rails['db_database'], the lookup needs to track it.
+            stub_gitlab_rb(
+              gitlab_rails: { db_database: 'gitlabhq_staging' },
+              pgbouncer: {
+                enable: true,
+                databases: {
+                  'gitlabhq_staging' => { host: '10.0.0.7', port: 5432 }
+                }
+              },
+              postgresql: {
+                component_databases: {
+                  'gate' => {
+                    'enable' => true, 'user' => 'gate', 'password' => 'secret',
+                    'database' => 'gate_production'
+                  }
+                }
+              }
+            )
+
+            parsed = JSON.parse(chef_run.file(databases_json).content)
+            expect(parsed['gate_production']).to include('host' => '10.0.0.7')
+          end
+        end
+      end
     end
 
     context 'peers' do
