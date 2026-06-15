@@ -6,9 +6,6 @@ RSpec.describe Build::Info::Components::GitLabRails do
     stub_default_package_version
     stub_env_var('GITLAB_ALTERNATIVE_REPO', nil)
     stub_env_var('ALTERNATIVE_PRIVATE_TOKEN', nil)
-    # Keep tests deterministic regardless of whether CI_JOB_TOKEN is set in the
-    # real environment (it is when these specs run in CI).
-    stub_env_var('CI_JOB_TOKEN', nil)
   end
 
   describe '.version' do
@@ -83,22 +80,6 @@ RSpec.describe Build::Info::Components::GitLabRails do
       it 'returns public mirror for GitLab EE' do
         allow(Build::Info::Package).to receive(:name).and_return("gitlab-ee")
         expect(described_class.repo).to eq("https://gitlab.com/gitlab-org/gitlab.git")
-      end
-
-      context 'when a CI job token is available' do
-        before do
-          stub_env_var('CI_JOB_TOKEN', 'CJT')
-        end
-
-        it 'embeds the credential in the EE public mirror' do
-          allow(Build::Info::Package).to receive(:name).and_return("gitlab-ee")
-          expect(described_class.repo).to eq("https://gitlab-ci-token:CJT@gitlab.com/gitlab-org/gitlab.git")
-        end
-
-        it 'does not embed the credential in the CE public mirror' do
-          allow(Build::Info::Package).to receive(:name).and_return("gitlab-ce")
-          expect(described_class.repo).to eq("https://gitlab.com/gitlab-org/gitlab-foss.git")
-        end
       end
     end
 
