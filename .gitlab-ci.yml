@@ -122,8 +122,8 @@ before_script:
     [http "https://gitlab.com/gitlab-org/gitlab.git"]
         proactiveAuth = basic
     [user]
-        name = Omnibus GitLab
-        email = omnibus@gitlab.com
+        name = GitLab Distribution Team
+        email = distribution-be@gitlab.com
     GITCFG
     chmod 600 "${GIT_CONFIG_GLOBAL}"
   - echo "PIPELINE_TYPE detected as ${PIPELINE_TYPE}"
