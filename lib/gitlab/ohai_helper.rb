@@ -40,6 +40,8 @@ class OhaiHelper
         'el'
       when 'almalinux'
         'el'
+      when 'opensuse', 'opensuseleap'
+        'opensuse'
       when 'amazon', 'aws', 'amzn'
         'amazon'
       else
@@ -100,6 +102,10 @@ class OhaiHelper
       end
     end
 
+    def get_opensuse_version
+      ohai['platform_version']
+    end
+
     # TODO: Remove once Amazon Linux 2 is end-of-life. Until that happens,
     # this combination happens so often it makes sense to make a shorthand.
     def amazon_linux_2?
@@ -122,6 +128,8 @@ class OhaiHelper
         version = get_centos_version
       when 'almalinux'
         version = get_centos_version
+      when 'opensuse', 'opensuseleap'
+        version = get_opensuse_version
       when 'amazon', 'aws', 'amzn'
         version = get_amazon_version
       end
