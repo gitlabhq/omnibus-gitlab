@@ -13,7 +13,7 @@ This independent company will help drive adoption of the GitLab complete DevOps
 platform in China and foster the GitLab community and open source contributions.
 
 For more information, see the
-[blog post announcement](https://about.gitlab.com/blog/2021/03/18/gitlab-licensed-technology-to-new-independent-chinese-company/)
+[blog post announcement](https://about.gitlab.com/blog/gitlab-licensed-technology-to-new-independent-chinese-company/)
 and the [FAQ](https://about.gitlab.com/pricing/faq-jihu/).
 
 ## Prerequisites
@@ -31,7 +31,7 @@ that you can use as part of the installation process.
 > automatically configures and starts GitLab at that URL. Enabling HTTPS requires
 > [additional configuration](settings/nginx.md#enable-https) to specify the certificates.
 
-Please refer to the [GitLab Jihu Edition Install](https://gitlab.cn/install/) page
+Please refer to the [GitLab Jihu Edition Install](https://gitlab.cn/install) page
 for more details on installing or updating a JiHu Edition package.
 
 ### Set initial password and apply license
