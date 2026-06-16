@@ -30,7 +30,7 @@ sudo apt-get update
 sudo apt-get clean
 ```
 
-Another workaround is to download the package manually by selecting the correct package from the [CE packages](https://packages.gitlab.com/gitlab/gitlab-ce) or [EE packages](https://packages.gitlab.com/gitlab/gitlab-ee) repository:
+Another workaround is to download the package manually by selecting the correct package from the [CE packages](https://packages.gitlab.com/gitlab/gitlab-ce/) or [EE packages](https://packages.gitlab.com/gitlab/gitlab-ee/) repository:
 
 ```shell
 curl -LJO "https://packages.gitlab.com/gitlab/gitlab-ce/packages/ubuntu/trusty/gitlab-ce_8.1.0-ce.0_amd64.deb/download"
@@ -793,7 +793,7 @@ The GitLab systemd unit file by default uses `multi-user.target` for both `After
 and `WantedBy` fields. This is done to ensure service runs after `remote-fs` and
 `network` targets, and thus GitLab will function properly.
 
-However, this interacts poorly with [cloud-init](https://cloudinit.readthedocs.io/en/latest/)'s
+However, this interacts poorly with [cloud-init](https://docs.cloud-init.io/en/latest/)'s
 own unit ordering, which is used by AWS Cloudformation.
 
 To fix this, users can make use of `package['systemd_wanted_by']` and
@@ -947,7 +947,7 @@ In this example:
 - The local mirror is running on a `RHEL 8`, `Rocky 8`, or `AlmaLinux 8` system.
 - The host name used for the web-server is `mirror.example.com`.
 - Pulp 3 syncs from the local mirror.
-- Mirroring is of the [GitLab Enterprise Edition repository](https://packages.gitlab.com/gitlab/gitlab-ee).
+- Mirroring is of the [GitLab Enterprise Edition repository](https://packages.gitlab.com/gitlab/gitlab-ee/).
 
 #### Create and configure an Apache server
 
@@ -1061,7 +1061,7 @@ local mirror that are no longer present in the corresponding GitLab repository.
    to the GitLab repository.
 
 After the repository is synced, you can create a publication and distribution to
-make it available. See <https://docs.pulpproject.org/pulp_rpm/> for details.
+make it available. See <https://pulpproject.org/pulp_rpm/> for details.
 
 ## Error: `E: connection refused to d20rj4el6vkp4c.cloudfront.net 443`
 

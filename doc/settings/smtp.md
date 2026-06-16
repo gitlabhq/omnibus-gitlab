@@ -1011,7 +1011,7 @@ gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
 
 ### easyDNS (outbound mail)
 
-Check if it's available/enabled and configuration settings in the [control panel](https://cp.easydns.com/manage/domains/mail/outbound/).
+Check if it's available/enabled and configuration settings in the control panel. Must be logged in: `https://cp.easydns.com/manage/domains/mail/outbound/`.
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
