@@ -731,7 +731,7 @@ production: &base
     <% end %>
 
     <% unless @elastic_index_bulk_cron.nil? %>
-    elastic_index_bulk_cron_worker:
+    search_elastic_index_bulk_cron_worker:
       cron: "<%= @elastic_index_bulk_cron %>"
     <% end %>
 
