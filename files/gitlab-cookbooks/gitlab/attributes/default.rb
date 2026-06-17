@@ -1007,11 +1007,6 @@ default['gitlab']['remote_syslog']['destination_host'] = "localhost"
 default['gitlab']['remote_syslog']['destination_port'] = 514
 default['gitlab']['remote_syslog']['services'] = %w(redis nginx puma gitlab-rails gitlab-shell postgresql sidekiq gitlab-workhorse gitlab-pages praefect gitlab-kas)
 
-###
-# High Availability
-###
-default['gitlab']['high_availability']['mountpoint'] = nil
-
 ####
 # GitLab CI Rails app
 ####

@@ -43,3 +43,8 @@ default['runit']['lsb_init_dir'] = '/opt/gitlab/init'
 
 # SELinux Policy options to assist with transition to unified policy
 default['package']['selinux_policy_version'] = nil
+
+###
+# High Availability
+###
+default['high_availability']['mountpoint'] = nil

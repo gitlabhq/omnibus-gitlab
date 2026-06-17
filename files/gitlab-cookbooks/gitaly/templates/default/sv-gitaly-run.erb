@@ -10,7 +10,7 @@ set -e # fail on errors
 # Redirect stderr -> stdout
 exec 2>&1
 
-<%= render("mount_point_check.erb", cookbook: 'gitlab') %>
+<%= render("mount_point_check.erb", cookbook: 'package') %>
 
 <% if @options[:cgroups_enabled] %>
   <% if @options[:cgroups_v2_enabled] %>

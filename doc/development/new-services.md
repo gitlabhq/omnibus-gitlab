@@ -196,7 +196,7 @@ exec chpst -P \
 ```ruby
 #!/bin/sh
 exec 2>&1
-<%= render("mount_point_check.erb") %>
+<%= render("mount_point_check.erb", cookbook: 'package') %>
 cd <%= node['gitlab']['best-service']['dir'] %>
 exec chpst -P /opt/gitlab/embedded/bin/best-service -config-flags -etc
 ```

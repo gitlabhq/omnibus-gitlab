@@ -1,6 +1,6 @@
 #!/bin/sh
 exec 2>&1
-<%= render("mount_point_check.erb") %>
+<%= render("mount_point_check.erb", cookbook: 'package') %>
 umask 077
 exec chpst -e /opt/gitlab/etc/postgres-exporter/env -P -U <%= node['postgresql']['username'] %>:<%= node['gitlab']['user']['group'] %> -u <%= node['postgresql']['username'] %>:<%= node['gitlab']['user']['group'] %> /opt/gitlab/embedded/bin/postgres_exporter <%= @options[:flags] %>
 

@@ -3,7 +3,7 @@
 # Let runit capture all script error messages
 exec 2>&1
 
-<%= render('mount_point_check.erb', cookbook: 'gitlab') %>
+<%= render('mount_point_check.erb', cookbook: 'package') %>
 
 exec chpst -e <%= @options[:env_directory] %> -P \
   -u <%= @options[:user] %>:<%= @options[:groupname] %> \
