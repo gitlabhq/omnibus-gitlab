@@ -3,6 +3,32 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.1.0 (2026-06-17)
+
+### Added (2 changes)
+
+- [Add sql_psql_password to manage gitlab-psql superuser password](gitlab-org/omnibus-gitlab@028ec5b8be46171dd6cea3e49a37cae4840c17d1) ([merge request](gitlab-org/omnibus-gitlab!9385))
+- [Add agent_plan_content object storage configuration](gitlab-org/omnibus-gitlab@abe0c61872c681002d71ae4a8b1a8526f78e7545) ([merge request](gitlab-org/omnibus-gitlab!9382))
+
+### Fixed (3 changes)
+
+- [Default registry database port to postgresql['port']](gitlab-org/omnibus-gitlab@b0a9b5ddb75e7d01de30edf4379026abbcd7da61) ([merge request](gitlab-org/omnibus-gitlab!9493))
+- [Fix corrupted regex in default issue_closing_pattern template](gitlab-org/omnibus-gitlab@c26123b4f74d97880ba07a8426e04e118dbc5828) ([merge request](gitlab-org/omnibus-gitlab!9454))
+- [Fix registry migrations to support custom registry directory](gitlab-org/omnibus-gitlab@f0eab058cfd0f08d73b8a09d64d2dcbc3aa3bbc6) ([merge request](gitlab-org/omnibus-gitlab!9027))
+
+### Changed (10 changes)
+
+- [Fix healthcheck exit code for non-web roles](gitlab-org/omnibus-gitlab@cbd0c4421defdd00a97b0666d00c5f6b7236fda2) ([merge request](gitlab-org/omnibus-gitlab!9236))
+- [Update dependency jemalloc/jemalloc to v5.3.1](gitlab-org/omnibus-gitlab@bbacb0817727fafc2a0f86ba4917d20e20c1bc49) ([merge request](gitlab-org/omnibus-gitlab!9355))
+- [Update dependency curl/curl to curl-8_20_0](gitlab-org/omnibus-gitlab@0572b3efdc1aff88bbc96ee272f000bd1fbf523c) ([merge request](gitlab-org/omnibus-gitlab!9392))
+- [Update dependency nginx-module-vts to v0.2.5](gitlab-org/omnibus-gitlab@7aaeed6bfe7ce2f6bd19395f2c22f6bf95320e24) ([merge request](gitlab-org/omnibus-gitlab!9001))
+- [Update dependency nginx/nginx to release-1.31.0](gitlab-org/omnibus-gitlab@eba34caa92b9f1ba9f779cf67b907ebdf6c0e57d) ([merge request](gitlab-org/omnibus-gitlab!9432))
+- [Update dependency bundler to v4.0.12](gitlab-org/omnibus-gitlab@392de2a311fccb5bde7903497b81ba0203d0974d) ([merge request](gitlab-org/omnibus-gitlab!9455))
+- [Use nproc to cap Puma worker count to cgroup CPU limits](gitlab-org/omnibus-gitlab@785cf78c79404dfda914f16acc9837cbb433f9f5) ([merge request](gitlab-org/omnibus-gitlab!9369))
+- [Update gitlabsos digest to fb66af8](gitlab-org/omnibus-gitlab@38c041e357eda6217f03e6ddcc227d4a0dd769e8) ([merge request](gitlab-org/omnibus-gitlab!9429))
+- [Update dependency gitlab-exporter to v16.8.0](gitlab-org/omnibus-gitlab@9a6db0449a815454ff3bcda61c0b8815015260cf) ([merge request](gitlab-org/omnibus-gitlab!9388))
+- [Update dependency redis/redis to v7.2.13](gitlab-org/omnibus-gitlab@e3a190bfadb2f56b59b241e166f091cb5753e419) ([merge request](gitlab-org/omnibus-gitlab!9351))
+
 ## 19.0.2 (2026-06-10)
 
 ### Changed (2 changes)
