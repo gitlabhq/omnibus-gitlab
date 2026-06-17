@@ -39,6 +39,7 @@ module GitlabRails
       parse_redis_settings
       parse_redis_extra_config_command
       parse_registry_postgresql_settings
+      parse_smtp_settings
       validate_smtp_settings!
       validate_ssh_settings!
       parse_nginx_settings
@@ -430,6 +431,10 @@ module GitlabRails
       return if Gitlab['gitlab_rails']['max_request_duration_seconds'] < worker_timeout
 
       raise "The maximum request duration needs to be smaller than the worker timeout (#{worker_timeout}s)"
+    end
+
+    def parse_smtp_settings
+      SmtpHelper.parse_smtp_authentication!(Gitlab['gitlab_rails'])
     end
 
     def validate_smtp_settings!
