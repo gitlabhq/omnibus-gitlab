@@ -179,6 +179,7 @@ class OmnibusHelper
       'suse-15.6' => 'GitLab 19.5',
       # Use $ anchor to avoid matching amazon-2023 (AL2023 is still supported)
       'amazon-2$' => 'GitLab 19.1',
+      'debian-11' => 'GitLab 19.8',
     }
   end
 
