@@ -1,6 +1,6 @@
 #!/bin/sh
 exec 2>&1
-<%= render('mount_point_check.erb', cookbook: 'gitlab') %>
+<%= render('mount_point_check.erb', cookbook: 'package') %>
 umask 077
 
 <% user = @options[:user] %>

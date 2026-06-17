@@ -65,6 +65,7 @@ module Gitlab
   attribute('letsencrypt', priority: 17).use { LetsEncrypt } # After GitlabRails, but before Registry
   attribute('crond')
   attribute('logrotate')
+  attribute('high_availability')
   attribute('nginx', priority: 40).use { Nginx } # Parse after gitlab_rails and oak; ports and listen addresses depend on them
   attribute('mattermost_nginx')
   attribute('pages_nginx')
@@ -123,7 +124,6 @@ module Gitlab
     attribute('gitlab_ci')
     attribute('sidekiq').use { Sidekiq }
     attribute('remote_syslog')
-    attribute('high_availability')
     attribute('web_server')
     attribute('prometheus_monitoring')
     attribute('gitlab_backup_cli')

@@ -1,6 +1,6 @@
 #!/bin/sh
 exec 2>&1
-<%= render('mount_point_check.erb') %>
+<%= render('mount_point_check.erb', cookbook: 'package') %>
 exec chpst -P -U <%= node['postgresql']['username'] %>:<%= node['postgresql']['group'] %> \
    -u <%= node['postgresql']['username'] %>:<%= node['postgresql']['group'] %> \
    /opt/gitlab/embedded/postgresql/<%= @options[:database_version] %>/bin/postgres \

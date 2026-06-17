@@ -4,7 +4,7 @@
 exec 2>&1
 
 <%= render("make_metrics_rundir.erb") %>
-<%= render("mount_point_check.erb") %>
+<%= render("mount_point_check.erb", cookbook: 'package') %>
 rubyopt="-W:no-experimental"
 
 exec chpst -P \

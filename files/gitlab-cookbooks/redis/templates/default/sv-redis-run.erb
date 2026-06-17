@@ -1,6 +1,6 @@
 #!/bin/sh
 exec 2>&1
-<%= render('mount_point_check.erb', cookbook: 'gitlab') %>
+<%= render('mount_point_check.erb', cookbook: 'package') %>
 sleep <%= node['redis']['startup_delay'] %>
 <% if @options[:open_files_ulimit] %>
 ulimit -n <%= @options[:open_files_ulimit] %>

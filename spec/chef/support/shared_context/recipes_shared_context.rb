@@ -11,6 +11,7 @@ RSpec.shared_context 'recipes' do
         "gitlab::default",
         "gitlab::gitlab-healthcheck",
         "package::config",
+        "package::default",
         "postgresql::directory_locations",
         "package::web-server",
         "package::users",

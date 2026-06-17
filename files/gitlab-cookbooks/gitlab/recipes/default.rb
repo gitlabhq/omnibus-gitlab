@@ -24,58 +24,10 @@ require_relative '../../package/libraries/settings_dsl.rb'
 install_dir = node['package']['install-dir']
 ENV['PATH'] = "#{install_dir}/bin:#{install_dir}/embedded/bin:#{ENV['PATH']}"
 
-include_recipe 'package::config'
-
-OmnibusHelper.check_deprecations
-OmnibusHelper.check_environment
-OmnibusHelper.check_locale
+include_recipe 'package::default'
 
 # Setup additional postgresql attributes
 include_recipe 'postgresql::directory_locations'
-
-directory "/etc/gitlab" do
-  owner "root"
-  group "root"
-  mode "0775"
-  only_if { node['gitlab']['manage_storage_directories']['manage_etc'] }
-end.run_action(:create)
-
-node.default['gitlab']['bootstrap']['enable'] = false if File.exist?("/var/opt/gitlab/bootstrapped")
-
-directory "Create /var/opt/gitlab" do
-  path "/var/opt/gitlab"
-  owner "root"
-  group "root"
-  mode "0755"
-  recursive true
-  action :create
-end
-
-directory "Create /var/log/gitlab" do
-  path "/var/log/gitlab"
-  owner "root"
-  group "root"
-  mode "0755"
-  recursive true
-  action :create
-end
-
-directory "#{install_dir}/embedded/etc" do
-  owner "root"
-  group "root"
-  mode "0755"
-  recursive true
-  action :create
-end
-
-# This recipe needs to run before gitlab-rails
-# because we add `gitlab-www` user to some groups created by that recipe
-include_recipe "package::web-server"
-
-# We attempt to create and manage users/groups by default. If users wish to
-# disable it, they can set `manage_accounts['enable']` to `false`, and
-# `account` custom resource will not create them.
-include_recipe "package::users"
 
 include_recipe "gitlab::gitlab-rails" if node['gitlab']['gitlab_rails']['enable']
 
@@ -97,14 +49,8 @@ include_recipe "gitlab::add_trusted_certs"
   end
 end
 
-# Install our runit instance
-include_recipe "package::runit"
-
 # Install shell after runit so `gitlab-sshd` comes up
 include_recipe "gitlab::gitlab-shell" if node['gitlab']['gitlab_rails']['enable']
-
-# Make global sysctl commands available
-include_recipe "package::sysctl"
 
 # Configure Pre-migration services
 # Postgresql depends on Redis because of `rake db:seed_fu`
@@ -218,23 +164,4 @@ if node['gitlab']['gitlab_rails']['database_reindexing']['enable']
   include_recipe 'gitlab::database_reindexing_enable'
 else
   include_recipe 'gitlab::database_reindexing_disable'
-end
-
-OmnibusHelper.is_deprecated_os?
-
-# Report on any deprecations we encountered at the end of the run
-# There are three possible exits for a reconfigure run
-# 1. Normal cinc-client run completion
-# 2. cinc-client failed due to an exception
-# 3. cinc-client failed for some other reason
-# 1 and 3 are handled below. 2 is handled in our custom exception handler
-# defined at files/gitlab-cookbooks/package/libraries/handlers/gitlab.rb
-Chef.event_handler do
-  on :run_completed do
-    OmnibusHelper.on_exit
-  end
-
-  on :run_failed do
-    OmnibusHelper.on_exit
-  end
 end
