@@ -6,7 +6,7 @@ if Rails.env.production?
   secrets = Gitlab::Email::SmtpConfig.secrets
   smtp_settings = {
     <% unless @smtp_authentication.nil? %>
-    authentication: <%= @smtp_authentication.to_s.to_sym.inspect %>,
+    authentication: <%= @smtp_authentication.to_sym.inspect %>,
     <% end %>
     user_name: <%= node['gitlab']['gitlab_rails']["smtp_user_name"]&.inspect || "secrets.username" %>,
     password: <%= node['gitlab']['gitlab_rails']["smtp_password"]&.inspect || "secrets.password"  %>,
