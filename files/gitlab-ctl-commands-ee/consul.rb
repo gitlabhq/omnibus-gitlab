@@ -14,14 +14,14 @@
 # limitations under the License.
 #
 
-require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/consul"
-require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/consul_download"
+require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/gitlab_ctl/consul"
+require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/gitlab_ctl/consul_download"
 
 add_command_under_category('consul', 'consul', 'Interact with the gitlab-consul cluster', 2) do
-  consul = ConsulHandler.new(ARGV, $stdin.gets)
+  consul = GitlabCtl::ConsulHandler.new(ARGV, $stdin.gets)
   consul.execute
 end
 
 add_command_under_category('consul-download', 'consul', 'Download consul for the gitlab-consul cluster', 2) do
-  ConsulDownloadCommand.new(ARGV).run
+  GitlabCtl::ConsulDownloadCommand.new(ARGV).run
 end

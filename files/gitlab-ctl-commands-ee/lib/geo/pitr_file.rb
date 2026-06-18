@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'promote_db'
-require_relative '../consul'
+require_relative '../gitlab_ctl/consul'
 
 module Geo
   class PitrFile
@@ -26,31 +26,31 @@ module Geo
     # @param [String] lsn point-in-time LSN reference
     def create(lsn)
       if use_consul?
-        ConsulHandler::Kv.put(consul_key, lsn)
+        GitlabCtl::ConsulHandler::Kv.put(consul_key, lsn)
       else
         File.write(filepath, lsn)
       end
-    rescue Errno::ENOENT, ConsulHandler::ConsulError
+    rescue Errno::ENOENT, GitlabCtl::ConsulHandler::ConsulError
       raise PitrFileError, "Unable to create PITR"
     end
 
     def delete
       if use_consul?
-        ConsulHandler::Kv.delete(consul_key)
+        GitlabCtl::ConsulHandler::Kv.delete(consul_key)
       elsif File.exist?(filepath)
         File.delete(filepath)
       end
-    rescue Errno::ENOENT, ConsulHandler::ConsulError
+    rescue Errno::ENOENT, GitlabCtl::ConsulHandler::ConsulError
       raise PitrFileError, "Unable to delete PITR"
     end
 
     def get
       if use_consul?
-        ConsulHandler::Kv.get(consul_key)
+        GitlabCtl::ConsulHandler::Kv.get(consul_key)
       else
         File.read(filepath)
       end
-    rescue Errno::ENOENT, ConsulHandler::ConsulError
+    rescue Errno::ENOENT, GitlabCtl::ConsulHandler::ConsulError
       raise PitrFileError, "Unable to fetch PITR"
     end
   end

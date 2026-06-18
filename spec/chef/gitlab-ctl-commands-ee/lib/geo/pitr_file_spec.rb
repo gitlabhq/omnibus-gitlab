@@ -75,7 +75,7 @@ RSpec.describe Geo::PitrFile do
 
     context '#create' do
       it 'create the write key entry' do
-        expect(ConsulHandler::Kv).to receive(:put).with(subject.consul_key, lsn)
+        expect(GitlabCtl::ConsulHandler::Kv).to receive(:put).with(subject.consul_key, lsn)
 
         subject.create(lsn)
       end
@@ -83,7 +83,7 @@ RSpec.describe Geo::PitrFile do
 
     context '#delete' do
       it 'removes the consul key' do
-        expect(ConsulHandler::Kv).to receive(:delete).with(subject.consul_key)
+        expect(GitlabCtl::ConsulHandler::Kv).to receive(:delete).with(subject.consul_key)
 
         subject.delete
       end
@@ -96,7 +96,7 @@ RSpec.describe Geo::PitrFile do
     context '#get' do
       context 'existing key' do
         before do
-          allow(ConsulHandler::Kv).to receive(:get).with(subject.consul_key).and_return(lsn)
+          allow(GitlabCtl::ConsulHandler::Kv).to receive(:get).with(subject.consul_key).and_return(lsn)
         end
 
         it 'returns the correct lsn' do
