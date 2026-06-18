@@ -18,6 +18,7 @@ title: Omnibus GitLab test plans
 - [Rubygems](upgrade-rubygems-testplan.md)
 - [`nginx`](upgrade-nginx-testplan.md)
 - [`libxml2`](upgrade-libxml2-testplan.md)
+- [`prometheus`](upgrade-prometheus-testplan.md)
 
 ## Other changes
 
