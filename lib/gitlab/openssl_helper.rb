@@ -5,7 +5,6 @@ class OpenSSLHelper
   @base_libs = %w[libssl libcrypto]
   @pkg_config_files = OhaiHelper.amazon_linux_2? ? { "openssl11.pc" => nil, "libssl11.pc" => nil, "libcrypto11.pc" => nil } : { "openssl.pc" => nil, "libssl.pc" => nil, "libcrypto.pc" => nil }
   @deps = []
-  @cursor = 2
 
   class << self
     def allowed_libs
@@ -21,8 +20,6 @@ class OpenSSLHelper
     end
 
     def append_deps(path)
-      @cursor += 1
-
       return if path.start_with?("/opt/gitlab") || !path.start_with?("/")
 
       puts "\tFinding dependencies of #{path}"
@@ -34,16 +31,20 @@ class OpenSSLHelper
     def find_deps(name)
       puts "Libraries starting with '#{name}' and their dependencies"
       @deps << name
+      start = @deps.length
       libs = find_libs(name)
 
       libs.each do |lib, path|
         append_deps(path)
       end
 
-      loop do
-        break if @cursor >= @deps.length
+      cursor = start
 
-        append_deps(@deps[@cursor])
+      loop do
+        break if cursor >= @deps.length
+
+        append_deps(@deps[cursor])
+        cursor += 1
       end
     end
 
