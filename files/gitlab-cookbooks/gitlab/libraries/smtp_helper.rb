@@ -13,17 +13,23 @@ class SmtpHelper
   VALID_AUTHENTICATION_MECHANISMS = %w[login plain cram_md5].freeze
 
   # Normalizes gitlab_rails['smtp_authentication'] so the template can render
-  # it directly: nil when authentication is disabled, otherwise the configured
-  # mechanism left untouched.  Raises if the value is not a recognised
+  # it directly: nil when authentication is disabled, otherwise the canonical
+  # lowercase mechanism name.  Raises if the value is not a recognised
   # mechanism and not a disabled/falsey value.
   def self.parse_smtp_authentication!(rails_config)
+    return unless rails_config['smtp_enable']
+
     value = rails_config['smtp_authentication']
     return if value.nil?
 
     normalized = value.to_s.downcase
     if normalized.empty? || DISABLED_AUTHENTICATION_VALUES.include?(normalized)
       rails_config['smtp_authentication'] = nil
-    elsif !VALID_AUTHENTICATION_MECHANISMS.include?(normalized)
+    elsif VALID_AUTHENTICATION_MECHANISMS.include?(normalized)
+      # Write back the canonical lowercase mechanism so the template never
+      # renders a mixed-case symbol like :LOGIN, which net-smtp 0.5.x rejects.
+      rails_config['smtp_authentication'] = normalized
+    else
       raise "gitlab_rails['smtp_authentication'] is set to an unrecognized value: #{value.inspect}. " \
             "Valid mechanisms are: #{VALID_AUTHENTICATION_MECHANISMS.join(', ')}. " \
             "Set it to false or 'none' to disable SMTP authentication."
