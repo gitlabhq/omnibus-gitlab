@@ -2,21 +2,29 @@ require 'chef_helper'
 
 RSpec.describe SmtpHelper do
   describe '.parse_smtp_authentication!' do
-    def normalize(value)
-      config = { 'smtp_authentication' => value }
+    def normalize(value, smtp_enable: true)
+      config = { 'smtp_enable' => smtp_enable, 'smtp_authentication' => value }
       described_class.parse_smtp_authentication!(config)
       config['smtp_authentication']
     end
 
     context 'when set to a valid authentication mechanism' do
-      it 'leaves a string mechanism untouched' do
+      it 'leaves a lowercase string authentication mechanism untouched' do
         expect(normalize('login')).to eq('login')
         expect(normalize('plain')).to eq('plain')
         expect(normalize('cram_md5')).to eq('cram_md5')
       end
 
-      it 'leaves a symbol mechanism untouched' do
-        expect(normalize(:plain)).to eq(:plain)
+      # net-smtp 0.5.x validates the authtype against its lowercase SASL
+      # mechanism names, so the value must be canonicalized to lowercase.
+      it 'lowercases a mixed-case string authentication mechanism' do
+        expect(normalize('LOGIN')).to eq('login')
+        expect(normalize('Plain')).to eq('plain')
+      end
+
+      it 'normalizes a symbol authentication mechanism to a lowercase string' do
+        expect(normalize(:plain)).to eq('plain')
+        expect(normalize(:LOGIN)).to eq('login')
       end
     end
 
@@ -29,6 +37,13 @@ RSpec.describe SmtpHelper do
     [false, 'false', 'FALSE', 'none', 'None', ''].each do |value|
       it "normalizes #{value.inspect} to nil" do
         expect(normalize(value)).to be_nil
+      end
+    end
+
+    context 'when SMTP is disabled' do
+      it 'leaves the value untouched and does not raise' do
+        expect(normalize('xoauth2', smtp_enable: false)).to eq('xoauth2')
+        expect(normalize('LOGIN', smtp_enable: false)).to eq('LOGIN')
       end
     end
 

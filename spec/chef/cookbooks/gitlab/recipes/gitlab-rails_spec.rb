@@ -2497,6 +2497,20 @@ RSpec.describe 'gitlab::gitlab-rails' do
         end
       end
 
+      # net-smtp 0.5.x validates the authtype against its lowercase SASL
+      # mechanism names, so a mixed-case value must render as a lowercase symbol.
+      context 'when set to a mixed-case authentication mechanism' do
+        before do
+          stub_gitlab_rb(gitlab_rails: { smtp_enable: true, smtp_authentication: 'LOGIN' })
+        end
+
+        it 'renders the authentication mechanism as a lowercase symbol' do
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/smtp_settings.rb').with_content { |content|
+            expect(content).to include('authentication: :login')
+          }
+        end
+      end
+
       # net-smtp 0.5.x raises ArgumentError on any truthy authtype that is not a
       # known mechanism, so falsey/"disable" values must not be rendered as
       # symbols like :false or :none.
