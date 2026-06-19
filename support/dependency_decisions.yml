@@ -392,3 +392,9 @@
   - :who: Angelo Rivera
     :why: https://gitlab.com/gitlab-org/orbit/knowledge-graph/-/blob/main/clients/gkgpb/LICENSE
     :when: 2026-04-02 15:00:00.000000000 Z
+- - :license
+  - ./pkg/autoflow
+  - MIT
+  - :who: Adam Chu
+    :why: https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/LICENSE
+    :when: 2026-06-19 00:00:00.000000000 Z
