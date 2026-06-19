@@ -2471,6 +2471,63 @@ RSpec.describe 'gitlab::gitlab-rails' do
         expect { chef_run }.to raise_error(RuntimeError)
       end
     end
+
+    context 'authentication' do
+      context 'when not configured' do
+        before do
+          stub_gitlab_rb(gitlab_rails: { smtp_enable: true })
+        end
+
+        it 'omits the authentication setting' do
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/smtp_settings.rb').with_content { |content|
+            expect(content).not_to include('authentication:')
+          }
+        end
+      end
+
+      context 'when set to a valid authentication mechanism' do
+        before do
+          stub_gitlab_rb(gitlab_rails: { smtp_enable: true, smtp_authentication: 'login' })
+        end
+
+        it 'renders the authentication mechanism as a symbol' do
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/smtp_settings.rb').with_content { |content|
+            expect(content).to include('authentication: :login')
+          }
+        end
+      end
+
+      # net-smtp 0.5.x validates the authtype against its lowercase SASL
+      # mechanism names, so a mixed-case value must render as a lowercase symbol.
+      context 'when set to a mixed-case authentication mechanism' do
+        before do
+          stub_gitlab_rb(gitlab_rails: { smtp_enable: true, smtp_authentication: 'LOGIN' })
+        end
+
+        it 'renders the authentication mechanism as a lowercase symbol' do
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/smtp_settings.rb').with_content { |content|
+            expect(content).to include('authentication: :login')
+          }
+        end
+      end
+
+      # net-smtp 0.5.x raises ArgumentError on any truthy authtype that is not a
+      # known mechanism, so falsey/"disable" values must not be rendered as
+      # symbols like :false or :none.
+      [false, 'false', 'none', ''].each do |value|
+        context "when set to #{value.inspect} to disable authentication" do
+          before do
+            stub_gitlab_rb(gitlab_rails: { smtp_enable: true, smtp_authentication: value })
+          end
+
+          it 'omits the authentication setting' do
+            expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/smtp_settings.rb').with_content { |content|
+              expect(content).not_to include('authentication:')
+            }
+          end
+        end
+      end
+    end
   end
 
   describe 'cleaning up the legacy sidekiq log symlink' do
