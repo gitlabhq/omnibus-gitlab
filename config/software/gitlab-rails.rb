@@ -318,6 +318,8 @@ build do
 
   mkdir "#{install_dir}/embedded/service/gitlab-rails"
   sync './', "#{install_dir}/embedded/service/gitlab-rails/", exclude: %w(
+    .agents
+    .claude
     .git
     .gitignore
     app/assets
