@@ -37,6 +37,8 @@ build do
 
   mkdir dest_dir
   sync './', "#{dest_dir}/", exclude: %w(
+    .agents
+    .claude
     .git*
     .rubocop*
     CODEOWNERS

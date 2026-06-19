@@ -38,5 +38,5 @@ build do
   env['FIPS_MODE'] = '1' if Build::Check.use_system_ssl?
 
   command 'make build', env: env
-  sync './', "#{install_dir}/embedded/service/gitlab-shell/", exclude: ['.git', '.gitignore', 'go', 'go_build']
+  sync './', "#{install_dir}/embedded/service/gitlab-shell/", exclude: ['.agents', '.claude', '.git', '.gitignore', 'go', 'go_build']
 end
