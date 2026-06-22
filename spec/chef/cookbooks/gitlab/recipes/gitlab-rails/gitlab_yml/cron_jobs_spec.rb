@@ -19,7 +19,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
         'analytics_usage_trends_count_job_trigger_worker'        | 'analytics_usage_trends_count_job_trigger_worker_cron'
         'ci_archive_traces_cron_worker'                          | 'ci_archive_traces_cron_worker_cron'
         'ci_platform_metrics_update_cron_worker'                 | 'ci_platform_metrics_update_cron_worker'
-        'elastic_index_bulk_cron_worker'                         | 'elastic_index_bulk_cron'
+        'search_elastic_index_bulk_cron_worker'                  | 'elastic_index_bulk_cron'
         'environments_auto_stop_cron_worker'                     | 'environments_auto_stop_cron_worker_cron'
         'expire_build_artifacts_worker'                          | 'expire_build_artifacts_worker_cron'
         'geo_migrated_local_files_clean_up_worker'               | 'geo_migrated_local_files_clean_up_worker_cron'
