@@ -22,3 +22,6 @@ default['oak']['components'] = {}
 # is enabled. Parsed to derive the nginx server_name and listen port, following
 # the same convention as registry_external_url.
 default['oak']['components']['openbao']['external_url'] = nil
+
+# Path where the generated Helm values file is written.
+default['oak']['components']['openbao']['helm_values_path'] = '/etc/gitlab/openbao-helm-values.yaml'

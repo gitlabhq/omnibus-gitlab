@@ -3689,6 +3689,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 ## When enabled, gitlab-ctl reconfigure will:
 ##   1. Add an NGINX reverse proxy that routes the external URL to the OpenBao service.
 ##   2. Auto-configure gitlab_rails['openbao'] URLs (url + internal_url).
+##   3. Generate a ready-to-use Helm values file at the path below.
 ## Use https:// in external_url to enable TLS. When letsencrypt['enable'] is true, the
 ## OpenBao hostname is automatically added as a SAN to the Let's Encrypt certificate.
 # oak['components']['openbao']['enable'] = true
@@ -3699,3 +3700,5 @@ external_url 'GENERATED_EXTERNAL_URL'
 # oak['components']['openbao']['ssl_certificate_key'] = '/etc/gitlab/ssl/openbao.example.com.key'
 ## Redirect HTTP to HTTPS (enabled automatically when using Let's Encrypt):
 # oak['components']['openbao']['redirect_http_to_https'] = true
+## Path where the generated Helm values file is written.
+# oak['components']['openbao']['helm_values_path'] = '/etc/gitlab/openbao-helm-values.yaml'
