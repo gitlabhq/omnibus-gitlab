@@ -1,0 +1,42 @@
+# GitLab OAK – generated OpenBao Helm values
+#
+# This file is managed by gitlab-ctl. Manual changes will be overwritten on
+# the next `gitlab-ctl reconfigure`. Customise via gitlab.rb instead.
+#
+# Usage:
+#   helm upgrade --install openbao \
+#     oci://registry.gitlab.com/gitlab-org/charts/openbao \
+#     -f /etc/gitlab/openbao-helm-values.yaml
+
+config:
+  # Storage backend: PostgreSQL.
+  #
+  # The host and port below are auto-filled from your Omnibus configuration.
+  # The database, username, and password must be created manually by the
+  # operator before running `helm install` – see the OpenBao chart documentation:
+  # https://docs.gitlab.com/charts/charts/openbao/
+  storage:
+    postgresql:
+      # Required for PostgreSQL service_registration (uses advisory locks for HA).
+      haEnabled: true
+      connection:
+        # K8s pods reach the Omnibus PostgreSQL via the OAK network interface.
+        host: "<%= @network_address %>"
+        port: <%= @postgresql_port %>
+        database: "openbao"
+        username: "openbao"
+        # Supply the password via a Kubernetes secret:
+        #   kubectl create secret generic openbao-db-password \
+        #     --from-literal=password=<your-password>
+        password:
+          secret: openbao-db-password
+          key: password
+
+  # Auto-initializes OpenBao with the JWT auth method for GitLab on first install.
+  initialize:
+    enabled: true
+    oidcDiscoveryUrl: "<%= @gitlab_url %>"
+    boundIssuer: "<%= @gitlab_url %>"
+    # Must match the 'aud' claim in GitLab's JWT tokens (GitLab uses the OpenBao
+    # public URL as the audience).
+    boundAudiences: '"<%= @openbao_external_url %>"'
