@@ -43,9 +43,6 @@ else
   build do
     env = with_standard_compiler_flags(with_embedded_path)
 
-    # SLES uses gcc with C90 by default, but OpenSSL 3.x requires C99
-    env['CFLAGS'] << ' -std=gnu99' if OhaiHelper.os_platform == 'sles'
-
     configure_args = [
       "--prefix=#{install_dir}/embedded",
       "--libdir=lib",
