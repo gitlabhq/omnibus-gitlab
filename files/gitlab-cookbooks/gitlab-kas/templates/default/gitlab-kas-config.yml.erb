@@ -54,6 +54,9 @@ redis:
     key_file: "<%= @redis_tls_client_key_file %>"
     <% end %>
     <% end %>
+  <%- if @redis_username %>
+  username: <%= @redis_username %>
+  <%- end %>
   <%- if @redis_password_file %>
   password_file: <%= @redis_password_file %>
   <%- end %>

@@ -48,6 +48,7 @@ default['gitlab_kas']['env'] = {
 default['gitlab_kas']['redis_socket'] = nil
 default['gitlab_kas']['redis_host'] = nil
 default['gitlab_kas']['redis_port'] = nil
+default['gitlab_kas']['redis_username'] = nil
 default['gitlab_kas']['redis_password'] = nil
 default['gitlab_kas']['redis_sentinels'] = []
 default['gitlab_kas']['redis_sentinels_master_name'] = nil

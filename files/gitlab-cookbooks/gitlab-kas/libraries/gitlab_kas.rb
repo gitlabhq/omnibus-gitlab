@@ -123,6 +123,7 @@ module GitlabKas
         redis_socket
         redis_host
         redis_port
+        redis_username
         redis_password
         redis_sentinels
         redis_sentinels_password
