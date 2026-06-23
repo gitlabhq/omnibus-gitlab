@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.11.6 (2026-06-23)
+
+### Fixed (1 change)
+
+- [Default registry database port to postgresql['port']](gitlab-org/security/omnibus-gitlab@f771b219676fc947f2b8e448d16623f76401ba4c)
+
 ## 18.11.5 (2026-06-10)
 
 ### Security (1 change)
