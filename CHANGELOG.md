@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.1.1 (2026-06-23)
+
+### Changed (1 change)
+
+- [Re-enable OpenSUSE 15.6 builds](gitlab-org/security/omnibus-gitlab@7236e421d0a944cf3189facb1637b488035da36a)
+
 ## 19.1.0 (2026-06-17)
 
 ### Added (2 changes)
