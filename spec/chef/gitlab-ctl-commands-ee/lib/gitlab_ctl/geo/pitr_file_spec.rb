@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'geo/pitr_file'
+require 'gitlab_ctl/geo/pitr_file'
 
-RSpec.describe Geo::PitrFile do
+RSpec.describe GitlabCtl::Geo::PitrFile do
   let(:lsn) { 'imafakelsn' }
   let(:postgres_path) { 'postgresql/dir' }
   let(:filepath) { "#{postgres_path}/data/geo-pitr-file" }
@@ -40,7 +40,7 @@ RSpec.describe Geo::PitrFile do
         allow(File).to receive(:exist?).with(filepath).and_return(false)
         allow(File).to receive(:delete).with(filepath).and_raise(Errno::ENOENT)
 
-        expect { subject.delete }.to_not raise_error(Geo::PitrFileError, "Unable to delete PITR")
+        expect { subject.delete }.to_not raise_error(GitlabCtl::Geo::PitrFileError, "Unable to delete PITR")
       end
     end
 
@@ -57,7 +57,7 @@ RSpec.describe Geo::PitrFile do
       it 'raises an error if the file does not exist' do
         allow(File).to receive(:read).with(filepath).and_raise(Errno::ENOENT)
 
-        expect { subject.get }.to raise_error(Geo::PitrFileError, "Unable to fetch PITR")
+        expect { subject.get }.to raise_error(GitlabCtl::Geo::PitrFileError, "Unable to fetch PITR")
       end
     end
   end
@@ -89,7 +89,7 @@ RSpec.describe Geo::PitrFile do
       end
 
       it 'raises an error if the key does not exist' do
-        expect { subject.delete }.to raise_error(Geo::PitrFileError, 'Unable to delete PITR')
+        expect { subject.delete }.to raise_error(GitlabCtl::Geo::PitrFileError, 'Unable to delete PITR')
       end
     end
 
@@ -106,7 +106,7 @@ RSpec.describe Geo::PitrFile do
 
       context 'non-existing key' do
         it 'raises an error if the key does not exist' do
-          expect { subject.get }.to raise_error(Geo::PitrFileError, 'Unable to fetch PITR')
+          expect { subject.get }.to raise_error(GitlabCtl::Geo::PitrFileError, 'Unable to fetch PITR')
         end
       end
     end

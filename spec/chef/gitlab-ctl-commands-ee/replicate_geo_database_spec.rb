@@ -12,9 +12,9 @@ RSpec.describe 'gitlab-ctl replicate-geo-database' do
   before do
     allow_any_instance_of(Omnibus::Ctl).to receive(:require).and_call_original
     allow_any_instance_of(Omnibus::Ctl).to receive(:require).with(
-      '/opt/testing-ctl/embedded/service/omnibus-ctl-ee/lib/geo/replication'
+      '/opt/testing-ctl/embedded/service/omnibus-ctl-ee/lib/gitlab_ctl/geo/replication'
     ) do
-      require_relative('../../../files/gitlab-ctl-commands-ee/lib/geo/replication')
+      require_relative('../../../files/gitlab-ctl-commands-ee/lib/gitlab_ctl/geo/replication')
     end
 
     subject.load_file('files/gitlab-ctl-commands-ee/replicate_geo_database.rb')
@@ -28,11 +28,11 @@ RSpec.describe 'gitlab-ctl replicate-geo-database' do
     it 'executes the geo replication command' do
       stub_command_arguments(required_arguments)
 
-      expect(Geo::Replication).to receive(:new).and_call_original
+      expect(GitlabCtl::Geo::Replication).to receive(:new).and_call_original
         .with(subject, hash_including(host: 'gitlab-primary.geo',
                                       slot_name: 'gitlab_primary_geo'))
 
-      expect_any_instance_of(Geo::Replication).to receive(:execute)
+      expect_any_instance_of(GitlabCtl::Geo::Replication).to receive(:execute)
 
       replicate_geo_database
     end
@@ -40,7 +40,7 @@ RSpec.describe 'gitlab-ctl replicate-geo-database' do
     it 'applies defaults to optional arguments' do
       stub_command_arguments(required_arguments)
 
-      expect(Geo::Replication).to receive(:new).and_call_original
+      expect(GitlabCtl::Geo::Replication).to receive(:new).and_call_original
         .with(subject, hash_including(host: 'gitlab-primary.geo',
                                       slot_name: 'gitlab_primary_geo',
                                       user: 'gitlab_replicator',
@@ -56,7 +56,7 @@ RSpec.describe 'gitlab-ctl replicate-geo-database' do
                                       recovery_target_timeline: 'latest',
                                       db_name: 'gitlabhq_production'))
 
-      expect_any_instance_of(Geo::Replication).to receive(:execute)
+      expect_any_instance_of(GitlabCtl::Geo::Replication).to receive(:execute)
 
       replicate_geo_database
     end
@@ -64,7 +64,7 @@ RSpec.describe 'gitlab-ctl replicate-geo-database' do
     it 'requires the host argument' do
       stub_command_arguments(%w(--slot-name=gitlab_primary_geo))
 
-      expect(Geo::Replication).not_to receive(:new)
+      expect(GitlabCtl::Geo::Replication).not_to receive(:new)
 
       # Important to catch this SystemExit or else RSpec exits
       expect { subject.replicate_geo_database }.to raise_error(SystemExit).and(
@@ -75,7 +75,7 @@ RSpec.describe 'gitlab-ctl replicate-geo-database' do
     it 'requires the slot-name argument' do
       stub_command_arguments(%w(--host=gitlab-primary.geo))
 
-      expect(Geo::Replication).not_to receive(:new)
+      expect(GitlabCtl::Geo::Replication).not_to receive(:new)
 
       # Important to catch this SystemExit or else RSpec exits
       expect { subject.replicate_geo_database }.to raise_error(SystemExit).and(
@@ -91,14 +91,14 @@ RSpec.describe 'gitlab-ctl replicate-geo-database' do
                --sslcompression=1
                --no-wait))
 
-        expect(Geo::Replication).to receive(:new).and_call_original
+        expect(GitlabCtl::Geo::Replication).to receive(:new).and_call_original
           .with(subject, hash_including(host: 'gitlab-primary.geo',
                                         slot_name: 'gitlab_primary_geo',
                                         sslmode: 'disable',
                                         sslcompression: 1,
                                         now: true))
 
-        expect_any_instance_of(Geo::Replication).to receive(:execute)
+        expect_any_instance_of(GitlabCtl::Geo::Replication).to receive(:execute)
 
         replicate_geo_database
       end
@@ -110,12 +110,12 @@ RSpec.describe 'gitlab-ctl replicate-geo-database' do
           required_arguments +
             %w(--db-name=custom_db_name))
 
-        expect(Geo::Replication).to receive(:new).and_call_original
+        expect(GitlabCtl::Geo::Replication).to receive(:new).and_call_original
           .with(subject, hash_including(host: 'gitlab-primary.geo',
                                         slot_name: 'gitlab_primary_geo',
                                         db_name: 'custom_db_name'))
 
-        expect_any_instance_of(Geo::Replication).to receive(:execute)
+        expect_any_instance_of(GitlabCtl::Geo::Replication).to receive(:execute)
 
         replicate_geo_database
       end

@@ -1,9 +1,9 @@
 require 'chef_helper'
-require 'geo/promotion_preflight_checks'
+require 'gitlab_ctl/geo/promotion_preflight_checks'
 
 RSpec.shared_context 'promotion-preflight-checks' do
   let(:command_name) { 'promotion-preflight-checks' }
-  let(:klass) { Geo::PromotionPreflightChecks }
+  let(:klass) { GitlabCtl::Geo::PromotionPreflightChecks }
   let(:command_script) { 'promotion_preflight_checks' }
 end
 
