@@ -89,6 +89,12 @@ No changes.
 - [Remove Spamcheck from Omnibus-GitLab for 19.0](gitlab-org/omnibus-gitlab@ca64c4627e2b95a2dec19e44e3f76561ebf4afb2) ([merge request](gitlab-org/omnibus-gitlab!9366))
 - [Remove Mattermost for SLES-12.5](gitlab-org/omnibus-gitlab@580302851cb4486434e0db203d4a1062b9abc4e0) ([merge request](gitlab-org/omnibus-gitlab!9274))
 
+## 18.11.6 (2026-06-23)
+
+### Fixed (1 change)
+
+- [Default registry database port to postgresql['port']](gitlab-org/security/omnibus-gitlab@f771b219676fc947f2b8e448d16623f76401ba4c)
+
 ## 18.11.5 (2026-06-10)
 
 ### Security (1 change)
