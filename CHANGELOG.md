@@ -3,6 +3,16 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.0.3 (2026-06-23)
+
+### Fixed (1 change)
+
+- [Default registry database port to postgresql['port']](gitlab-org/security/omnibus-gitlab@83eb2fc2dffa290ef2f55b6c39b58fe261937214)
+
+### Changed (1 change)
+
+- [Re-enable OpenSUSE 15.6 builds](gitlab-org/security/omnibus-gitlab@6080b0d24e30b519abd48d3791a5889455631cde)
+
 ## 19.0.2 (2026-06-10)
 
 ### Changed (2 changes)
