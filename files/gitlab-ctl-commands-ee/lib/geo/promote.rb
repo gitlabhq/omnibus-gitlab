@@ -122,7 +122,7 @@ module Geo
       return @patroni_node_role if defined?(@patroni_node_role)
 
       unless progress_message('Attempting to detect the Patroni role of this node') do
-        node = Patroni::Client.new
+        node = GitlabCtl::Patroni::Client.new
         @patroni_node_role = :standby_leader if node.standby_leader?
         @patroni_node_role = :leader if node.leader?
         @patroni_node_role = :replica if node.replica?

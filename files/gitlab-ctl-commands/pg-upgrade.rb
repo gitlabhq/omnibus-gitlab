@@ -648,7 +648,7 @@ def guess_patroni_node_role
   failure_cause = :none
   unless GitlabCtl::Util.progress_message('Attempting to detect the role of this Patroni node') do
     begin
-      node = Patroni::Client.new
+      node = GitlabCtl::Patroni::Client.new
       scope = @attributes.dig(:patroni, :scope)
       node_name = @attributes.dig(:patroni, :name)
       consul_binary = @attributes.dig(:consul, :binary_path)
@@ -696,7 +696,7 @@ end
 def check_patroni_cluster_status
   # If the client can be created then it means that the
   # required node attributes are stored correctly.
-  node = Patroni::Client.new
+  node = GitlabCtl::Patroni::Client.new
 
   return if [:patroni_leader, :patroni_standby_leader].none? { |type| @instance_type == type }
 
