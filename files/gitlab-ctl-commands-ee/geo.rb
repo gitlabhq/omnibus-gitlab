@@ -2,21 +2,21 @@ require 'optparse'
 
 require "#{base_path}/embedded/cookbooks/package/libraries/gitlab_cluster"
 require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
-require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/geo"
-require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/geo/promote"
+require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/gitlab_ctl/geo"
+require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/gitlab_ctl/geo/promote"
 
 add_command_under_category('geo', 'gitlab-geo', 'Interact with Geo', 2) do
   begin
-    options = Geo.parse_options(ARGV)
+    options = GitlabCtl::Geo.parse_options(ARGV)
   rescue OptionParser::ParseError => e
-    warn "#{e}\n\n#{Geo.usage}"
+    warn "#{e}\n\n#{GitlabCtl::Geo.usage}"
     exit 128
   end
 
   case options[:command]
   when 'promote'
     begin
-      Geo::Promote.new(self, options).execute
+      GitlabCtl::Geo::Promote.new(self, options).execute
       exit 0
     rescue StandardError => e
       warn "Error while promoting the current node: #{e}" unless options[:quiet]
@@ -31,13 +31,13 @@ add_command_under_category('geo', 'gitlab-geo', 'Interact with Geo', 2) do
 
     command = options[:command].match?(/[_?]/) ? nil : options[:command].to_sym
 
-    if command.nil? || !Geo.respond_to?(command) || Geo.method(command).arity != 1
+    if command.nil? || !GitlabCtl::Geo.respond_to?(command) || GitlabCtl::Geo.method(command).arity != 1
       warn "Unknown Geo command: #{options[:command]}"
       exit 128
     end
 
     begin
-      status = Geo.send(command, options)
+      status = GitlabCtl::Geo.send(command, options)
       log status.stdout
 
       if status.error?

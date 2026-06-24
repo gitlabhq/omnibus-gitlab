@@ -1,8 +1,8 @@
 require 'spec_helper'
-require 'geo/promote_db'
+require 'gitlab_ctl/geo/promote_db'
 require 'gitlab_ctl/util'
 
-RSpec.describe Geo::PromoteDb, '#execute' do
+RSpec.describe GitlabCtl::Geo::PromoteDb, '#execute' do
   let(:instance) { double(base_path: '/opt/gitlab/embedded', data_path: 'ctl_data_path') }
 
   subject(:command) { described_class.new(instance) }

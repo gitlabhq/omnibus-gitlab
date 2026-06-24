@@ -1,4 +1,4 @@
-require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/geo/replication"
+require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/gitlab_ctl/geo/replication"
 require 'optparse'
 require 'English'
 
@@ -32,7 +32,7 @@ class GeoReplicationCommand
   end
 
   def execute!
-    Geo::Replication.new(@ctl, @options).execute
+    GitlabCtl::Geo::Replication.new(@ctl, @options).execute
   end
 
   def arguments

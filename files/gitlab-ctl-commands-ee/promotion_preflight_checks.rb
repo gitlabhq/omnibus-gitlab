@@ -1,4 +1,4 @@
-require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/geo/promotion_preflight_checks"
+require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/gitlab_ctl/geo/promotion_preflight_checks"
 
 add_command_under_category('promotion-preflight-checks', 'gitlab-geo', 'Run preflight checks for promotion to primary node', 2) do |cmd_name, *args|
   def get_ctl_options
@@ -14,5 +14,5 @@ add_command_under_category('promotion-preflight-checks', 'gitlab-geo', 'Run pref
     options
   end
 
-  Geo::PromotionPreflightChecks.new(base_path, get_ctl_options).execute
+  GitlabCtl::Geo::PromotionPreflightChecks.new(base_path, get_ctl_options).execute
 end

@@ -1,11 +1,11 @@
 require 'spec_helper'
-require 'geo/promote'
-require 'geo/promote_db'
+require 'gitlab_ctl/geo/promote'
+require 'gitlab_ctl/geo/promote_db'
 require 'gitlab_ctl/util'
 
-require_relative('../../../../../files/gitlab-ctl-commands-ee/lib/gitlab_ctl/patroni')
+require_relative('../../../../../../files/gitlab-ctl-commands-ee/lib/gitlab_ctl/patroni')
 
-RSpec.describe Geo::Promote, '#execute' do
+RSpec.describe GitlabCtl::Geo::Promote, '#execute' do
   let(:base_path) { '/opt/gitlab/embedded' }
   let(:ctl) { double(base_path: base_path, data_path: '/var/opt/gitlab/postgresql/data') }
   let(:config_path) { Dir.mktmpdir }
@@ -327,7 +327,7 @@ RSpec.describe Geo::Promote, '#execute' do
         it 'promotes database to begin read-write operations' do
           allow(command).to receive(:run_reconfigure)
 
-          expect_any_instance_of(Geo::PromoteDb).to receive(:execute).once.and_return(true)
+          expect_any_instance_of(GitlabCtl::Geo::PromoteDb).to receive(:execute).once.and_return(true)
 
           command.execute
         end
@@ -341,7 +341,7 @@ RSpec.describe Geo::Promote, '#execute' do
         it 'does not promote the PostgreSQL database' do
           allow(command).to receive(:run_reconfigure)
 
-          expect_any_instance_of(Geo::PromoteDb).not_to receive(:execute)
+          expect_any_instance_of(GitlabCtl::Geo::PromoteDb).not_to receive(:execute)
 
           command.execute
         end
@@ -371,7 +371,7 @@ RSpec.describe Geo::Promote, '#execute' do
             allow(command).to receive(:disable_patroni_standby_cluster)
             allow(command).to receive(:run_reconfigure)
 
-            expect_any_instance_of(Geo::PromoteDb).to receive(:execute).once.and_return(true)
+            expect_any_instance_of(GitlabCtl::Geo::PromoteDb).to receive(:execute).once.and_return(true)
 
             command.execute
           end
@@ -386,7 +386,7 @@ RSpec.describe Geo::Promote, '#execute' do
             allow(command).to receive(:disable_patroni_standby_cluster)
             allow(command).to receive(:run_reconfigure)
 
-            expect_any_instance_of(Geo::PromoteDb).not_to receive(:execute)
+            expect_any_instance_of(GitlabCtl::Geo::PromoteDb).not_to receive(:execute)
 
             command.execute
           end
@@ -437,7 +437,7 @@ RSpec.describe Geo::Promote, '#execute' do
         it 'does not promote the PostgreSQL database' do
           allow(command).to receive(:run_reconfigure)
 
-          expect_any_instance_of(Geo::PromoteDb).not_to receive(:execute)
+          expect_any_instance_of(GitlabCtl::Geo::PromoteDb).not_to receive(:execute)
 
           command.execute
         end

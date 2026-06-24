@@ -3,10 +3,10 @@ require 'spec_helper'
 $LOAD_PATH << './files/gitlab-ctl-commands-ee/lib'
 $LOAD_PATH << './files/gitlab-ctl-commands/lib'
 
-require 'geo/replication'
+require 'gitlab_ctl/geo/replication'
 require 'gitlab_ctl/util'
 
-RSpec.describe Geo::Replication, '#execute' do
+RSpec.describe GitlabCtl::Geo::Replication, '#execute' do
   let(:command) { spy('command spy', error?: false) }
   let(:instance) { double(base_path: '/opt/gitlab/embedded', data_path: '/var/opt/gitlab') }
   let(:file) { spy('file spy') }

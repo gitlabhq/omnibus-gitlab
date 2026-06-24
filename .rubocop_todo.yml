@@ -228,7 +228,7 @@ Style/CaseLikeIf:
   Exclude:
     - 'files/gitlab-cookbooks/monitoring/libraries/prometheus_helper.rb'
     - 'files/gitlab-cookbooks/package/libraries/deprecations.rb'
-    - 'files/gitlab-ctl-commands-ee/lib/geo/replication_toggle_command.rb'
+    - 'files/gitlab-ctl-commands-ee/lib/gitlab_ctl/geo/replication_toggle_command.rb'
     - 'files/gitlab-ctl-commands/pg-upgrade.rb'
     - 'lib/gitlab/license/analyzer.rb'
 
@@ -257,12 +257,12 @@ Style/FrozenStringLiteralComment:
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Style/GlobalStdStream:
   Exclude:
-    - 'files/gitlab-ctl-commands-ee/lib/geo/promotion_preflight_checks.rb'
-    - 'files/gitlab-ctl-commands-ee/lib/geo/replication.rb'
+    - 'files/gitlab-ctl-commands-ee/lib/gitlab_ctl/geo/promotion_preflight_checks.rb'
+    - 'files/gitlab-ctl-commands-ee/lib/gitlab_ctl/geo/replication.rb'
     - 'files/gitlab-ctl-commands/lib/gitlab_ctl/util.rb'
     - 'lib/gitlab/build/trigger.rb'
-    - 'spec/chef/gitlab-ctl-commands-ee/lib/geo/promotion_preflight_checks_spec.rb'
-    - 'spec/chef/gitlab-ctl-commands-ee/lib/geo/replication_spec.rb'
+    - 'spec/chef/gitlab-ctl-commands-ee/lib/gitlab_ctl/geo/promotion_preflight_checks_spec.rb'
+    - 'spec/chef/gitlab-ctl-commands-ee/lib/gitlab_ctl/geo/replication_spec.rb'
     - 'spec/chef/gitlab-ctl-commands/lib/gitlab_ctl_backup_spec.rb'
     - 'spec/chef/gitlab-ctl-commands/lib/util_spec.rb'
 
@@ -317,7 +317,7 @@ Style/RedundantBegin:
 # This cop supports safe autocorrection (--autocorrect).
 Style/RedundantConditional:
   Exclude:
-    - 'files/gitlab-ctl-commands-ee/lib/geo/replication.rb'
+    - 'files/gitlab-ctl-commands-ee/lib/gitlab_ctl/geo/replication.rb'
 
 # Offense count: 63
 # This cop supports safe autocorrection (--autocorrect).

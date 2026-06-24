@@ -3,16 +3,16 @@ require 'spec_helper'
 $LOAD_PATH << './files/gitlab-ctl-commands-ee/lib'
 $LOAD_PATH << './files/gitlab-ctl-commands/lib'
 
-require 'geo/replication_toggle_command'
+require 'gitlab_ctl/geo/replication_toggle_command'
 require 'gitlab_ctl/util'
 
-RSpec.describe Geo::ReplicationToggleCommand do
+RSpec.describe GitlabCtl::Geo::ReplicationToggleCommand do
   let(:status) { double('Command status', error?: false) }
   let(:arguments) { [] }
   let(:ctl_instance) { double('gitlab-ctl instance', base_path: '', data_path: 'ctl_data_path') }
 
   before do
-    allow_any_instance_of(Geo::ReplicationToggleCommand).to receive(:current_lsn).and_return('16/B374D848')
+    allow_any_instance_of(GitlabCtl::Geo::ReplicationToggleCommand).to receive(:current_lsn).and_return('16/B374D848')
     allow(GitlabCtl::Util)
       .to receive(:get_public_node_attributes)
         .and_return({ 'postgresql' => { 'dir' => 'data_path/postgresql' } })
@@ -22,14 +22,14 @@ RSpec.describe Geo::ReplicationToggleCommand do
     subject { described_class.new(ctl_instance, 'pause', arguments) }
 
     it 'calls pause' do
-      expect_any_instance_of(Geo::ReplicationProcess).to receive(:pause)
+      expect_any_instance_of(GitlabCtl::Geo::ReplicationProcess).to receive(:pause)
       expect(File).to receive(:write).with('data_path/postgresql/data/geo-pitr-file', '16/B374D848')
 
       expect { subject.execute! }.to output(/Create Geo point-in-time recovery file/).to_stdout
     end
 
     it 'rescues and exits if postgres has an error' do
-      expect_any_instance_of(Geo::ReplicationProcess).to receive(:pause).and_raise(Geo::PsqlError, "Oh nose!")
+      expect_any_instance_of(GitlabCtl::Geo::ReplicationProcess).to receive(:pause).and_raise(GitlabCtl::Geo::PsqlError, "Oh nose!")
 
       expect do
         expect { subject.execute! }.to raise_error(SystemExit)
@@ -40,8 +40,8 @@ RSpec.describe Geo::ReplicationToggleCommand do
       let(:arguments) { %w(--db_name=database_i_want) }
 
       it 'uses the specified database' do
-        expect(Geo::ReplicationProcess).to receive(:new).with(any_args, { db_name: 'database_i_want' }).and_call_original
-        expect_any_instance_of(Geo::ReplicationProcess).to receive(:pause)
+        expect(GitlabCtl::Geo::ReplicationProcess).to receive(:new).with(any_args, { db_name: 'database_i_want' }).and_call_original
+        expect_any_instance_of(GitlabCtl::Geo::ReplicationProcess).to receive(:pause)
         expect(File).to receive(:write).with('data_path/postgresql/data/geo-pitr-file', '16/B374D848')
 
         expect { subject.execute! }.to output(/Create Geo point-in-time recovery file/).to_stdout
@@ -49,11 +49,11 @@ RSpec.describe Geo::ReplicationToggleCommand do
     end
 
     it 'rescues, resumes and exits if pitr file creation has an error' do
-      expect_any_instance_of(Geo::ReplicationProcess).to receive(:pause)
-      expect_any_instance_of(Geo::PitrFile).to receive(:create).and_raise(Geo::PitrFileError, "Oh nose!")
+      expect_any_instance_of(GitlabCtl::Geo::ReplicationProcess).to receive(:pause)
+      expect_any_instance_of(GitlabCtl::Geo::PitrFile).to receive(:create).and_raise(GitlabCtl::Geo::PitrFileError, "Oh nose!")
 
       expect do
-        expect_any_instance_of(Geo::ReplicationProcess).to receive(:resume)
+        expect_any_instance_of(GitlabCtl::Geo::ReplicationProcess).to receive(:resume)
         expect { subject.execute! }.to raise_error(SystemExit)
       end.to output(/Geo point-in-time recovery file encountered an error: Oh nose!/).to_stdout
     end
@@ -67,13 +67,13 @@ RSpec.describe Geo::ReplicationToggleCommand do
     end
 
     it 'calls resume' do
-      expect_any_instance_of(Geo::ReplicationProcess).to receive(:resume)
+      expect_any_instance_of(GitlabCtl::Geo::ReplicationProcess).to receive(:resume)
 
       expect { subject.execute! }.to output(/Remove Geo point-in-time recovery file/).to_stdout
     end
 
     it 'rescues and exits if postgres has an error' do
-      expect_any_instance_of(Geo::ReplicationProcess).to receive(:resume).and_raise(Geo::PsqlError, "Oh nose!")
+      expect_any_instance_of(GitlabCtl::Geo::ReplicationProcess).to receive(:resume).and_raise(GitlabCtl::Geo::PsqlError, "Oh nose!")
 
       expect do
         expect { subject.execute! }.to raise_error(SystemExit)
@@ -81,7 +81,7 @@ RSpec.describe Geo::ReplicationToggleCommand do
     end
 
     it 'rescues and exits if rake has an error' do
-      expect_any_instance_of(Geo::ReplicationProcess).to receive(:resume).and_raise(Geo::RakeError, "Oh nose!")
+      expect_any_instance_of(GitlabCtl::Geo::ReplicationProcess).to receive(:resume).and_raise(GitlabCtl::Geo::RakeError, "Oh nose!")
 
       expect do
         expect { subject.execute! }.to raise_error(SystemExit)
@@ -89,11 +89,11 @@ RSpec.describe Geo::ReplicationToggleCommand do
     end
 
     it 'rescues, resumes and exits if pitr file creation has an error' do
-      expect_any_instance_of(Geo::PitrFile).to receive(:delete).and_raise(Geo::PitrFileError, "Oh nose!")
-      expect_any_instance_of(Geo::ReplicationProcess).to receive(:resume)
+      expect_any_instance_of(GitlabCtl::Geo::PitrFile).to receive(:delete).and_raise(GitlabCtl::Geo::PitrFileError, "Oh nose!")
+      expect_any_instance_of(GitlabCtl::Geo::ReplicationProcess).to receive(:resume)
 
       expect do
-        expect_any_instance_of(Geo::ReplicationProcess).to receive(:pause)
+        expect_any_instance_of(GitlabCtl::Geo::ReplicationProcess).to receive(:pause)
         expect { subject.execute! }.to raise_error(SystemExit)
       end.to output(/Geo point-in-time recovery file encountered an error: Oh nose!/).to_stdout
     end
@@ -102,8 +102,8 @@ RSpec.describe Geo::ReplicationToggleCommand do
       let(:arguments) { %w(--db_name=database_i_want) }
 
       it 'uses the specified database' do
-        expect(Geo::ReplicationProcess).to receive(:new).with(any_args, { db_name: 'database_i_want' }).and_call_original
-        expect_any_instance_of(Geo::ReplicationProcess).to receive(:resume)
+        expect(GitlabCtl::Geo::ReplicationProcess).to receive(:new).with(any_args, { db_name: 'database_i_want' }).and_call_original
+        expect_any_instance_of(GitlabCtl::Geo::ReplicationProcess).to receive(:resume)
 
         expect { subject.execute! }.to output(/Remove Geo point-in-time recovery file/).to_stdout
       end
