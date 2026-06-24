@@ -27,6 +27,11 @@ title: Contribute to Linux package development
 - [Handling broken master pipelines](broken_master.md)
 - [Handling vulnerabilities](vulnerabilities.md)
 
+## Operating system support
+
+- [Add support for a new operating system](adding-support-for-an-os.md)
+- [Deprecate and remove support for a supported operating system](deprecating-and-removing-support-for-an-os.md)
+
 ## Technical notes
 
 - [AWS AMis and Marketplace Listing](aws_amis_and_marketplace_listings.md)
