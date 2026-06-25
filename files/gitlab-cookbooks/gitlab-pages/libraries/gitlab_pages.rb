@@ -90,7 +90,7 @@ module GitlabPages
       Gitlab['gitlab_pages']['pages_root'] ||= (Gitlab['gitlab_rails']['pages_path'] || File.join(Gitlab['gitlab_rails']['shared_path'], 'pages'))
 
       Gitlab['gitlab_pages']['gitlab_server'] ||= Gitlab['external_url']
-      Gitlab['gitlab_pages']['artifacts_server_url'] ||= Gitlab['gitlab_pages']['gitlab_server'].chomp('/') + '/api/v4'
+      Gitlab['gitlab_pages']['artifacts_server_url'] ||= (Gitlab['gitlab_pages']['internal_gitlab_server'] || Gitlab['gitlab_pages']['gitlab_server']).chomp('/') + '/api/v4'
 
       Gitlab['gitlab_pages']['nginx']['namespace_in_path'] = Gitlab['gitlab_pages']['namespace_in_path'] if Gitlab['gitlab_pages']['namespace_in_path']
 
