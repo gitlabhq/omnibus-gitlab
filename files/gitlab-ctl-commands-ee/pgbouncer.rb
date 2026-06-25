@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/pgbouncer"
+require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/gitlab_ctl/pgbouncer"
 require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl/postgresql"
 
 add_command_under_category('pgb-console', 'pgbouncer', 'Connect to the pgbouncer console', 2) do
@@ -59,7 +59,7 @@ add_command_under_category('write-pgpass', 'database', 'Write a pgpass file for 
   pgpass = GitlabCtl::PostgreSQL::Pgpass.new(
     hostname: options['host'],
     port: options['port'],
-    database: options['database'] || Pgbouncer::Databases.rails_database,
+    database: options['database'] || GitlabCtl::Pgbouncer::Databases.rails_database,
     username: options['user'],
     password: password,
     host_user: options['host_user'],
@@ -136,7 +136,7 @@ end
 
 def get_client
   begin
-    pgb = Pgbouncer::Databases.new(get_pg_options, base_path, data_path)
+    pgb = GitlabCtl::Pgbouncer::Databases.new(get_pg_options, base_path, data_path)
   rescue RuntimeError => e
     log e.message
     exit 1

@@ -379,7 +379,7 @@ Style/SoleNestedConditional:
 Style/StderrPuts:
   Exclude:
     - 'files/gitlab-cookbooks/package/libraries/handlers/gitlab.rb'
-    - 'files/gitlab-ctl-commands-ee/lib/pgbouncer.rb'
+    - 'files/gitlab-ctl-commands-ee/lib/gitlab_ctl/pgbouncer.rb'
     - 'files/gitlab-ctl-commands-ee/pgbouncer.rb'
     - 'files/gitlab-ctl-commands/letsencrypt.rb'
     - 'files/gitlab-ctl-commands/lib/gitlab_ctl/pg_upgrade.rb'
