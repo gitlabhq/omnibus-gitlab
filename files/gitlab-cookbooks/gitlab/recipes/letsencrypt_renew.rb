@@ -16,4 +16,4 @@
 
 include_recipe 'package::config'
 
-include_recipe 'letsencrypt::enable' if node['nginx']['enable'] && node['letsencrypt']['enable']
+include_recipe 'letsencrypt::enable' if node['gitlab']['gitlab_rails']['nginx']['enable'] && node['letsencrypt']['enable']

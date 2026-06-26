@@ -8,12 +8,12 @@ ruby_block 'http external-url' do
 end
 
 # If we're using SSL, force http redirection to https
-node.default['nginx']['redirect_http_to_https'] = true
+node.default['gitlab']['gitlab_rails']['nginx']['redirect_http_to_https'] = true
 
 include_recipe 'nginx::enable'
 
 # We assume that the certificate and key will be stored in the same directory
-ssl_dir = File.dirname(node['nginx']['ssl_certificate'])
+ssl_dir = File.dirname(node['gitlab']['gitlab_rails']['nginx']['ssl_certificate'])
 node.default['acme']['private_key_file'] = File.join(ssl_dir, 'letsencrypt_account_private_key.pem')
 
 directory ssl_dir do
@@ -40,11 +40,11 @@ acme_selfsigned site.host do
   node.default['letsencrypt']['alt_names'] << site.host
 
   alt_names node['letsencrypt']['alt_names']
-  crt node['nginx']['ssl_certificate']
-  key node['nginx']['ssl_certificate_key']
+  crt node['gitlab']['gitlab_rails']['nginx']['ssl_certificate']
+  key node['gitlab']['gitlab_rails']['nginx']['ssl_certificate_key']
   key_size node['letsencrypt']['key_size']
   notifies :restart, 'runit_service[nginx]', :immediately
-  only_if { !::File.exist?(node['nginx']['ssl_certificate']) }
+  only_if { !::File.exist?(node['gitlab']['gitlab_rails']['nginx']['ssl_certificate']) }
 end
 
 include_recipe "letsencrypt::#{node['letsencrypt']['authorization_method']}_authorization"

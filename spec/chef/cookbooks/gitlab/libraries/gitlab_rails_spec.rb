@@ -273,4 +273,151 @@ RSpec.describe GitlabRails do
       end
     end
   end
+
+  describe '.translate_rails_nginx_settings' do
+    let(:chef_run) { converge_config }
+
+    context 'when the rails-nginx enable option is already set by the operator' do
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: { nginx: { enable: false } },
+          nginx: { enable: true }
+        )
+      end
+
+      it 'leaves the rails-nginx enable untouched' do
+        Gitlab[:node] = chef_run.node
+        expect(Gitlab['gitlab_rails']['nginx']['enable']).to be false
+      end
+    end
+
+    context 'when neither option is set' do
+      before do
+        stub_gitlab_rb({})
+      end
+
+      # With no service role active, `DefaultRole.load_role` enables the
+      # default service group at parse time. `nginx` lives in that group
+      # via the `service 'nginx'` registration in `services.rb`, so
+      # `node.default['nginx']['enable']` becomes `true` before the
+      # translate runs, and the translate carries that through to the
+      # rails-nginx option.
+      it 'follows the default-group enable for nginx' do
+        Gitlab[:node] = chef_run.node
+        expect(Gitlab['gitlab_rails']['nginx']['enable']).to be true
+      end
+    end
+
+    context 'when the operator sets the legacy nginx[enable] = false against an active application role' do
+      before do
+        stub_gitlab_rb(
+          application_role: { enable: true },
+          nginx: { enable: false }
+        )
+      end
+
+      # The application role calls `Services.enable_group('rails')`, which
+      # writes `node.default['nginx']['enable'] = true`. The translate must
+      # carry the operator-set `false` through anyway; the regression this
+      # pins folded the `false` into the role's `true` via `||`.
+      it 'preserves the operator-set false on the rails-nginx enable' do
+        Gitlab[:node] = chef_run.node
+        expect(Gitlab['gitlab_rails']['nginx']['enable']).to be false
+      end
+    end
+
+    context 'when the operator sets the legacy nginx[enable] = true' do
+      before do
+        stub_gitlab_rb(nginx: { enable: true })
+      end
+
+      it 'propagates the true to the rails-nginx enable' do
+        Gitlab[:node] = chef_run.node
+        expect(Gitlab['gitlab_rails']['nginx']['enable']).to be true
+      end
+    end
+
+    context 'when the operator sets a server-and-clients shared nginx[*] key' do
+      before do
+        stub_gitlab_rb(nginx: { gzip_enabled: false })
+        allow(LoggingHelper).to receive(:deprecation)
+      end
+
+      # The global `nginx.conf` template reads `node['nginx']['gzip_enabled']`
+      # via `nginx/recipes/enable.rb`, so a deprecation that routes operators
+      # to `gitlab_rails['nginx']['gzip_enabled']` would orphan the daemon.
+      it 'does not emit a deprecation that names the legacy key' do
+        Gitlab[:node] = chef_run.node
+        expect(LoggingHelper).not_to have_received(:deprecation).with(
+          "nginx['gzip_enabled'] has been deprecated. Please use gitlab_rails['nginx']['gzip_enabled'] instead."
+        )
+      end
+
+      it 'still mirrors the legacy value into the rails-nginx subkey' do
+        Gitlab[:node] = chef_run.node
+        expect(Gitlab['gitlab_rails']['nginx']['gzip_enabled']).to be false
+      end
+    end
+
+    context 'when the operator sets nginx[log_directory]' do
+      before do
+        stub_gitlab_rb(nginx: { log_directory: '/legacy/log' })
+        allow(LoggingHelper).to receive(:deprecation)
+      end
+
+      # `LogfilesHelper.logging_settings('nginx')` reads
+      # `node['nginx']['log_directory']` to feed the runit service log
+      # directory and the svlogd path -- routing operators to the rails
+      # subkey would orphan the daemon's log path.
+      it 'does not emit a deprecation that names the legacy key' do
+        Gitlab[:node] = chef_run.node
+        expect(LoggingHelper).not_to have_received(:deprecation).with(
+          "nginx['log_directory'] has been deprecated. Please use gitlab_rails['nginx']['log_directory'] instead."
+        )
+      end
+
+      it 'still mirrors the legacy value into the rails-nginx subkey' do
+        Gitlab[:node] = chef_run.node
+        expect(Gitlab['gitlab_rails']['nginx']['log_directory']).to eq('/legacy/log')
+      end
+    end
+
+    context 'when the operator sets a clients-only shared nginx[*] key' do
+      before do
+        stub_gitlab_rb(nginx: { ssl_certificate: '/legacy/path.crt' })
+        allow(LoggingHelper).to receive(:deprecation)
+      end
+
+      it 'emits a deprecation that names the legacy key' do
+        Gitlab[:node] = chef_run.node
+        expect(LoggingHelper).to have_received(:deprecation).with(
+          "nginx['ssl_certificate'] has been deprecated. Please use gitlab_rails['nginx']['ssl_certificate'] instead."
+        )
+      end
+    end
+
+    context 'when the operator sets a legacy explicit-list key' do
+      let(:custom_pages) do
+        { '404' => { 'title' => 'Not Found', 'header' => 'h', 'message' => 'm' } }
+      end
+
+      before do
+        stub_gitlab_rb(nginx: { custom_error_pages: custom_pages })
+        allow(LoggingHelper).to receive(:deprecation)
+      end
+
+      # Pins the explicit-list iteration against `custom_error_pages`.
+      it 'translates the legacy value into the rails-nginx subkey' do
+        Gitlab[:node] = chef_run.node
+        expect(Gitlab['gitlab_rails']['nginx']['custom_error_pages']).to eq(custom_pages)
+      end
+
+      it 'emits a deprecation that names the legacy key' do
+        Gitlab[:node] = chef_run.node
+        expect(LoggingHelper).to have_received(:deprecation).with(
+          "nginx['custom_error_pages'] has been deprecated. Please use gitlab_rails['nginx']['custom_error_pages'] instead."
+        )
+      end
+    end
+  end
 end

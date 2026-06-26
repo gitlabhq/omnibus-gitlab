@@ -32,10 +32,12 @@ module Package
     def instantiate_nginx_settings
       Gitlab['nginx'] ||= {}
 
+      Gitlab['gitlab_rails'] ||= {}
       Gitlab['registry'] ||= {}
       Gitlab['gitlab_pages'] ||= {}
       Gitlab['gitlab_kas'] ||= {}
 
+      Gitlab['gitlab_rails']['nginx'] ||= {}
       Gitlab['registry']['nginx'] ||= {}
       Gitlab['gitlab_pages']['nginx'] ||= {}
       Gitlab['gitlab_kas']['nginx'] ||= {}

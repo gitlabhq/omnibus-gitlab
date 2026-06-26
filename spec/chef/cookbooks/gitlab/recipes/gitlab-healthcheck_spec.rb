@@ -9,7 +9,7 @@ RSpec.describe 'gitlab::gitlab-healthcheck' do
 
   context 'nginx is enabled' do
     before do
-      stub_gitlab_rb(nginx: { enable: true })
+      stub_gitlab_rb(gitlab_rails: { nginx: { enable: true } })
     end
 
     it 'correctly renders the healthcheck-rc file' do
@@ -21,7 +21,7 @@ RSpec.describe 'gitlab::gitlab-healthcheck' do
 
     it 'correctly renders the healthcheck-rc file if using proxy protocol' do
       stub_gitlab_rb(
-        nginx: { proxy_protocol: true }
+        gitlab_rails: { nginx: { proxy_protocol: true } }
       )
       expect(chef_run).to render_file("/opt/gitlab/etc/gitlab-healthcheck-rc")
         .with_content(%r{flags=\(--haproxy-protocol --insecure\)})
@@ -59,7 +59,7 @@ RSpec.describe 'gitlab::gitlab-healthcheck' do
 
   context 'nginx is disabled' do
     before do
-      stub_gitlab_rb(nginx: { enable: false })
+      stub_gitlab_rb(gitlab_rails: { nginx: { enable: false } })
     end
 
     it 'correctly renders the healthcheck-rc file using workhorse' do
@@ -81,7 +81,7 @@ RSpec.describe 'gitlab::gitlab-healthcheck' do
       # Needs gitlab::default - the `include_recipe 'gitlab::gitlab-healthcheck'`
       # gate (on `nginx.enable || gitlab_workhorse.enable`) only runs in the
       # full default recipe.
-      stub_gitlab_rb(nginx: { enable: false }, gitlab_workhorse: { enable: false })
+      stub_gitlab_rb(gitlab_rails: { nginx: { enable: false } }, gitlab_workhorse: { enable: false })
       gitlab_default_run = ChefSpec::SoloRunner.converge('gitlab::default')
       expect(gitlab_default_run).not_to render_file("/opt/gitlab/etc/gitlab-healthcheck-rc")
     end
@@ -89,7 +89,7 @@ RSpec.describe 'gitlab::gitlab-healthcheck' do
 
   context 'on a non-web node' do
     before do
-      stub_gitlab_rb(nginx: { enable: false }, gitlab_workhorse: { enable: false })
+      stub_gitlab_rb(gitlab_rails: { nginx: { enable: false } }, gitlab_workhorse: { enable: false })
     end
 
     it 'does not render the healthcheck-rc file' do

@@ -56,7 +56,7 @@ class LetsEncrypt
     end
 
     def nginx_listen_https?
-      Gitlab['nginx']['listen_https'].nil? || Gitlab['nginx']['listen_https']
+      Gitlab['gitlab_rails'].dig('nginx', 'listen_https').nil? || Gitlab['gitlab_rails'].dig('nginx', 'listen_https')
     end
 
     def le_auto_enabled?
@@ -67,7 +67,9 @@ class LetsEncrypt
     end
 
     def cert_files_present?
-      File.exist?(Gitlab['nginx']['ssl_certificate_key']) || File.exist?(Gitlab['nginx']['ssl_certificate'])
+      cert_file = Gitlab['gitlab_rails'].dig('nginx', 'ssl_certificate')
+      key_file = Gitlab['gitlab_rails'].dig('nginx', 'ssl_certificate_key')
+      File.exist?(cert_file) || File.exist?(key_file)
     end
 
     # Should we enable the recipe even if a user didn't specify it?
@@ -113,7 +115,7 @@ class LetsEncrypt
     #
     # @return [true, false]
     def needs_renewal?
-      file_name = Gitlab['nginx']['ssl_certificate']
+      file_name = Gitlab['gitlab_rails']['nginx']['ssl_certificate']
       return false unless File.exist? file_name
 
       cert = OpenSSL::X509::Certificate.new File.read(file_name)

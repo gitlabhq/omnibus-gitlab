@@ -37,11 +37,13 @@ module OmnibusGitlab
     end
 
     def default_values
+      shared_default_values.merge(client_default_values)
+    end
+
+    # Settings that are used in both nginx.conf as well as service nginx configuration files
+    def shared_default_values
       {
-        'client_max_body_size' => 0,
-        'custom_gitlab_server_config' => nil,
         'dir' => "/var/opt/gitlab/nginx",
-        'error_log_level' => "error",
         'gzip_comp_level' => "2",
         'gzip_enabled' => true,
         'gzip_http_version' => "1.1",
@@ -56,14 +58,23 @@ module OmnibusGitlab
           "text/javascript",
           "application/json"
         ],
+        'log_directory' => "/var/log/gitlab/nginx",
+        'proxy_cache' => 'gitlab',
+      }
+    end
+
+    # Settings that are used in service nginx configuration files
+    def client_default_values
+      {
+        'client_max_body_size' => 0,
+        'custom_gitlab_server_config' => nil,
+        'error_log_level' => "error",
         'hsts_include_subdomains' => false,
         'hsts_max_age' => 63072000,
         'http2_enabled' => true,
         'listen_addresses' => ['*'],
         'listen_https' => nil,
         'listen_port' => nil,
-        'log_directory' => "/var/log/gitlab/nginx",
-        'proxy_cache' => 'gitlab',
         'proxy_connect_timeout' => 300,
         'proxy_custom_buffer_size' => nil,
         'proxy_protocol' => false,

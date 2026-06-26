@@ -54,11 +54,11 @@ RSpec.describe LetsEncrypt do
     before do
       stub_gitlab_rb(
         gitlab_rails: {
-          gitlab_https: true
-        },
-        nginx: {
-          ssl_certificate_key: 'example.key',
-          ssl_certificate: 'example.crt'
+          gitlab_https: true,
+          nginx: {
+            ssl_certificate_key: 'example.key',
+            ssl_certificate: 'example.crt'
+          }
         }
       )
 
@@ -78,7 +78,7 @@ RSpec.describe LetsEncrypt do
     end
 
     it 'is false when nginx is not enabled' do
-      stub_gitlab_rb(nginx: { enable: false })
+      stub_gitlab_rb(gitlab_rails: { nginx: { enable: false } })
 
       expect(subject.should_auto_enable?).to be_falsey
     end
@@ -90,7 +90,7 @@ RSpec.describe LetsEncrypt do
     end
 
     it 'is false with explicit nginx.listen_https = false' do
-      stub_gitlab_rb(nginx: { listen_https: false })
+      stub_gitlab_rb(gitlab_rails: { nginx: { listen_https: false } })
 
       expect(subject.should_auto_enable?).to be_falsey
     end

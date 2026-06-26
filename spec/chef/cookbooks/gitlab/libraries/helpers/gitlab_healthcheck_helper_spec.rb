@@ -11,7 +11,7 @@ RSpec.describe GitlabHealthcheckHelper do
 
   context 'when nginx is enabled' do
     before do
-      stub_gitlab_rb(nginx: { enable: true })
+      stub_gitlab_rb(gitlab_rails: { nginx: { enable: true } })
     end
 
     describe '#web_node?' do
@@ -37,7 +37,7 @@ RSpec.describe GitlabHealthcheckHelper do
         # to evaluate and apply this scenario.
         stub_gitlab_rb(
           external_url: 'https://gitlab.example.com',
-          nginx: { listen_https: false }
+          gitlab_rails: { nginx: { listen_https: false } }
         )
         expect(subject.url).to eq('http://localhost:443/help')
       end
@@ -67,7 +67,7 @@ RSpec.describe GitlabHealthcheckHelper do
       end
 
       it 'prepends --haproxy-protocol when proxy_protocol is enabled' do
-        stub_gitlab_rb(nginx: { proxy_protocol: true })
+        stub_gitlab_rb(gitlab_rails: { nginx: { proxy_protocol: true } })
         expect(subject.flags).to eq(['--haproxy-protocol', '--insecure'])
       end
 
@@ -83,7 +83,7 @@ RSpec.describe GitlabHealthcheckHelper do
 
   context 'when nginx is disabled and workhorse is enabled' do
     before do
-      stub_gitlab_rb(nginx: { enable: false })
+      stub_gitlab_rb(gitlab_rails: { nginx: { enable: false } })
     end
 
     describe '#web_node?' do
@@ -99,7 +99,7 @@ RSpec.describe GitlabHealthcheckHelper do
 
       it 'targets the workhorse port when listening on a TCP socket' do
         stub_gitlab_rb(
-          nginx: { enable: false },
+          gitlab_rails: { nginx: { enable: false } },
           gitlab_workhorse: { listen_network: 'tcp', listen_addr: 'localhost:9191' }
         )
         expect(subject.url).to eq('http://localhost:9191/help')
@@ -113,7 +113,7 @@ RSpec.describe GitlabHealthcheckHelper do
 
       it 'uses --insecure when workhorse listens on a TCP socket' do
         stub_gitlab_rb(
-          nginx: { enable: false },
+          gitlab_rails: { nginx: { enable: false } },
           gitlab_workhorse: { listen_network: 'tcp', listen_addr: 'localhost:9191' }
         )
         expect(subject.flags).to eq(['--insecure'])
@@ -123,7 +123,7 @@ RSpec.describe GitlabHealthcheckHelper do
 
   context 'when neither nginx nor workhorse is enabled' do
     before do
-      stub_gitlab_rb(nginx: { enable: false }, gitlab_workhorse: { enable: false })
+      stub_gitlab_rb(gitlab_rails: { nginx: { enable: false } }, gitlab_workhorse: { enable: false })
     end
 
     describe '#web_node?' do

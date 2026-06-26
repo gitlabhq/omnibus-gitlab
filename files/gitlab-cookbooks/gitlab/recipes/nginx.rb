@@ -21,39 +21,24 @@ include_recipe 'nginx::directory'
 omnibus_helper = OmnibusHelper.new(node)
 
 nginx_helper = OmnibusGitlab::NginxHelper.new(node)
-gitlab_rails_http_conf = nginx_helper.service_conf_path('rails')
-gitlab_rails_smartcard_http_conf = nginx_helper.service_conf_path('smartcard')
 # Health configuration is not to be included in global nginx.conf file. It is
 # only included from the rails conf file. Hence it gets a .partial suffix
 gitlab_rails_health_conf = nginx_helper.service_conf_path('health', suffix: 'partial')
 
 # If the service is enabled, check if we are using internal nginx
 gitlab_rails_enabled = if node['gitlab']['gitlab_rails']['enable']
-                         node['nginx']['enable']
+                         node['gitlab']['gitlab_rails']['nginx']['enable']
                        else
                          false
                        end
 
 gitlab_rails_smartcard_enabled = if node['gitlab']['gitlab_rails']['enable']
-                                   node['nginx']['enable'] && node['gitlab']['gitlab_rails']['smartcard_enabled']
+                                   node['gitlab']['gitlab_rails']['nginx']['enable'] && node['gitlab']['gitlab_rails']['smartcard_enabled']
                                  else
                                    false
                                  end
 
-# Include the config file for gitlab-rails in nginx.conf later
-nginx_vars = node['nginx'].to_hash.merge({
-                                           gitlab_http_config: gitlab_rails_enabled ? gitlab_rails_http_conf : nil
-                                         })
-
-# Include the config file for gitlab-rails-smartcard in nginx.conf later
-nginx_vars = nginx_vars.to_hash.merge!({
-                                         gitlab_smartcard_http_config: gitlab_rails_smartcard_enabled ? gitlab_rails_smartcard_http_conf : nil
-                                       })
-
-# Include the config file for gitlab-health in nginx.conf later
-nginx_vars = nginx_vars.to_hash.merge!({
-                                         gitlab_health_conf: gitlab_rails_enabled || gitlab_rails_smartcard_enabled ? gitlab_rails_health_conf : nil
-                                       })
+nginx_vars = node['gitlab']['gitlab_rails']['nginx'].to_hash
 
 nginx_vars['https'] = if nginx_vars['listen_https'].nil?
                         node['gitlab']['gitlab_rails']['gitlab_https']
@@ -61,7 +46,11 @@ nginx_vars['https'] = if nginx_vars['listen_https'].nil?
                         nginx_vars['listen_https']
                       end
 
-nginx_vars['gzip'] = node['nginx']['gzip_enabled'] ? "on" : "off"
+nginx_vars = nginx_vars.to_hash.merge!({
+                                         gitlab_health_conf: gitlab_rails_enabled || gitlab_rails_smartcard_enabled ? gitlab_rails_health_conf : nil
+                                       })
+
+nginx_vars['gzip'] = node['gitlab']['gitlab_rails']['nginx']['gzip_enabled'] ? "on" : "off"
 
 root_path = node['gitlab']['gitlab_rails']['gitlab_relative_url'] || '/'
 api_path = root_path == "/" ? "/api" : File.join(root_path, "/api")
@@ -110,13 +99,13 @@ nginx_configuration 'rails' do
           kerberos_use_dedicated_port: node['gitlab']['gitlab_rails']['kerberos_use_dedicated_port'],
           kerberos_port: node['gitlab']['gitlab_rails']['kerberos_port'],
           kerberos_https: node['gitlab']['gitlab_rails']['kerberos_https'],
-          redirect_http_to_https: node['nginx']['redirect_http_to_https']
+          redirect_http_to_https: node['gitlab']['gitlab_rails']['nginx']['redirect_http_to_https']
         }
       )
     end
   )
 
-  action gitlab_rails_enabled ? :create : :delete
+  action :create
 end
 
 gitlab_rails_smartcard_nginx_vars = {
@@ -129,7 +118,7 @@ gitlab_rails_smartcard_nginx_vars = {
       'X-SSL-Client-Certificate' => '$ssl_client_cert'
     }
   ),
-  redirect_http_to_https: node['nginx']['redirect_http_to_https']
+  redirect_http_to_https: node['gitlab']['gitlab_rails']['nginx']['redirect_http_to_https']
 }
 
 gitlab_rails_smartcard_nginx_vars['fqdn'] = node['gitlab']['gitlab_rails']['smartcard_client_certificate_required_host'] unless node['gitlab']['gitlab_rails']['smartcard_client_certificate_required_host'].nil?
@@ -167,20 +156,19 @@ nginx_configuration 'rails-metrics' do
             })
 end
 
-if nginx_vars.key?('custom_error_pages')
-  nginx_vars['custom_error_pages'].each_key do |code|
-    template "#{GitlabRails.public_path}/#{code}-custom.html" do
-      source "gitlab-rails-error.html.erb"
-      owner "root"
-      group "root"
-      mode "0644"
-      variables(
-        code: code,
-        title: nginx_vars['custom_error_pages'][code]['title'],
-        header: nginx_vars['custom_error_pages'][code]['header'],
-        message: nginx_vars['custom_error_pages'][code]['message']
-      )
-      notifies :restart, 'runit_service[nginx]' if omnibus_helper.should_notify?("nginx")
-    end
+custom_error_pages = nginx_vars['custom_error_pages']
+custom_error_pages&.each_key do |code|
+  template "#{GitlabRails.public_path}/#{code}-custom.html" do
+    source "gitlab-rails-error.html.erb"
+    owner "root"
+    group "root"
+    mode "0644"
+    variables(
+      code: code,
+      title: custom_error_pages[code]['title'],
+      header: custom_error_pages[code]['header'],
+      message: custom_error_pages[code]['message']
+    )
+    notifies :restart, 'runit_service[nginx]' if omnibus_helper.should_notify?("nginx")
   end
 end

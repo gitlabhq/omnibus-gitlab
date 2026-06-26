@@ -643,3 +643,9 @@ end
 file File.join(gitlab_rails_dir, 'config.ru') do
   action :delete
 end
+
+if node['gitlab']['gitlab_rails']['nginx']['enable']
+  include_recipe "gitlab::nginx"
+else
+  include_recipe "gitlab::nginx_disable"
+end
