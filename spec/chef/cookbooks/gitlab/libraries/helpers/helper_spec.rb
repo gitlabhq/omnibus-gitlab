@@ -131,7 +131,7 @@ RSpec.describe OmnibusHelper do
       services.each do |service|
         stub_should_notify?(service, true)
       end
-      stub_gitlab_rb(nginx: { enable: false })
+      stub_gitlab_rb(gitlab_rails: { nginx: { enable: false } })
     end
 
     it 'does not notify the service' do

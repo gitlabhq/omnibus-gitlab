@@ -86,7 +86,7 @@ RSpec.describe 'letsencrypt::enable' do
       using RSpec::Parameterized::TableSyntax
 
       where(:redirect_config_key, :nginx_config_file) do
-        'nginx' | '/var/opt/gitlab/nginx/conf/service_conf/gitlab-rails.conf'
+        'gitlab#gitlab_rails#nginx' | '/var/opt/gitlab/nginx/conf/service_conf/gitlab-rails.conf'
         'registry#nginx' | '/var/opt/gitlab/nginx/conf/service_conf/gitlab-registry.conf'
         'gitlab_pages#nginx' | '/var/opt/gitlab/nginx/conf/service_conf/gitlab-pages.conf'
       end

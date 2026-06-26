@@ -6,6 +6,7 @@ RSpec.describe 'nginx::enable' do
   let(:chef_runner) do
     ChefSpec::SoloRunner.new(step_into: %w(runit_service nginx_configuration)) do |node|
       node.normal['nginx']['enable'] = true
+      node.normal['gitlab']['gitlab_rails']['nginx']['enable'] = true
       node.normal['package']['install-dir'] = '/opt/gitlab'
     end
   end
@@ -19,54 +20,65 @@ RSpec.describe 'nginx::enable' do
   before do
     allow(Gitlab).to receive(:[]).and_call_original
     allow(Gitlab).to receive(:[]).with('node') { chef_runner.node }
-
-    # generate a random number to use as error code
-    @code = rand(1000)
-    @nginx_errors = {
-      @code => {
-        'title' => 'TEST TITLE',
-        'header' => 'TEST HEADER',
-        'message' => 'TEST MESSAGE'
-      }
-    }
   end
 
   it_behaves_like 'enabled runit service', 'nginx', 'root', 'root'
 
-  it 'creates a custom error_page entry when a custom error is defined' do
-    allow(Gitlab).to receive(:[]).with('nginx').and_return({ 'custom_error_pages' => @nginx_errors })
+  describe 'customer error pages' do
+    context 'when not defined' do
+      it 'creates a standard error_page entry when no custom error is defined' do
+        expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
+          expect(content).to include("error_page 404 /404.html;")
+        }
+      end
 
-    expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
-      expect(content).to include("error_page #{@code} /#{@code}-custom.html;")
-    }
-  end
+      it 'uses the default proxy_intercept_errors option when custom_error_pages is not defined' do
+        chef_runner.node.normal['nginx'].delete('custom_error_pages')
+        expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
+          expect(content).not_to include("proxy_intercept_errors on")
+        }
+      end
+    end
 
-  it 'renders an error template when a custom error is defined' do
-    chef_runner.node.normal['nginx']['custom_error_pages'] = @nginx_errors
-    expect(chef_run).to render_file("/opt/gitlab/embedded/service/gitlab-rails/public/#{@code}-custom.html").with_content { |content|
-      expect(content).to include("TEST MESSAGE")
-    }
-  end
+    context 'when defined' do
+      before do
+        # generate a random number to use as error code
+        @code = rand(1000)
+        @nginx_errors = {
+          @code => {
+            'title' => 'TEST TITLE',
+            'header' => 'TEST HEADER',
+            'message' => 'TEST MESSAGE'
+          }
+        }
+        stub_gitlab_rb(
+          gitlab_rails: {
+            nginx: {
+              custom_error_pages: @nginx_errors
+            }
+          }
+        )
+      end
 
-  it 'creates a standard error_page entry when no custom error is defined' do
-    chef_runner.node.normal['nginx'].delete('custom_error_pages')
-    expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
-      expect(content).to include("error_page 404 /404.html;")
-    }
-  end
+      it 'creates a custom error_page entry when a custom error is defined' do
+        expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
+          expect(content).to include("error_page #{@code} /#{@code}-custom.html;")
+        }
+      end
 
-  it 'enables the proxy_intercept_errors option when custom_error_pages is defined' do
-    chef_runner.node.normal['nginx']['custom_error_pages'] = @nginx_errors
-    expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
-      expect(content).to include("proxy_intercept_errors on")
-    }
-  end
+      it 'renders an error template when a custom error is defined' do
+        expect(chef_run).to render_file("/opt/gitlab/embedded/service/gitlab-rails/public/#{@code}-custom.html").with_content { |content|
+          expect(content).to include("TEST MESSAGE")
+        }
+      end
 
-  it 'uses the default proxy_intercept_errors option when custom_error_pages is not defined' do
-    chef_runner.node.normal['nginx'].delete('custom_error_pages')
-    expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
-      expect(content).not_to include("proxy_intercept_errors on")
-    }
+      it 'enables the proxy_intercept_errors option when custom_error_pages is defined' do
+        chef_runner.node.normal['nginx']['custom_error_pages'] = @nginx_errors
+        expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
+          expect(content).to include("proxy_intercept_errors on")
+        }
+      end
+    end
   end
 
   context 'OAK OpenBao nginx configuration' do
@@ -282,12 +294,12 @@ RSpec.describe 'nginx' do
       cached(:chef_run) { nginx_chef_run }
 
       it 'properly sets the default nginx proxy headers' do
-        expect(chef_run.node['nginx']['proxy_set_headers']).to eql(nginx_headers({
-                                                                                   "Host" => "$http_host_with_default",
-                                                                                   "Upgrade" => "$http_upgrade",
-                                                                                   "Connection" => "$connection_upgrade",
-                                                                                   "X-Forwarded-For" => "$remote_addr"
-                                                                                 }))
+        expect(chef_run.node['gitlab']['gitlab_rails']['nginx']['proxy_set_headers']).to eql(nginx_headers({
+                                                                                                             "Host" => "$http_host_with_default",
+                                                                                                             "Upgrade" => "$http_upgrade",
+                                                                                                             "Connection" => "$connection_upgrade",
+                                                                                                             "X-Forwarded-For" => "$remote_addr"
+                                                                                                           }))
         expect(chef_run.node['registry']['nginx']['proxy_set_headers']).to eql(basic_nginx_headers)
         expect(chef_run.node['gitlab_pages']['nginx']['proxy_set_headers']).to eql(basic_nginx_headers)
       end
@@ -316,8 +328,7 @@ RSpec.describe 'nginx' do
       )
 
       expect_headers = nginx_headers(set_headers)
-      expect(chef_run.node['nginx']['proxy_set_headers']).to(
-        include(expect_headers.merge({ "X-Forwarded-For" => "$remote_addr" })))
+      expect(chef_run.node['gitlab']['gitlab_rails']['nginx']['proxy_set_headers']).to include(expect_headers.merge({ "X-Forwarded-For" => "$remote_addr" }))
       expect(chef_run.node['registry']['nginx']['proxy_set_headers']).to include(expect_headers)
 
       # only test the headers that were overridden
@@ -337,14 +348,14 @@ RSpec.describe 'nginx' do
     end
 
     it 'properly sets the default nginx proxy ssl forward headers' do
-      expect(chef_run.node['nginx']['proxy_set_headers']).to eql(nginx_headers({
-                                                                                 "Host" => "$http_host_with_default",
-                                                                                 "X-Forwarded-Proto" => "https",
-                                                                                 "X-Forwarded-Ssl" => "on",
-                                                                                 "Upgrade" => "$http_upgrade",
-                                                                                 "Connection" => "$connection_upgrade",
-                                                                                 "X-Forwarded-For" => "$remote_addr"
-                                                                               }))
+      expect(chef_run.node['gitlab']['gitlab_rails']['nginx']['proxy_set_headers']).to eql(nginx_headers({
+                                                                                                           "Host" => "$http_host_with_default",
+                                                                                                           "X-Forwarded-Proto" => "https",
+                                                                                                           "X-Forwarded-Ssl" => "on",
+                                                                                                           "Upgrade" => "$http_upgrade",
+                                                                                                           "Connection" => "$connection_upgrade",
+                                                                                                           "X-Forwarded-For" => "$remote_addr"
+                                                                                                         }))
 
       expect(chef_run.node['registry']['nginx']['proxy_set_headers']).to eql(nginx_headers({
                                                                                              "X-Forwarded-Proto" => "https",
@@ -378,7 +389,7 @@ RSpec.describe 'nginx' do
         "gitlab_kas_nginx" => { proxy_set_headers: set_headers }
       )
 
-      expect(chef_run.node['nginx']['proxy_set_headers']).to include(expect_headers.merge("X-Forwarded-For" => "$remote_addr"))
+      expect(chef_run.node['gitlab']['gitlab_rails']['nginx']['proxy_set_headers']).to include(expect_headers.merge("X-Forwarded-For" => "$remote_addr"))
       expect(chef_run.node['registry']['nginx']['proxy_set_headers']).to include(expect_headers)
       expect(chef_run.node['gitlab_pages']['nginx']['proxy_set_headers']).to include(expect_headers)
 
@@ -396,7 +407,7 @@ RSpec.describe 'nginx' do
         "gitlab_kas_nginx" => { proxy_set_headers: set_headers }
       )
 
-      expect(chef_run.node['nginx']['proxy_set_headers']).to include(expect_headers.merge("X-Forwarded-For" => "$remote_addr"))
+      expect(chef_run.node['gitlab']['gitlab_rails']['nginx']['proxy_set_headers']).to include(expect_headers.merge("X-Forwarded-For" => "$remote_addr"))
       expect(chef_run.node['registry']['nginx']['proxy_set_headers']).to include(expect_headers)
       expect(chef_run.node['gitlab_pages']['nginx']['proxy_set_headers']).to include(expect_headers)
     end
@@ -451,10 +462,12 @@ RSpec.describe 'nginx' do
     end
 
     it 'applies nginx verify client settings to gitlab-http' do
-      stub_gitlab_rb("nginx" => {
-                       "ssl_client_certificate" => "/etc/gitlab/ssl/gitlab-http-ca.crt",
-                       "ssl_verify_client" => "on",
-                       "ssl_verify_depth" => "2",
+      stub_gitlab_rb("gitlab_rails" => {
+                       "nginx" => {
+                         "ssl_client_certificate" => "/etc/gitlab/ssl/gitlab-http-ca.crt",
+                         "ssl_verify_client" => "on",
+                         "ssl_verify_depth" => "2",
+                       }
                      })
       chef_run.converge('gitlab::default')
       expect(chef_run).to render_file(http_conf['gitlab']).with_content { |content|
@@ -538,9 +551,10 @@ RSpec.describe 'nginx' do
             registry_external_url: 'https://registry.localhost',
             pages_external_url: 'https://pages.localhost',
             gitlab_kas_external_url: 'wss://kas.localhost',
-            gitlab_kas: { listen_websocket: true },
-            nginx: {
-              ssl_password_file: '/etc/gitlab/ssl/gitlab_password_file.txt'
+            gitlab_rails: {
+              nginx: {
+                ssl_password_file: '/etc/gitlab/ssl/gitlab_password_file.txt'
+              }
             },
             pages_nginx: {
               ssl_password_file: '/etc/gitlab/ssl/pages_password_file.txt'
@@ -723,15 +737,17 @@ RSpec.describe 'nginx' do
     end
 
     it 'defaults to redirect_http_to_https off' do
-      expect(chef_run.node['nginx']['redirect_http_to_https']).to be false
+      expect(chef_run.node['gitlab']['gitlab_rails']['nginx']['redirect_http_to_https']).to be false
+      expect(chef_run.node['gitlab']['gitlab_rails']['nginx']['redirect_http_to_https']).to be false
       expect(chef_run).to render_file(gitlab_http_config).with_content { |content|
         expect(content).not_to include('return 301 https://fauxhai.local:80$request_uri;')
       }
     end
 
     it 'enables redirect when redirect_http_to_https is true' do
-      stub_gitlab_rb(nginx: { listen_https: true, redirect_http_to_https: true })
-      expect(chef_run.node['nginx']['redirect_http_to_https']).to be true
+      stub_gitlab_rb(gitlab_rails: { nginx: { listen_https: true, redirect_http_to_https: true } })
+      expect(chef_run.node['gitlab']['gitlab_rails']['nginx']['redirect_http_to_https']).to be true
+      expect(chef_run.node['gitlab']['gitlab_rails']['nginx']['redirect_http_to_https']).to be true
       expect(chef_run).to render_file(gitlab_http_config).with_content('return 301 https://fauxhai.local:80$request_uri;')
     end
 
@@ -806,9 +822,9 @@ RSpec.describe 'nginx' do
       before do
         stub_gitlab_rb(
           gitlab_rails: {
-            smartcard_enabled: true
-          },
-          nginx: { listen_https: true }
+            smartcard_enabled: true,
+            nginx: { listen_https: true }
+          }
         )
       end
 
@@ -849,9 +865,9 @@ RSpec.describe 'nginx' do
           stub_gitlab_rb(
             gitlab_rails: {
               smartcard_enabled: true,
-              smartcard_client_certificate_required_host: 'smartcard.fauxhai.local'
-            },
-            nginx: { listen_https: true }
+              smartcard_client_certificate_required_host: 'smartcard.fauxhai.local',
+              nginx: { listen_https: true }
+            }
           )
         end
 
@@ -1053,7 +1069,7 @@ RSpec.describe 'nginx' do
 
   context 'when hsts is disabled' do
     before do
-      stub_gitlab_rb(nginx: { hsts_max_age: 0 })
+      stub_gitlab_rb(gitlab_rails: { nginx: { hsts_max_age: 0 } })
     end
     it { is_expected.not_to render_file(gitlab_http_config).with_content(/add_header Strict-Transport-Security/) }
   end
@@ -1064,15 +1080,18 @@ RSpec.describe 'nginx' do
 
   context 'when referrer_policy is disabled' do
     before do
-      stub_gitlab_rb(nginx: { referrer_policy: false })
+      stub_gitlab_rb(gitlab_rails: { nginx: { referrer_policy: false } })
     end
 
-    it { is_expected.not_to render_file(gitlab_http_config).with_content(/add_header Referrer-Policy/) }
+    it 'renders http config file without referrer policy' do
+      expect(chef_run).to render_file(gitlab_http_config)
+      expect(chef_run).not_to render_file(gitlab_http_config).with_content(/add_header Referrer-Policy/)
+    end
   end
 
   context 'when referrer_policy is set to origin' do
     before do
-      stub_gitlab_rb(nginx: { referrer_policy: 'origin' })
+      stub_gitlab_rb(gitlab_rails: { nginx: { referrer_policy: 'origin' } })
     end
 
     it { is_expected.to render_file(gitlab_http_config).with_content(/add_header Referrer-Policy origin;/) }
@@ -1084,7 +1103,7 @@ RSpec.describe 'nginx' do
 
   context 'when gzip is disabled' do
     before do
-      stub_gitlab_rb(nginx: { gzip_enabled: false })
+      stub_gitlab_rb(gitlab_rails: { nginx: { gzip_enabled: false } })
     end
     it { is_expected.to render_file(gitlab_http_config).with_content(/gzip off;/) }
   end
@@ -1095,7 +1114,7 @@ RSpec.describe 'nginx' do
 
   context 'when include_subdomains is enabled' do
     before do
-      stub_gitlab_rb(nginx: { hsts_include_subdomains: true })
+      stub_gitlab_rb(gitlab_rails: { nginx: { hsts_include_subdomains: true } })
     end
 
     it { is_expected.to render_file(gitlab_http_config).with_content(/add_header Strict-Transport-Security "max-age=63072000; includeSubdomains" always;/) }
@@ -1103,7 +1122,7 @@ RSpec.describe 'nginx' do
 
   context 'when max-age is set to 10' do
     before do
-      stub_gitlab_rb(nginx: { hsts_max_age: 10 })
+      stub_gitlab_rb(gitlab_rails: { nginx: { hsts_max_age: 10 } })
     end
 
     it { is_expected.to render_file(gitlab_http_config).with_content(/"max-age=10[^"]*"/) }
@@ -1111,7 +1130,7 @@ RSpec.describe 'nginx' do
 
   context 'when error log level is set to debug' do
     before do
-      stub_gitlab_rb(nginx: { error_log_level: 'debug' })
+      stub_gitlab_rb(gitlab_rails: { nginx: { error_log_level: 'debug' } })
     end
     it { is_expected.to render_file(gitlab_http_config).with_content(/error_log   \/var\/log\/gitlab\/nginx\/gitlab_error.log debug;/) }
   end

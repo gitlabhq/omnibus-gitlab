@@ -29,7 +29,14 @@ include_recipe 'package::default'
 # Setup additional postgresql attributes
 include_recipe 'postgresql::directory_locations'
 
-include_recipe "gitlab::gitlab-rails" if node['gitlab']['gitlab_rails']['enable']
+if node['gitlab']['gitlab_rails']['enable']
+  include_recipe "gitlab::gitlab-rails"
+else
+  # gitlab::gitlab-rails is responsible for calling `gitlab::nginx` and
+  # `gitlab::nginx_disable` as required. However, if `gitlab::gitlab-rails`
+  # itself is skipped, we need to call `gitlab::nginx_disable` manually.
+  include_recipe "gitlab::nginx_disable"
+end
 
 include_recipe "gitlab::selinux"
 
@@ -96,22 +103,12 @@ end
   sidekiq
   gitlab-workhorse
   mailroom
-  nginx
   remote-syslog
   bootstrap
   storage-check
 ].each do |service|
-  # Temporary until gitlab block has its own nginx attribute -
-  # https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/8692 For now,
-  # nginx lives at node['nginx']; the other services in this loop  still live
-  # under node['gitlab'][*].
-  enabled = if service == 'nginx'
-              node['nginx']['enable']
-            else
-              node_attribute_key = SettingsDSL::Utils.node_attribute_key(service)
-              node["gitlab"][node_attribute_key]["enable"]
-            end
-  if enabled
+  node_attribute_key = SettingsDSL::Utils.node_attribute_key(service)
+  if node["gitlab"][node_attribute_key]["enable"]
     include_recipe "gitlab::#{service}"
   else
     include_recipe "gitlab::#{service}_disable"

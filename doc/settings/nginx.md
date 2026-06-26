@@ -15,6 +15,39 @@ title: NGINX settings
 This page provides configuration information for administrators and DevOps engineers configuring NGINX for GitLab installations.
 It includes essential instructions for optimizing performance and security specific to bundled NGINX (Linux package), Helm charts, or custom setups.
 
+## Migrate rails-specific settings to the `gitlab_rails` subkey
+
+Rails-specific NGINX settings live under `gitlab_rails['nginx'][*]`.
+The bundled NGINX daemon's own process-level settings (worker
+count, keepalive, server tokens, `gzip` master switch, cache path)
+remain under `nginx[*]` and configure the daemon itself via the
+global `nginx.conf` template. Per-service NGINX hashes for Pages,
+registry, and KAS each configure that service's
+`nginx_configuration` independently and do not inherit from
+`nginx[*]` -- see the per-service NGINX no-propagation comment
+block in `gitlab.rb.template` for the canonical statement of that
+contract.
+
+Update `/etc/gitlab/gitlab.rb` to use the new subkey for
+rails-specific settings:
+
+```ruby
+# Before
+nginx['ssl_certificate'] = '/etc/gitlab/ssl/example.crt'
+nginx['listen_https'] = true
+
+# After
+gitlab_rails['nginx']['ssl_certificate'] = '/etc/gitlab/ssl/example.crt'
+gitlab_rails['nginx']['listen_https'] = true
+```
+
+A translation shim carries the legacy keys forward silently for
+upgrades: setting `nginx['ssl_certificate']` continues to flow
+into `gitlab_rails['nginx']['ssl_certificate']` at parse time when
+the new key is not set. The shim is one-way and gated on the
+target being nil, so an explicit `gitlab_rails['nginx'][key]`
+setting always wins.
+
 ## Service-specific NGINX settings
 
 To configure NGINX settings for different services, edit the `gitlab.rb` file.

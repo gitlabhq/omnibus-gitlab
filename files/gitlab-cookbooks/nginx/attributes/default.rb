@@ -15,11 +15,9 @@ default['nginx']['hide_server_tokens'] = 'off'
 default['nginx']['keepalive_timeout'] = 65
 default['nginx']['keepalive_time'] = '1h'
 default['nginx']['cache_max_size'] = '5000m'
-default['nginx']['listen_https'] = nil # override only if your reverse proxy internally communicates over HTTP
 default['nginx']['custom_nginx_config'] = nil
 default['nginx']['proxy_cache_path'] = 'proxy_cache keys_zone=gitlab:10m max_size=1g levels=1:2'
 default['nginx']['server_names_hash_bucket_size'] = 64
-default['nginx']['default_server_enabled'] = true
 default['nginx']['consul_service_name'] = 'nginx'
 default['nginx']['consul_service_meta'] = nil
 

@@ -84,11 +84,13 @@ module Nginx
     def parse_error_pages
       # At the least, provide error pages for 404, 402, 500, 502 errors
       errors = Hash[%w(404 500 502).map { |x| [x, "#{x}.html"] }]
-      if Gitlab['nginx'].key?('custom_error_pages')
-        Gitlab['nginx']['custom_error_pages'].each_key do |err|
-          errors[err] = "#{err}-custom.html"
-        end
+
+      custom_error_pages = Gitlab['gitlab_rails'].dig('nginx', 'custom_error_pages')
+
+      custom_error_pages&.each_key do |err|
+        errors[err] = "#{err}-custom.html"
       end
+
       errors
     end
 
