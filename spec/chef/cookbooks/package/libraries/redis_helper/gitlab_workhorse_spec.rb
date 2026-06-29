@@ -100,6 +100,43 @@ RSpec.describe RedisHelper::GitlabWorkhorse do
         end
       end
 
+      context 'when username and password are set via gitlab_workhorse' do
+        before do
+          stub_gitlab_rb(
+            gitlab_workhorse: {
+              redis_host: 'my.redis.host',
+              redis_username: 'myuser',
+              redis_password: 'mypass'
+            }
+          )
+        end
+
+        it 'includes username in the URL' do
+          expect(subject.redis_params).to include(
+            url: 'redis://myuser:mypass@my.redis.host/',
+            password: 'mypass'
+          )
+        end
+      end
+
+      context 'when username and password are set for unix socket' do
+        before do
+          stub_gitlab_rb(
+            gitlab_workhorse: {
+              redis_username: 'myuser',
+              redis_password: 'mypass'
+            }
+          )
+        end
+
+        it 'includes username in the unix socket URL' do
+          expect(subject.redis_params).to include(
+            url: 'unix://myuser:mypass@/var/opt/gitlab/redis/redis.socket',
+            password: 'mypass'
+          )
+        end
+      end
+
       context 'when settings specified via gitlab_rails for separate Redis instance' do
         context 'with bare hostname' do
           before do

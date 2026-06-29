@@ -3,14 +3,16 @@ require_relative '../redis_uri'
 
 module RedisHelper
   class << self
-    def build_redis_url(ssl:, host:, port:, path:, password:)
+    def build_redis_url(ssl:, host:, port:, path:, password:, username: nil)
       scheme = ssl ? 'rediss:/' : 'redis:/'
       uri = URI(scheme)
       uri.host = host if host
       uri.port = port if port
       uri.path = path if path
-      # In case the password has non-alphanumeric passwords, be sure to encode it
-      uri.password = encode_redis_password(password) if password
+      # In case the password has non-alphanumeric characters, be sure to encode it
+      uri.password = encode_redis_credential(password) if password
+      # In case the username has non-alphanumeric characters, be sure to encode it
+      uri.user = encode_redis_credential(username) if username
 
       uri
     end
@@ -25,6 +27,8 @@ module RedisHelper
           port: sentinel['port'],
           path: '',
           password: password
+          # No username: Sentinel authentication uses SentinelUsername in Go,
+          # not the main Redis username.
         )
       end
     end
@@ -34,8 +38,9 @@ module RedisHelper
     # Note that CGI.escape and URI.encode_www_form_component encodes
     # a space as "+" instead of "%20". While this appears to be handled with
     # the Ruby client, the Go client doesn't work with "+".
-    def encode_redis_password(password)
-      ERB::Util.url_encode(password)
+    # This method is used for both username and password encoding.
+    def encode_redis_credential(credential)
+      ERB::Util.url_encode(credential)
     end
   end
 end
