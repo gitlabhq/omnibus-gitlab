@@ -33,7 +33,7 @@ run: puma: (pid 961) 7s; run: log: (pid 960) 7s
 - `Nginx`はプロセス名です。
 - `972`はプロセスの識別子です。
 - NGINXは7秒間実行されています (`7s`)。
-- `log`は、先行プロセスにアタッチされた[svlogdロギングプロセス](https://manpages.ubuntu.com/manpages/noble/en/man8/svlogd.8.html)を示します。
+- `log`は、先行プロセスにアタッチされている[svlogd logging process](https://manpages.ubuntu.com/manpages/noble/man8/svlogd.8.html)を示します。
 - `971`はロギングプロセスの識別子です。
 - ロギングプロセスは7秒間実行されています (`7s`)。
 

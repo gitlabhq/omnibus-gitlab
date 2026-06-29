@@ -17,7 +17,7 @@ GitLabを設定するには、`/etc/gitlab/gitlab.rb`ファイルに関連オプ
 [`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)には、利用可能なオプションの完全なリストが含まれています。新規インストールでは、`/etc/gitlab/gitlab.rb`にリストされているテンプレートのすべてのオプションがデフォルトで設定されています。
 
 > [!note]
-> `/etc/gitlab/gitlab.rb`を編集する際に提供される例は、必ずしもインスタンスのデフォルト設定を反映しているとは限りません。
+> `/etc/gitlab/gitlab.rb`を編集する際に提供される例は、インスタンスのデフォルト設定を常に反映しているとは限りません。
 
 デフォルト設定のリストについては、[package defaults](https://docs.gitlab.com/administration/package_information/defaults/)を参照してください。
 
@@ -72,7 +72,7 @@ sudo EXTERNAL_URL="https://gitlab.example.com" apt-get install gitlab-ee
 {{< /details >}}
 
 > [!warning]
-> GitLabの相対URLを設定すると、[known issues with Geo](https://gitlab.com/gitlab-org/gitlab/-/issues/456427)と[testing limitations](https://gitlab.com/gitlab-org/gitlab/-/issues/439943)が知られています。
+> GitLabに相対URLを設定すると、[Geoに関する既知のイシュー](https://gitlab.com/gitlab-org/gitlab/-/issues/456427)と[テストの制限](https://gitlab.com/gitlab-org/gitlab/-/issues/439943)があります。
 
 GitLabを独自の（サブ）ドメインにインストールすることを推奨しますが、不可能な場合もあります。その場合、GitLabは相対URLの下にインストールすることもできます。たとえば、`https://example.com/gitlab`です。
 
@@ -233,7 +233,7 @@ gitlab_rails['repositories_storages'] = {
       sudo gitlab-ctl stop
       ```
 
-   1. リポジトリを新しい場所に同期します。`repositories`の後ろにスラッシュは_ありません_が、`git-data`の後ろにはスラッシュが_あります_:
+   1. リポジトリを新しい場所に同期します。`repositories`の後ろにスラッシュは _ありません_ が、`git-data`の後ろにはスラッシュが _あります_ :
 
       ```shell
       sudo rsync -av --delete /var/opt/gitlab/git-data/repositories /mnt/nas/git-data/
@@ -259,12 +259,12 @@ gitlab_rails['repositories_storages'] = {
 
 別のサーバーでGitalyを実行している場合は、[the documentation on configuring Gitaly](https://docs.gitlab.com/administration/gitaly/configure_gitaly/#configure-gitaly-clients)を参照してください。
 
-すべてのリポジトリを移動するのではなく、既存のリポジトリストレージ間で特定のプロジェクトを移動したい場合は、[Edit Project API](https://docs.gitlab.com/api/projects/#edit-a-project)エンドポイントを使用し、`repository_storage`属性を指定してください。
+すべてのリポジトリを移動するのではなく、既存のリポジトリストレージ間で特定のプロジェクトを移動したい場合は、[Update Project API](https://docs.gitlab.com/api/projects/#update-a-project)エンドポイントを使用して、`repository_storage`属性を指定します。
 
 ## Gitユーザーまたはグループの名前を変更する {#change-the-name-of-the-git-user-or-group}
 
 > [!warning]
-> 既存のインストールのユーザーまたはグループを変更することは推奨しません。予期せぬ副次効果を引き起こす可能性があるためです。
+> 既存のインストールのユーザーまたはグループを変更することはお勧めしません。予期せぬ副次効果を引き起こす可能性があるためです。
 
 デフォルトでは、Linuxパッケージのインストールは、Git Lab Shellログイン、Gitデータ自体の所有権、およびWebインターフェースでのSSH URL生成のためにユーザー名`git`を使用します。同様に、`git`グループはGitデータのグループ所有権に使用されます。
 
@@ -315,8 +315,6 @@ Linuxパッケージのインストールは、GitLab、PostgreSQL、Redis、NGI
    web_server['gid'] = 1237
    registry['uid'] = 1238
    registry['gid'] = 1238
-   mattermost['uid'] = 1239
-   mattermost['gid'] = 1239
    prometheus['uid'] = 1240
    prometheus['gid'] = 1240
    ```
@@ -353,7 +351,6 @@ Linuxパッケージのインストールは、GitLab、PostgreSQL、Redis、NGI
 | `gitlab-psql`        | パッケージ化されたPostgreSQLを使用する場合のみ | PostgreSQLユーザー/グループ                                                 | `/var/opt/gitlab/postgresql` | `/bin/sh`     |
 | `gitlab-consul`      | GitLab Consulを使用する場合のみ           | GitLab Consulユーザー/グループ                                              | `/var/opt/gitlab/consul`     | `/bin/sh`     |
 | `registry`           | GitLabレジストリを使用する場合のみ         | GitLabレジストリユーザー/グループ                                            | `/var/opt/gitlab/registry`   | `/bin/sh`     |
-| `mattermost`         | GitLab Mattermostを使用する場合のみ       | GitLab Mattermostユーザー/グループ                                          | `/var/opt/gitlab/mattermost` | `/bin/sh`     |
 | `gitlab-backup`      | `gitlab-backup-cli`を使用する場合のみ     | GitLabバックアップCliユーザー                                                | `/var/opt/gitlab/backups`    | `/bin/sh`     |
 
 ユーザーおよびグループアカウント管理を無効にするには:
@@ -407,11 +404,6 @@ Linuxパッケージのインストールは、GitLab、PostgreSQL、Redis、NGI
    registry['group'] = "registry"
    registry['dir'] = "/var/opt/gitlab/registry"
    registry['shell'] = "/usr/sbin/nologin"
-
-   # Mattermost
-   mattermost['username'] = 'mattermost'
-   mattermost['group'] = 'mattermost'
-   mattermost['home'] = '/var/opt/gitlab/mattermost'
    ```
 
 1. GitLabを再設定します:
@@ -508,6 +500,7 @@ Linuxパッケージのインストールでは、これらのディレクトリ
 | `/var/opt/gitlab/gitlab-rails/shared/dependency_proxy` | `0700`      | `git:git`        | 依存プロキシを保持する |
 | `/var/opt/gitlab/gitlab-rails/shared/terraform_state`  | `0700`      | `git:git`        | Terraformステートを保持する |
 | `/var/opt/gitlab/gitlab-rails/shared/ci_secure_files`  | `0700`      | `git:git`        | アップロードされたセキュアファイルを保持する |
+| `/var/opt/gitlab/gitlab-rails/shared/agent_plan_content` | `0700`      | `git:git`        | エージェントプランコンテンツを保持します。 |
 | `/var/opt/gitlab/gitlab-rails/shared/pages`            | `0750`      | `git:gitlab-www` | ユーザーページを保持する |
 | `/var/opt/gitlab/gitlab-rails/uploads`                 | `0700`      | `git:git`        | ユーザーの添付ファイルを保持する |
 | `/var/opt/gitlab/gitlab-ci/builds`                     | `0700`      | `git:git`        | CIビルドログを保持する |
@@ -694,7 +687,7 @@ CDN/アセットホストを設定するには:
 [CSP and nonce-source withインラインJavaScript](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/script-src)はGitLab.comで利用可能です。GitLab Self-Managedインスタンスでは、[not configured by default](https://gitlab.com/gitlab-org/gitlab/-/issues/30720)です。
 
 > [!note]
-> CSPルールを不適切に設定すると、GitLabが正しく機能しなくなる可能性があります。ポリシーを実際にロールアウトしていく前に、`report_only`を`true`に変更して設定をテストするとよいかもしれません。
+> CSPルールを不適切に設定すると、GitLabが正常に機能しなくなる可能性があります。ポリシーを実際にロールアウトしていく前に、`report_only`を`true`に変更して設定をテストするとよいかもしれません。
 
 CSPを追加するには:
 
@@ -799,7 +792,7 @@ gitlab_rails['allowed_hosts'] = ['gitlab.example.com', '127.0.0.1', 'localhost']
 例として、以下のスクリプトと`gitlab.rb`スニペットを使用して、RedisサーバーおよびRedisに接続する必要があるコンポーネントのパスワードを指定できます。
 
 > [!note]
-> Redisサーバーにパスワードを指定する場合、この方法はユーザーが`gitlab.rb`ファイルにプレーンテキストパスワードを持つことを避けるだけです。パスワードは、`/var/opt/gitlab/redis/redis.conf`にあるRedisサーバー設定ファイルにプレーンテキストで書き込まれます。
+> Redisサーバーにパスワードを指定する場合、この方法はユーザーが`gitlab.rb`ファイルにプレーンテキストパスワードを保持しないようにするだけです。パスワードは、`/var/opt/gitlab/redis/redis.conf`にあるRedisサーバー設定ファイルにプレーンテキストで書き込まれます。
 
 1. 以下のスクリプトを`/opt/generate-redis-conf`として保存します。
 
