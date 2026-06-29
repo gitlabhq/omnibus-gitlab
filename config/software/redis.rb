@@ -25,11 +25,11 @@ skip_transitive_dependency_licensing true
 dependency 'config_guess'
 dependency 'openssl' unless Build::Check.use_system_ssl?
 
-version = Gitlab::Version.new('redis', '7.2.13')
+version = Gitlab::Version.new('redis', '7.2.14')
 default_version version.print(false)
 
 if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
-  source Build::UBT.source_args(name, "#{default_version}-2ubt", "146f6c543bea31be8880bcc4fab9629139d621dae1a1ab2307fe0029932a6840", OhaiHelper.arch)
+  source Build::UBT.source_args(name, "#{default_version}-2ubt", "0f962e5e693df1fcd3578515257fd45565902bd087cff29d13a4ae4b6d8b4d76", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
   source git: version.remote
