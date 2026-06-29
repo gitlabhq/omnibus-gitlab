@@ -467,5 +467,24 @@ RSpec.describe 'GitlabWorkhorse' do
         expect(node['gitlab']['gitlab_workhorse']['redis_sentinels_password']).to be_nil
       end
     end
+
+    context 'when gitlab_workhorse redis_username is set directly' do
+      let(:chef_run) { converge_config }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_workhorse: {
+            listen_network: 'unix',
+            redis_host: 'my.redis.host',
+            redis_username: 'workhorse-user',
+            redis_password: 'workhorse-pass'
+          }
+        )
+      end
+
+      it 'keeps the gitlab_workhorse redis_username' do
+        expect(node['gitlab']['gitlab_workhorse']['redis_username']).to eq('workhorse-user')
+      end
+    end
   end
 end

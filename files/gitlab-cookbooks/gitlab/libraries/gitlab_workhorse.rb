@@ -82,6 +82,7 @@ module GitlabWorkhorse
           host: Gitlab['gitlab_workhorse']['redis_host'] || Gitlab['node']['gitlab']['gitlab_workhorse']['redis_host'],
           port: Gitlab['gitlab_workhorse']['redis_port'] || Gitlab['node']['gitlab']['gitlab_workhorse']['redis_port'],
           password: Gitlab['gitlab_workhorse']['redis_password'] || Gitlab['node']['gitlab']['gitlab_workhorse']['redis_password'],
+          username: Gitlab['gitlab_workhorse']['redis_username'] || Gitlab['node']['gitlab']['gitlab_workhorse']['redis_username'],
           path: Gitlab['gitlab_workhorse']['redis_database'] || Gitlab['node']['gitlab']['gitlab_workhorse']['redis_database']
         ).to_s
 

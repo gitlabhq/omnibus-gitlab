@@ -50,7 +50,7 @@ RSpec.describe URI::Redis do
 
   context 'with non-alphanumeric password' do
     let(:password) { "&onBsidv6# XeKFd}=BDDyRrv/?@[]()<>*" }
-    let(:escaped) { RedisHelper.encode_redis_password(password) }
+    let(:escaped) { RedisHelper.encode_redis_credential(password) }
 
     it 'rejects unencoded passwords' do
       expect { subject.password = password }.to raise_error(URI::InvalidComponentError)
@@ -72,6 +72,57 @@ RSpec.describe URI::Redis do
   context 'without password' do
     it 'renders url without authentication division characters' do
       expect(subject.to_s).to eq 'redis://localhost'
+    end
+  end
+
+  context 'with username and password' do
+    before do
+      subject.user     = 'myuser'
+      subject.password = 'mypass'
+    end
+
+    it 'renders url with user:password' do
+      expect(subject.to_s).to eq 'redis://myuser:mypass@localhost'
+    end
+  end
+
+  context 'with non-alphanumeric username' do
+    let(:username) { 'my user@name' }
+    let(:escaped)  { RedisHelper.encode_redis_credential(username) }
+
+    it 'rejects unencoded username' do
+      expect { subject.user = username }.to raise_error(URI::InvalidComponentError)
+    end
+
+    it 'allows encoded username' do
+      subject.user = escaped
+      expect(subject.user).to eq(escaped)
+    end
+  end
+
+  context 'when parsing a password-only URL' do
+    subject { URI('redis://:mypass@localhost') }
+
+    it 'normalizes the empty user component to nil' do
+      expect(subject.user).to be_nil
+      expect(subject.password).to eq('mypass')
+    end
+
+    it 'compares equal to a URL built without a user component' do
+      built = RedisHelper.build_redis_url(
+        ssl: false, host: 'localhost', port: nil, path: nil, password: 'mypass'
+      )
+
+      expect(subject).to eq(built)
+    end
+  end
+
+  context 'when parsing a URL with a username' do
+    subject { URI('redis://myuser:mypass@localhost') }
+
+    it 'retains the username' do
+      expect(subject.user).to eq('myuser')
+      expect(subject.password).to eq('mypass')
     end
   end
 end

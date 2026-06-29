@@ -558,6 +558,26 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
     end
   end
 
+  context 'with username/password values for redis specified and socket disabled' do
+    before do
+      stub_gitlab_rb(
+        gitlab_workhorse: {
+          redis_host: "10.0.15.1",
+          redis_port: "1234",
+          redis_username: 'workhorse-user',
+          redis_password: 'examplepassword'
+        }
+      )
+    end
+
+    it 'should generate config file with the username in the URL' do
+      content_url = 'URL = "redis://workhorse-user:examplepassword@10.0.15.1:1234/"'
+      content_password = 'Password = "examplepassword"'
+      expect(chef_run).to render_file(config_file).with_content(content_url)
+      expect(chef_run).to render_file(config_file).with_content(content_password)
+    end
+  end
+
   context 'with socket for redis specified' do
     before do
       stub_gitlab_rb(gitlab_rails: { redis_socket: "/home/random/path.socket", redis_password: 'examplepassword' })

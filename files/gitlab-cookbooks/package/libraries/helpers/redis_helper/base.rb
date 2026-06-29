@@ -26,7 +26,8 @@ module RedisHelper
       {
         host: params[0],
         port: params[1],
-        password: params[2]
+        password: params[2],
+        username: redis_username
       }
     end
 
@@ -43,16 +44,18 @@ module RedisHelper
         uri = URI("unix://")
         uri.path = socket
 
-        if params[:password]
-          password = RedisHelper.encode_redis_password(params[:password])
-          uri.userinfo = ":#{password}"
-        end
+        encoded_user     = RedisHelper.encode_redis_credential(params[:username]) if params[:username]
+        encoded_password = RedisHelper.encode_redis_credential(params[:password]) if params[:password]
+
+        userinfo = URI::Redis.build_userinfo(encoded_user, encoded_password)
+        uri.userinfo = userinfo if userinfo
       else
         uri = RedisHelper.build_redis_url(
           ssl: redis_ssl,
           host: params[:host],
           port: params[:port],
           password: params[:password],
+          username: params[:username],
           path: "/#{redis_database}"
         )
       end
@@ -193,6 +196,10 @@ module RedisHelper
 
     def redis_password
       node_attr['redis_password']
+    end
+
+    def redis_username
+      node_attr['redis_username']
     end
 
     def redis_sentinels
