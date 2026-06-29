@@ -1,7 +1,7 @@
 ---
 stage: GitLab Delivery
 group: Build
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see <https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments>
 title: GitLab Dockerイメージをローカルでビルドする
 ---
 
@@ -17,16 +17,13 @@ RELEASE_VERSION=13.2.0-ee
 DOWNLOAD_URL_amd64=https://example.com/gitlab-ee_13.2.00-ee.0_amd64.deb
 ```
 
-- `RELEASE_PACKAGE`は、パッケージがGitLab Community Edition（CE）パッケージかGitLab Enterprise Edition（EE）パッケージかを指定します。
+- `RELEASE_PACKAGE`は、パッケージがCEかEEかを指定します。
 - `RELEASE_VERSION`は、パッケージのバージョンを指定します（例：`13.2.0-ee`）。
 - `DOWNLOAD_URL_amd64`は、そのパッケージをダウンロードできるamd64のURLを指定します。
 - `DOWNLOAD_URL_arm64`は、そのパッケージをダウンロードできるarm64のURLを指定します。
 
-{{< alert type="note" >}}
-
-この状況の改善と、ローカルで利用可能なパッケージの使用については、[イシュー#5550](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5550)で検討しています。
-
-{{< /alert >}}
+> [!note]
+> この状況を改善し、ローカルで利用可能なパッケージを使用することを[イシュー #5550](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5550)で検討しています。
 
 ## Dockerイメージをビルドする {#build-the-docker-image}
 

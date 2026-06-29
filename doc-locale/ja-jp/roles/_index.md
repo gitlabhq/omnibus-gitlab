@@ -1,7 +1,7 @@
 ---
 stage: GitLab Delivery
 group: Operate
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see <https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments>
 title: 高可用性ロール
 ---
 
@@ -12,17 +12,17 @@ title: 高可用性ロール
 
 {{< /details >}}
 
-Linuxパッケージには、高可用性構成でGitLabを実行するためのさまざまなソフトウェアコンポーネント/サービスが含まれています。デフォルトでは、これらのサポートサービスの一部は無効になっており、GitLabは単一ノードインストールとして実行するように構成されています。各サービスは、`/etc/gitlab/gitlab.rb`の設定を使用して有効または無効にできますが、`roles`を導入することで、サービスのグループを簡単に有効にでき、有効にした高可用性ロールに基づいて、より適切なデフォルトの設定が提供されます。
+Linuxパッケージには、GitLabを高可用性の設定で実行をサポートするためのさまざまなソフトウェアコンポーネント/サービスが含まれています。デフォルトでは、これらのサポートサービスの一部は無効になっており、GitLabは単一ノードインストールとして実行するように設定されています。各サービスは`/etc/gitlab/gitlab.rb`の設定を使用して有効または無効にできますが、`roles`の導入により、サービスのグループを簡単に有効にできるようになり、有効にした高可用性ロールに基づいて、より優れたデフォルトの設定が提供されます。
 
-## ロールを指定しない場合（デフォルトの設定） {#not-specifying-any-roles-the-default-configuration}
+## ロールを指定しない(デフォルト設定) {#not-specifying-any-roles-the-default-configuration}
 
-ロールを設定せずにGitLabを設定すると、GitLabは単一ノードインストールのデフォルトサービスを有効にします。これには、PostgreSQL、Redis、Puma、Sidekiq、Gitaly、GitLab Workhorse、NGINXなどが含まれます。
+GitLabをロールで設定しない場合、GitLabは単一ノードインストール用のデフォルトサービスを有効にします。これらには、PostgreSQL、Redis、Puma、Sidekiq、Gitaly、GitLab Workhorse、NGINXなどが含まれます。
 
-これらは、`/etc/gitlab/gitlab.rb`の設定で個別に有効/無効にすることもできます。
+これらは、`/etc/gitlab/gitlab.rb`内の設定によって個別に有効/無効にすることができます。
 
 ## ロールの指定 {#specifying-roles}
 
-ロールは`/etc/gitlab/gitlab.rb`の配列として渡されます
+ロールは`/etc/gitlab/gitlab.rb`に配列として渡されます
 
 複数のロールを指定する例:
 
@@ -38,131 +38,131 @@ roles ['geo_primary_role']
 
 ## ロール {#roles}
 
-以下のロールの大部分は、[GitLab Enterprise Edition](https://about.gitlab.com/install/ce-or-ee/)、つまり`gitlab-ee` Linuxパッケージでのみ機能します。各ロールの横に記載されています。
+以下のほとんどのロールはGitLab EEでのみ動作します。これは、`gitlab-ee` Linuxパッケージを意味します。各ロールの横に記載されます。
 
-### GitLabアプリのロール {#gitlab-app-role}
+### GitLab Appロール {#gitlab-app-role}
 
-- `application_role`（`gitlab-ce`/`gitlab-ee`）
+- `application_role` (`gitlab-ce`/`gitlab-ee`)
 
-  GitLabアプリのロールは、GitLabのみが実行されているインスタンスを設定するために使用されます。Redis、PostgreSQL、およびConsulサービスは、デフォルトで無効になっています。
+  GitLabアプリロールは、GitLabのみが実行されているインスタンスを設定するために使用されます。Redis、PostgreSQL、およびConsulサービスはデフォルトで無効になっています。
 
-### Redisサーバーのロール {#redis-server-roles}
+### Redisサーバーロール {#redis-server-roles}
 
-Redisロールの使用に関するドキュメントは、[Configuring Redis for Scaling](https://docs.gitlab.com/administration/redis/)にあります
+Redisロールの使用に関するドキュメントは、[Configuring Redis for Scaling](https://docs.gitlab.com/administration/redis/)にあります。
 
-- `redis_sentinel_role`（`gitlab-ee`）
+- `redis_sentinel_role` (`gitlab-ee`)
 
-  マシン上でセンチネルサービスを有効にします。
+  マシン上のセンチネルサービスを有効にします。
 
-  *デフォルトでは、他のサービスは有効になりません。*
+  *デフォルトでは、他のサービスを有効にしません。*
 
-- `redis_master_role`（`gitlab-ee`）
+- `redis_master_role` (`gitlab-ee`)
 
-  Redisサービスとモニタリングを有効にし、マスターパスワードの設定を許可します
+  Redisサービスとモニタリングを有効にし、masterパスワードの設定を許可します。
 
-  *デフォルトでは、他のサービスは有効になりません。*
+  *デフォルトでは、他のサービスを有効にしません。*
 
-- `redis_replica_role`（`gitlab-ee`）
+- `redis_replica_role` (`gitlab-ee`)
 
-  Redisサービスとモニタリングを有効にします
+  Redisサービスとモニタリングを有効にします。
 
-  *デフォルトでは、他のサービスは有効になりません。*
+  *デフォルトでは、他のサービスを有効にしません。*
 
-### GitLab Geoロール {#gitlab-geo-roles}
+### Geoロール {#gitlab-geo-roles}
 
-GitLab Geoロールは、GitLab Geoサイトの設定に使用されます。設定手順については、[Geo Setup Documentation](https://docs.gitlab.com/administration/geo/setup/)を参照してください。
+Geoロールは、Geoサイトの設定に使用されます。設定手順については、[Geo Setup Documentation](https://docs.gitlab.com/administration/geo/setup/)を参照してください。
 
-- `geo_primary_role`（`gitlab-ee`）
+- `geo_primary_role` (`gitlab-ee`)
 
-  このロール:
+  このロールは次のとおりです:
 
-  - ストリーミングレプリケーションのリーダーとして、単一ノードPostgreSQLデータベースを設定します。
-  - Geoセカンダリサイトへのストリーミングレプリケーションのダウンタイムが必要になるため、PostgreSQLの自動アップグレードを防止します。
-  - NGINX、Puma、Redis、Sidekiqなど、すべての単一ノードGitLabサービスを有効にします。サービスを分離する場合は、`/etc/gitlab/gitlab.rb`で不要なサービスを明示的に無効にする必要があります。したがって、このロールはGeoプライマリサイトの単一ノードPostgreSQLでのみ役立ちます。
-  - GeoプライマリサイトでPostgreSQLクラスタリングをセットアップするために使用することはできません。代わりに、[Geoマルチノードデータベースレプリケーション](https://docs.gitlab.com/administration/geo/setup/database/#multi-node-database-replication)を参照してください。
+  - 単一ノードのPostgreSQLデータベースをストリーミングレプリケーションのリーダーとして設定します。
+  - PostgreSQLの自動アップグレードを防ぎます。これは、Geoサイトへのストリーミングレプリケーションにダウンタイムが必要となるためです。
+  - NGINX、Puma、Redis、Sidekiqを含むすべての単一ノードGitLabサービスを有効にします。サービスを分離している場合は、`/etc/gitlab/gitlab.rb`で不要なサービスを明示的に無効にする必要があります。したがって、このロールはGeoサイト内の単一ノードPostgreSQLでのみ役立ちます。
+  - Geoサイト内のPostgreSQLクラスターを設定するために使用することはできません。代わりに、[Geoマルチノードデータベースレプリケーション](https://docs.gitlab.com/administration/geo/setup/database/#multi-node-database-replication)を参照してください。
 
-  *デフォルトでは、NGINX、Puma、Redis、Sidekiqなどの標準単一ノードGitLabサービスが有効になります。*
+  デフォルトでは、NGINX、Puma、Redis、Sidekiqを含む標準の単一ノードGitLabサービスを有効にします。
 
-- `geo_secondary_role`（`gitlab-ee`）
+- `geo_secondary_role` (`gitlab-ee`)
 
-  - 受信レプリケーションのために、セカンダリの読み取り専用レプリカデータベースを設定します。
-  - GeoトラッキングデータベースへのRails接続を設定します。
-  - Geoトラッキングデータベース`geo-postgresql`を有効にします。
+  - 受信レプリケーション用のセカンダリ読み取り専用レプリカデータベースを設定します。
+  - Geo追跡データベースへのRails接続を設定します。
+  - Geo追跡データベース`geo-postgresql`を有効にします。
   - Geoログカーソル`geo-logcursor`を有効にします。
-  - 再構成中に読み取り専用レプリカデータベースでの自動データベース移行を無効にします。
+  - 再設定中に読み取り専用レプリカデータベースでの自動データベース移行を無効にします。
   - 他のサービスのためにメモリを節約するために、Pumaワーカーの数を減らします。
   - `gitlab_rails['enable'] = true`を設定します。
 
-  このロールは、単一ノードで実行されているGeoセカンダリサイトで使用することを目的としています。複数のノードを持つGeoサイトでこのロールを使用する場合は、不要なサービスを`/etc/gitlab/gitlab.rb`で明示的に無効にする必要があります。[複数のノード用のGeo](https://docs.gitlab.com/administration/geo/replication/multiple_servers/)をセットアップする
+  このロールは、単一ノードで実行されているGeoセカンダリGeoサイトで使用することを目的としています。マルチノードを持つGeoサイトでこのロールを使用する場合、不要なサービスは`/etc/gitlab/gitlab.rb`で明示的に無効にする必要があります。[複数ノードのGeo](https://docs.gitlab.com/administration/geo/replication/multiple_servers/)を参照してください。
 
-  このロールは、GeoセカンダリサイトでPostgreSQLクラスタリングをセットアップするために使用しないでください。代わりに、[Geoマルチノードデータベースレプリケーション](https://docs.gitlab.com/administration/geo/setup/database/#multi-node-database-replication)を参照してください。
+  このロールは、Geoサイト内のPostgreSQLクラスターを設定するために使用すべきではありません。代わりに、[Geoマルチノードデータベースレプリケーション](https://docs.gitlab.com/administration/geo/setup/database/#multi-node-database-replication)を参照してください。
 
-  *デフォルトでは、すべてのGitLabデフォルト単一ノードサービスが有効になります。（NGINX、Puma、Redis、Sidekiqなど）*
+  デフォルトでは、NGINX、Puma、Redis、Sidekiqを含むすべてのGitLabデフォルト単一ノードサービスを有効にします。
 
 ### モニタリングロール {#monitoring-roles}
 
-モニタリングロールは、インストールのモニタリングを設定するために使用されます。詳細については、[モニタリングのドキュメント](https://docs.gitlab.com/administration/monitoring/prometheus/)を参照してください。
+モニタリングロールは、インストールのモニタリングを設定するために使用されます。詳細については、[モニタリングドキュメント](https://docs.gitlab.com/administration/monitoring/prometheus/)を参照してください。
 
-- `monitoring_role`（`gitlab-ce`/`gitlab-ee`）
+- `monitoring_role` (`gitlab-ce`/`gitlab-ee`)
 
-  メトリクスを収集し、ダッシュボードを提供するための中央モニタリングサーバーを設定します。
+  メトリクスを収集し、ダッシュボードを提供する中央モニタリングサーバーを設定します。
 
   PrometheusとAlertmanagerを有効にします。
 
 ### PostgreSQLロール {#postgresql-roles}
 
-PostgreSQLロールの使用方法に関するドキュメントは、[Configuring PostgreSQL for Scaling](https://docs.gitlab.com/administration/postgresql/)にあります
+PostgreSQLロールの使用に関するドキュメントは、[Configuring PostgreSQL for Scaling](https://docs.gitlab.com/administration/postgresql/)にあります。
 
-- `postgres_role`（`gitlab-ce`/`gitlab-ee`）
+- `postgres_role` (`gitlab-ce`/`gitlab-ee`)
 
-  マシン上でPostgreSQLサービスを有効にします
+  マシン上でPostgreSQLサービスを有効にします。
 
-  *デフォルトでは、他のサービスは有効になりません。*
+  *デフォルトでは、他のサービスを有効にしません。*
 
-- `patroni_role`（`gitlab-ee`）
+- `patroni_role` (`gitlab-ee`)
 
-  マシン上でPostgreSQL、Patroni、Consulサービスを有効にします
+  マシン上でPostgreSQL、Patroni、およびConsulサービスを有効にします。
 
-  *デフォルトでは、他のサービスは有効になりません。*
+  *デフォルトでは、他のサービスを有効にしません。*
 
-- `pgbouncer_role`（`gitlab-ee`）
+- `pgbouncer_role` (`gitlab-ee`)
 
-  マシン上でPgBouncerとConsulサービスを有効にします
+  マシン上でPgBouncerおよびConsulサービスを有効にします。
 
-  *デフォルトでは、他のサービスは有効になりません。*
+  *デフォルトでは、他のサービスを有効にしません。*
 
-- `consul_role`（`gitlab-ee`）
+- `consul_role` (`gitlab-ee`)
 
-  マシン上でConsulサービスを有効にします
+  マシン上でConsulサービスを有効にします。
 
-  *デフォルトでは、他のサービスは有効になりません。*
+  *デフォルトでは、他のサービスを有効にしません。*
 
 ### GitLab Pagesロール {#gitlab-pages-roles}
 
-GitLab Pagesロールは、GitLab Pagesを設定するために使用されます。詳細については、[GitLab Pages管理ドキュメント](https://docs.gitlab.com/administration/pages/)を参照してください
+GitLab Pagesロールは、GitLab Pagesを設定するために使用されます。詳細については、[GitLab Pages管理ドキュメント](https://docs.gitlab.com/administration/pages/)を参照してください。
 
-- `pages_role`（`gitlab-ce`/`gitlab-ee`）
+- `pages_role` (`gitlab-ce`/`gitlab-ee`)
 
-  GitLab Pagesインスタンスを使用してサーバーを設定します。
+  サーバーにGitLab Pagesインスタンスを設定します。
 
-  *デフォルトでは、他のサービスは有効になりません。*
+  *デフォルトでは、他のサービスを有効にしません。*
 
 ### Sidekiqロール {#sidekiq-roles}
 
-Sidekiqロールは、Sidekiqを設定するために使用されます。詳細については、[Sidekiq管理ドキュメント](https://docs.gitlab.com/administration/sidekiq/)を参照してください
+Sidekiqロールは、Sidekiqを設定するために使用されます。詳細については、[Sidekiq管理ドキュメント](https://docs.gitlab.com/administration/sidekiq/)を参照してください。
 
-- `sidekiq_role`（`gitlab-ce`/`gitlab-ee`）
+- `sidekiq_role` (`gitlab-ce`/`gitlab-ee`)
 
-  Sidekiqサービスを使用してサーバーを設定します。
+  サーバーにSidekiqサービスを設定します。
 
-  *デフォルトでは、他のサービスは有効になりません。*
+  *デフォルトでは、他のサービスを有効にしません。*
 
 ### Gitalyロール {#gitaly-roles}
 
-Gitalyロールは、Gitalyサービスを設定するために使用されます。詳細については、[Gitalyドキュメント](https://docs.gitlab.com/administration/gitaly/)を参照してください
+Gitalyロールは、Gitalyサービスを設定するために使用されます。詳細については、[Gitalyドキュメント](https://docs.gitlab.com/administration/gitaly/)を参照してください。
 
-- `gitaly_role`（`gitlab-ce`/`gitlab-ee`）
+- `gitaly_role` (`gitlab-ce`/`gitlab-ee`)
 
-  Gitalyサービスを使用してサーバーを設定します。
+  サーバーにGitalyサービスを設定します。
 
-  *デフォルトでは、他のサービスは有効になりません。*
+  *デフォルトでは、他のサービスを有効にしません。*
