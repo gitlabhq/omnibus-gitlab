@@ -1,9 +1,9 @@
 require 'optparse'
 
 require "#{base_path}/embedded/cookbooks/package/libraries/gitlab_cluster"
-require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
-require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/gitlab_ctl/geo"
-require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/gitlab_ctl/geo/promote"
+require "gitlab_ctl"
+require "gitlab_ctl/geo"
+require "gitlab_ctl/geo/promote"
 
 add_command_under_category('geo', 'gitlab-geo', 'Interact with Geo', 2) do
   begin

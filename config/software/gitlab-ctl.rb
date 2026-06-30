@@ -73,7 +73,7 @@ if [ "$1" == "reconfigure" ] && [ "$UID" != "0" ]; then
   exit 1
 fi
 
-#{install_dir}/embedded/bin/omnibus-ctl #{File.basename(install_dir)} '#{install_dir}/embedded/service/omnibus-ctl*' "$@"
+RUBYLIB="#{install_dir}/embedded/service/omnibus-ctl/lib:#{install_dir}/embedded/service/omnibus-ctl-ee/lib" #{install_dir}/embedded/bin/omnibus-ctl #{File.basename(install_dir)} '#{install_dir}/embedded/service/omnibus-ctl*' "$@"
       EOH
     end
   end

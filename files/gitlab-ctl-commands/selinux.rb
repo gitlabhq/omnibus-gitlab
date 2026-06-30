@@ -11,8 +11,8 @@
 # limitations under the License.
 #
 
-require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl/selinux"
-require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl/util"
+require "gitlab_ctl/selinux"
+require "gitlab_ctl/util"
 
 add_command_under_category('apply-sepolicy',
                            'SELinux Controls',

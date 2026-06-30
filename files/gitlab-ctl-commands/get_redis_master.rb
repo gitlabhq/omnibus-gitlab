@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl/util"
+require "gitlab_ctl/util"
 
 add_command 'get-redis-master', 'Get connection details to Redis master', 2 do |cmd_name|
   node_attributes = GitlabCtl::Util.get_node_attributes

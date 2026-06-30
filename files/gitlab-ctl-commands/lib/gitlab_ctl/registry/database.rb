@@ -4,7 +4,7 @@ require 'optparse'
 require_relative './migrate'
 require_relative './import'
 require_relative './gc_stats'
-require_relative '../../gitlab_ctl'
+require 'gitlab_ctl'
 
 module GitlabCtl
   module Registry

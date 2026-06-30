@@ -2,8 +2,8 @@ require 'optparse'
 require 'mixlib/shellout'
 require 'rainbow'
 
-require_relative 'util'
-require_relative '../gitlab_ctl'
+require 'gitlab_ctl/util'
+require 'gitlab_ctl'
 
 # For testing purposes, if the first path cannot be found load the second
 begin

@@ -1,4 +1,4 @@
-require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/gitlab_ctl/geo/replication"
+require "gitlab_ctl/geo/replication"
 require 'optparse'
 require 'English'
 

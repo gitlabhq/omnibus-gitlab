@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl/backup"
+require "gitlab_ctl/backup"
 
 add_command_under_category('backup-etc', 'backup',
                            'Backup GitLab configuration [options]', 2) do |cmd_name, *args|

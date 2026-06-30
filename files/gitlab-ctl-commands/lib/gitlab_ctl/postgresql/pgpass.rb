@@ -17,7 +17,7 @@
 require 'erb'
 require 'etc'
 
-require_relative '../../gitlab_ctl'
+require 'gitlab_ctl'
 
 module GitlabCtl
   class PostgreSQL

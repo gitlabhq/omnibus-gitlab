@@ -1,12 +1,7 @@
 require 'io/console'
 require 'rainbow/ext/string'
 
-# For testing purposes, if the first path cannot be found load the second
-begin
-  require_relative '../../../../omnibus-ctl/lib/gitlab_ctl/postgresql'
-rescue LoadError
-  require_relative '../../../../gitlab-ctl-commands/lib/gitlab_ctl/postgresql'
-end
+require 'gitlab_ctl/postgresql'
 
 module GitlabCtl
   module Geo

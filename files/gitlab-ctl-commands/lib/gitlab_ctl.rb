@@ -14,9 +14,9 @@
 # limitations under the License.
 #
 
-require_relative 'gitlab_ctl/pg_upgrade'
-require_relative 'gitlab_ctl/backup'
-require_relative 'gitlab_ctl/util'
+require 'gitlab_ctl/pg_upgrade'
+require 'gitlab_ctl/backup'
+require 'gitlab_ctl/util'
 
 module GitlabCtl
   class Errors

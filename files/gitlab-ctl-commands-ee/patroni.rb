@@ -1,7 +1,7 @@
 require 'optparse'
 
-require "#{base_path}/embedded/service/omnibus-ctl/lib/gitlab_ctl"
-require "#{base_path}/embedded/service/omnibus-ctl-ee/lib/gitlab_ctl/patroni"
+require "gitlab_ctl"
+require "gitlab_ctl/patroni"
 
 add_command_under_category('patroni', 'database', 'Interact with Patroni', 2) do
   begin
