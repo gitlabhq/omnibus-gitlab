@@ -180,7 +180,7 @@ runit_service 'gitaly' do
     use_wrapper: use_wrapper,
   }.merge(params))
   # Ensure gitaly has time to do its graceful restart before runit times out and fails
-  sv_timeout (Gitaly.parse_duration(graceful_restart_timeout) / 1000) + 5
+  sv_timeout (Gitaly.parse_duration(graceful_restart_timeout) / 1000) + node['gitaly']['sv_timeout_buffer'].to_i
   log_options logging_settings[:options]
 end
 

@@ -139,6 +139,30 @@ RSpec.describe 'gitaly' do
       expect(chef_run.find_resource('runit_service', 'gitaly').sv_timeout).to eq(65)
     end
 
+    context 'with a custom sv_timeout_buffer as an integer' do
+      cached(:chef_run) { gitaly_chef_run }
+
+      before do
+        stub_gitlab_rb(gitaly: { sv_timeout_buffer: 30 })
+      end
+
+      it 'uses the custom buffer to compute sv_timeout' do
+        expect(chef_run.find_resource('runit_service', 'gitaly').sv_timeout).to eq(90)
+      end
+    end
+
+    context 'with a custom sv_timeout_buffer as a string' do
+      cached(:chef_run) { gitaly_chef_run }
+
+      before do
+        stub_gitlab_rb(gitaly: { sv_timeout_buffer: '30' })
+      end
+
+      it 'coerces the string to integer and computes sv_timeout' do
+        expect(chef_run.find_resource('runit_service', 'gitaly').sv_timeout).to eq(90)
+      end
+    end
+
     it 'does not append timestamp in logs if logging format is json' do
       expect(chef_run).to render_file('/opt/gitlab/sv/gitaly/log/run')
         .with_content(/svlogd \/var\/log\/gitlab\/gitaly/)
