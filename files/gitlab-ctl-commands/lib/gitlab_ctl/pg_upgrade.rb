@@ -15,13 +15,13 @@ end
 module GitlabCtl
   class PgUpgrade
     include GitlabCtl::Util
-    attr_accessor :base_path, :data_path, :tmp_dir, :timeout, :target_version, :initial_version, :psql_command, :port
+    attr_accessor :tmp_dir, :timeout, :target_version, :initial_version, :psql_command, :port
 
     attr_writer :data_dir, :tmp_data_dir
 
-    def initialize(base_path, data_path, target_version, tmp_dir = nil, timeout = nil, psql_command = nil, port = nil)
-      @base_path = base_path
-      @data_path = data_path
+    def initialize(ctl, target_version, tmp_dir = nil, timeout = nil, psql_command = nil, port = nil)
+      @ctl = ctl
+      @roles = GitlabCtl::Util.roles(ctl.base_path)
       @tmp_dir = tmp_dir
       @timeout = timeout
       @target_version = target_version
@@ -35,7 +35,7 @@ module GitlabCtl
 
       # We still need to support legacy attributes starting with `gitlab`, as
       # they might exists before running configure on an existing installation
-      pg_base_dir = node_attributes.dig(:gitlab, :postgresql, :dir) || node_attributes.dig(:postgresql, :dir) || File.join(@data_path, "postgresql")
+      pg_base_dir = node_attributes.dig(:gitlab, :postgresql, :dir) || node_attributes.dig(:postgresql, :dir) || File.join(@ctl.data_path, "postgresql")
 
       @data_dir = File.join(pg_base_dir, "data")
 
@@ -47,6 +47,13 @@ module GitlabCtl
       return @tmp_data_dir if @tmp_data_dir
 
       @tmp_data_dir = @tmp_dir ? "#{@tmp_dir}/data" : data_dir
+    end
+
+    # Return whether there is a file flag indicating that PostgreSQL upgrade is disabled
+    #
+    # @return [Boolean]
+    def pg_upgrade_disabled?
+      File.exist?('/etc/gitlab/disable-postgresql-upgrade')
     end
 
     def enough_free_space?(dir, needed)
@@ -75,7 +82,7 @@ module GitlabCtl
 
     def fetch_running_version
       PGVersion.parse(GitlabCtl::Util.get_command_output(
-        "#{@base_path}/embedded/bin/pg_ctl --version"
+        "#{@ctl.base_path}/embedded/bin/pg_ctl --version"
       ).split.last)
     end
 
@@ -104,7 +111,7 @@ module GitlabCtl
     end
 
     def node_attributes
-      @node_attributes ||= GitlabCtl::Util.get_node_attributes(@base_path)
+      @node_attributes ||= GitlabCtl::Util.get_node_attributes(@ctl.base_path)
     end
 
     def public_node_attributes
@@ -112,7 +119,7 @@ module GitlabCtl
     end
 
     def base_postgresql_path
-      "#{base_path}/embedded/postgresql"
+      "#{@ctl.base_path}/embedded/postgresql"
     end
 
     def target_version_path
@@ -131,6 +138,41 @@ module GitlabCtl
 
     def log(message)
       $stderr.puts message
+    end
+
+    # Return whether the current node has a Geo primary role set
+    #
+    # @return [Boolean]
+    def geo_primary_role?
+      @roles.include?('geo_primary')
+    end
+
+    # Return whether the current node has a Geo secondary role set
+    #
+    # @return [Boolean]
+    def geo_secondary_role?
+      @roles.include?('geo_secondary')
+    end
+
+    # Return whether the current node has Patroni service enabled
+    #
+    # @return [Boolean]
+    def patroni_service_enabled?
+      @ctl.service_enabled?('patroni')
+    end
+
+    # Return whether the current node has Postgres service enabled
+    #
+    # @return [Boolean]
+    def postgres_service_enabled?
+      @ctl.service_enabled?('postgresql')
+    end
+
+    # Return whether the current node has Geo Postgres service enabled
+    #
+    # @return [Boolean]
+    def geo_postgres_service_enabled?
+      @ctl.service_enabled?('geo-postgresql')
     end
 
     def run_pg_upgrade
@@ -175,7 +217,8 @@ module GitlabCtl
           skip_disk_check: false,
           leader: nil,
           replica: nil,
-          standby_leader: nil
+          standby_leader: nil,
+          skip_multi_node: false
         }
 
         OptionParser.new do |opts|
@@ -218,6 +261,10 @@ module GitlabCtl
             options[:leader] = false
             options[:replica] = false
             options[:standby_leader] = true
+          end
+
+          opts.on('--skip-multi-node', 'Bail out instead of upgrading on anything other than a single-node install. Skips when Geo or Patroni is in use, or when PostgreSQL upgrade has been explicitly disabled. Intended for non-interactive callers such as the Docker entrypoint.') do
+            options[:skip_multi_node] = true
           end
         end.parse!(args)
 
