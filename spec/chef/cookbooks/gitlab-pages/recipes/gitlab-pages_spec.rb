@@ -79,6 +79,24 @@ RSpec.describe 'GitLab Pages' do
       expect(chef_run).to render_file("/var/opt/gitlab/gitlab-pages/gitlab-pages-config").with_content(default_content)
     end
 
+    context 'when internal_gitlab_server is set' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          pages_external_url: 'https://pages.example.com',
+          gitlab_pages: {
+            internal_gitlab_server: 'https://int.gitlab.example.com'
+          }
+        )
+      end
+
+      it 'derives artifacts_server_url from internal_gitlab_server' do
+        expect(chef_run).to render_file("/var/opt/gitlab/gitlab-pages/gitlab-pages-config").with_content { |content|
+          expect(content).to match(%r{^artifacts-server=https://int.gitlab.example.com/api/v4$})
+        }
+      end
+    end
+
     it 'skips rendering the auth settings when access control is disabled' do
       stub_gitlab_rb(
         external_url: 'https://gitlab.example.com',
