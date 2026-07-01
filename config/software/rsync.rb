@@ -16,7 +16,7 @@
 
 name 'rsync'
 
-default_version '3.4.1'
+default_version '3.4.2'
 
 license 'GPL v3'
 license_file 'COPYING'
@@ -26,14 +26,11 @@ skip_transitive_dependency_licensing true
 dependency 'popt'
 
 if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
-  # NOTE: We cannot use UBT binaries in FIPS builds
-  # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
-  # FIXME: version has drifted in Omnibus vs UBT builds
-  source Build::UBT.source_args(name, "3.4.1", "ca5264107125053f83556759df620f3a70926c12168a41353aa8e3144284d61b", OhaiHelper.arch)
+  source Build::UBT.source_args(name, "#{default_version}-2ubt", "0dddc59ef9d4414cef25e04986db8af66277a65d526c5c0c46a7e2e0865b373f", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
   source url: "https://rsync.samba.org/ftp/rsync/src/rsync-#{version}.tar.gz",
-         sha256: '2924bcb3a1ed8b551fc101f740b9f0fe0a202b115027647cf69850d65fd88c52'
+         sha256: 'ff10aa2c151cd4b2dbbe6135126dbc854046113d2dfb49572a348233267eb315'
 
   relative_path "rsync-#{version}"
 
