@@ -13,7 +13,7 @@ class OhaiHelper
       "#{os}-#{codename}"
     end
 
-    # This prints something like 'ubuntu/xenial'; used for packagecloud uploads
+    # This prints something like 'ubuntu/xenial'; used for repository uploads
     def repo_string
       os, codename, _ = fetch_os_with_codename
 

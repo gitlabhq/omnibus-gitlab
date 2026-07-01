@@ -74,9 +74,7 @@ These variables are required to release packages built by the pipeline.
 | Environment Variable            | Description |
 |---------------------------------|-------------|
 | `STAGING_REPO`                  | Repository at `packages.gitlab.com` where releases are uploaded prior to final release. |
-| `STAGING_REPO_TOKEN`            | PackageCloud master token which is used by CI to download the installation script. Values come from the [`Tokens` page](https://packages.gitlab.com/gitlab/pre-release/tokens) of the `gitlab/pre-release` package repository. See [documentation here](https://packagecloud.io/docs#master_tokens). |
-| `PACKAGECLOUD_USER`             | Packagecloud username for pushing packages to `packages.gitlab.com`. |
-| `PACKAGECLOUD_TOKEN`            | API access token for pushing packages to `packages.gitlab.com`. The value should come from the [API token](https://packages.gitlab.com/api_token) page. This value is used by the `packagecloud` CLI to run `packagecloud push`. See [documentation here](https://www.rubydoc.info/gems/package_cloud/#environment-variables). |
+| `STAGING_REPO_TOKEN`            | Token used by CI/CD to download the installation script from the pre-release package repository at `packages.gitlab.com`. |
 | `LICENSE_S3_BUCKET`             | Bucket for storing release license information published on the public page at `https://gitlab-org.gitlab.io/omnibus-gitlab/licenses.html`. |
 | `LICENSE_AWS_SECRET_ACCESS_KEY` | Account secret to read/write from the S3 bucket containing license information. |
 | `LICENSE_AWS_ACCESS_KEY_ID`     | Account ID to read/write from the S3 bucket containing license information. |
@@ -109,7 +107,6 @@ These additional variables are available to override or enable different build b
 | `GITLAB_COM_PKGS_BUILDS_BUCKET`  | GCS bucket where regular branch packages are pushed. |
 | `GITLAB_COM_PKGS_SA_FILE`        | Service account key used for pushing release packages for SaaS deployments, it must have write access to the pkgs bucket. |
 | `GITLAB_NAMESPACE`               | Used to override image URLs in the Dev instance, since the top-level name there diverges from `gitlab-org` to `gitlab`. |
-| `PACKAGECLOUD_ENABLED`           | Set to `"true"` to enable uploading packages to PackageCloud (`packages.gitlab.com`). Defaults to `"false"`. See [decommissioning issue](https://gitlab.com/gitlab-org/build/team-tasks/-/work_items/177). |
 
 ## Unknown/outdated variables
 

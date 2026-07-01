@@ -68,7 +68,7 @@ To fetch the latest repository signing key:
    ```
 
 > [!note]
-> The usage of `apt-key` [was deprecated](https://blog.packagecloud.io/secure-solutions-for-apt-key-add-deprecated-messages/)
+> The usage of `apt-key` [was deprecated](https://manpages.debian.org/unstable/apt/apt-key.8.en.html)
 > and removed in Debian 13.
 >
 > If using `apt-key` and cannot migrate to the `signed-by` method

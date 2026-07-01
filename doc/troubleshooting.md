@@ -30,7 +30,9 @@ sudo apt-get update
 sudo apt-get clean
 ```
 
-Another workaround is to download the package manually by selecting the correct package from the [CE packages](https://packages.gitlab.com/gitlab/gitlab-ce/) or [EE packages](https://packages.gitlab.com/gitlab/gitlab-ee/) repository:
+For more information, see [this issue comment](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/628#note_1824330) and [Debian's apt documentation on hash sum mismatches](https://wiki.debian.org/DebianRepository/Format).
+
+To workaround this issue, download the package manually. Select the correct package from the [CE packages](https://packages.gitlab.com/gitlab/gitlab-ce) or [EE packages](https://packages.gitlab.com/gitlab/gitlab-ee) repository:
 
 ```shell
 curl -LJO "https://packages.gitlab.com/gitlab/gitlab-ce/packages/ubuntu/trusty/gitlab-ce_8.1.0-ce.0_amd64.deb/download"
@@ -501,7 +503,7 @@ Add the following line to apt-cacher-ng config (for example in `/etc/apt-cacher-
 PassThroughPattern: (packages\.gitlab\.com|packages-gitlab-com\.s3\.amazonaws\.com|*\.cloudfront\.net)
 ```
 
-For more details on why this passthrough rule is required and how to configure it, refer to the `apt-cacher-ng` documentation for HTTPS/TLS repositories.
+Read more about `apt-cacher-ng` and the reasons why this change is needed [in the apt-cacher-ng documentation](https://www.unix-ag.uni-kl.de/~bloch/acng/html/).
 
 ## Mirroring packages for multiple distributions using apt-mirror fails
 

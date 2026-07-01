@@ -27,8 +27,7 @@ discuss the deprecation and removal timeline. We provide a path forward for user
 who are affected by this by making sure:
 
 - We can build packages for the next version of the OS.
-- Our package repository provider, [Packagecloud](https://packagecloud.io/),
-  supports packages for the new version.
+- Our package repository supports packages for the new version.
 
 After we decide to deprecate support for an OS, we tell affected users
 through appropriate channels, including:
