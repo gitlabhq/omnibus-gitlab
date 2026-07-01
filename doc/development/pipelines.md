@@ -350,7 +350,7 @@ This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-g
 ### `<OS_NAME>-staging`
 
 These jobs upload the packages built in previous job to an internal staging
-repository in [Packagecloud instance](https://packages.gitlab.com).
+repository in [GitLab package repository](https://packages.gitlab.com).
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on tag pipelines.
 
@@ -360,7 +360,7 @@ This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-g
 ### `<OS_NAME>-release`
 
 These jobs pulls the packages from the internal staging repository to a public
-repository in [Packagecloud instance](https://packages.gitlab.com).
+repository in [GitLab package repository](https://packages.gitlab.com).
 
 This job is run only on [Release mirror](https://dev.gitlab.org/gitlab/omnibus-gitlab) on tag pipelines.
 
