@@ -440,7 +440,7 @@ DEPENDENCIES
   unf_ext (= 0.0.9.1)
 
 CHECKSUMS
-  acme-client (2.0.30) sha256=fd87896fcbf5e143cde380a73cfbd87d816f50f619fded50e8fbb62b8ba70616
+  acme-client (2.0.31) sha256=69c6c2bd015fdd4bdacdb3c2baa9f0034dbf91b855e08f15b78a533cc77ff360
   activesupport (7.0.8.4) sha256=69047070402b20fbaeebbeb56d21238db457c54c7e66f356dcba683e500ae197
   addressable (2.8.7) sha256=462986537cf3735ab5f3c0f557f14155d778f4b43ea4f485a9deb9c8f7c58232
   ast (2.4.2) sha256=1e280232e6a33754cde542bc5ef85520b74db2aac73ec14acef453784447cc12
