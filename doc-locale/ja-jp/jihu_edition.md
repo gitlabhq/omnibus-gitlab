@@ -6,11 +6,11 @@ title: JiHu Edition
 ---
 
 > [!note]
-> このセクションは、中国市場のお客様にのみ関連します。
+> このセクションは、中国市場の顧客である場合にのみ関連します。
 
 GitLabは、その技術をJiHuと呼ばれる新しい独立した中国企業にライセンス供与しました。この独立した会社は、中国におけるGitLabの完全なDevOpsプラットフォームの導入を促進し、GitLabコミュニティとオープンソースへのコントリビュートを育成するのに役立ちます。
 
-詳細については、[ブログ投稿の発表](https://about.gitlab.com/blog/2021/03/18/gitlab-licensed-technology-to-new-independent-chinese-company/)と[FAQ](https://about.gitlab.com/pricing/faq-jihu/)を参照してください。
+詳細については、[ブログ投稿の発表](https://about.gitlab.com/blog/gitlab-licensed-technology-to-new-independent-chinese-company/)と[FAQ](https://about.gitlab.com/pricing/faq-jihu/)を参照してください。
 
 ## 前提条件 {#prerequisites}
 
@@ -21,9 +21,9 @@ JiHuと契約後、JiHuの担当者からインストールプロセスの一部
 ## JiHu Editionパッケージをインストールまたは更新する {#install-or-update-a-jihu-edition-package}
 
 > [!note]
-> 初めてインストールする場合は、`EXTERNAL_URL="<GitLab URL>"`変数を渡して、希望するドメイン名を設定する必要があります。インストールにより、そのURLでGitLabが自動的に設定および起動されます。HTTPSを有効にするには、証明書を指定するために[追加の設定](settings/nginx.md#enable-https)が必要です。
+> 初めてインストールする場合は、希望のドメイン名を設定するために`EXTERNAL_URL="<GitLab URL>"`変数を渡す必要があります。インストールにより、そのURLでGitLabが自動的に設定および起動されます。HTTPSを有効にするには、証明書を指定するために[追加の設定](settings/nginx.md#enable-https)が必要です。
 
-JiHu Editionパッケージのインストールまたは更新の詳細については、[GitLab Jihu Edition Install](https://gitlab.cn/install/)ページを参照してください。
+JiHu Editionパッケージのインストールまたは更新の詳細については、[GitLab JiHu Editionインストール](https://gitlab.cn/install)ページを参照してください。
 
 ### 初期パスワードを設定し、ライセンスを適用する {#set-initial-password-and-apply-license}
 

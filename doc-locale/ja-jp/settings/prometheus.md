@@ -1,8 +1,8 @@
 ---
 stage: GitLab Delivery
 group: Operate
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
-title: Prometheus設定
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see <https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments>
+title: Prometheusの設定
 ---
 
 {{< details >}}
@@ -14,9 +14,9 @@ title: Prometheus設定
 
 ## リモート読み取り/書き込み {#remote-readwrite}
 
-Prometheusは、リモートサービスとの間での読み取りと書き込みをサポートしています。
+Prometheusは、リモートサービスへの読み取りと書き込みをサポートしています。
 
-リモートの読み取りまたは書き込みサービスを設定するには、`gitlab.rb`に以下を含めることができます。
+リモートの読み取りまたは書き込みサービスを設定するには、`gitlab.rb`に以下を含めます。
 
 ```ruby
 prometheus['remote_write'] = [
@@ -34,15 +34,18 @@ prometheus['remote_read'] = [
 ]
 ```
 
-利用可能なオプションの詳細については、公式ドキュメントの[remote write](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#%3Cremote_write%3E)セクションと[remote read](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#%3Cremote_read%3E)セクションを参照してください。
+設定オプションの詳細については、Prometheusの設定に関する情報を参照してください:
+
+- [`remote_write`](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write)。
+- [`remote_read`](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_read)。
 
 ## ルールファイル {#rules-files}
 
-Prometheusでは、[recording](https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/)と[alerting](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/)のルールを使用できます。
+Prometheusは、[記録](https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/)および[アラート](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/)ルールを許可します。
 
-Linuxパッケージのインストールには、`/var/opt/gitlab/prometheus/rules/`に保存されているいくつかの[デフォルトのルールファイル](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/monitoring/templates/rules)が含まれています。
+Linuxパッケージのインストールには、`/var/opt/gitlab/prometheus/rules/`に保存されている[デフォルトルールファイル](https://gitlab.com/gitlab-org/omnibus-gitlab/tree/master/files/gitlab-cookbooks/monitoring/templates/rules)が含まれています。
 
-デフォルトのルールをオーバーライドするには、`gitlab.rb.`でデフォルトのリストを変更します。
+デフォルトルールをオーバーライドするには、`gitlab.rb.`でデフォルトリストを変更できます。
 
 ルールなし:
 
@@ -67,15 +70,15 @@ prometheus['external_labels'] = {
 }
 ```
 
-外部ラベルは、デフォルトでは設定されていません。
+デフォルトでは外部ラベルは設定されません。
 
 ## `node_exporter` {#node_exporter}
 
-`node_exporter`は、システムレベルのメトリクスを提供します。
+`node_exporter`はシステムレベルのメトリクスを提供します。
 
-追加のメトリクスコレクターは、デフォルトで有効になっています。たとえば、`mountstats`は、NFSマウントに関するメトリクスを収集するために使用されます。
+追加のメトリクスコレクターはデフォルトで有効になっています。例えば、NFSマウントに関するメトリクスを収集するために`mountstats`が使用されます。
 
-`mountstats`コレクターを無効にするには、次の設定で`gitlab.rb`を調整し、`gitlab-ctl reconfigure`を実行します:
+`mountstats`コレクターを無効にするには、`gitlab.rb`を以下の設定で調整し、`gitlab-ctl reconfigure`を実行します:
 
 ```ruby
 node_exporter['flags'] = {
@@ -83,13 +86,13 @@ node_exporter['flags'] = {
 }
 ```
 
-利用可能なコレクターの詳細については、[アップストリームドキュメント](https://github.com/prometheus/node_exporter#collectors)を参照してください。
+利用可能なコレクターの詳細については、[アップストリームのドキュメント](https://github.com/prometheus/node_exporter#collectors)を参照してください。
 
 ## Alertmanagerオプション {#alertmanager-options}
 
 [Alertmanager](https://prometheus.io/docs/alerting/latest/configuration/)の[グローバルオプション](https://prometheus.io/docs/alerting/latest/configuration/)を設定できます。
 
-たとえば、次の`gitlab.rb`設定は、SMTPサーバー自体を識別するためにAlertmanagerが使用するホスト名をオーバーライドします:
+例えば、以下の`gitlab.rb`設定は、AlertmanagerがSMTPサーバーに対して自身を識別するために使用するホスト名をオーバーライドします:
 
 ```ruby
 alertmanager['global'] = {
@@ -99,7 +102,7 @@ alertmanager['global'] = {
 
 ### 追加のレシーバーとルート {#additional-receivers-and-routes}
 
-この例では、VictorOpsの新しいレシーバーを実装します。
+この例では、VictorOps用の新しいレシーバーを実装します。
 
 1. `/etc/gitlab/gitlab.rb`を編集して、新しいレシーバーを追加し、[ルート](https://prometheus.io/docs/alerting/latest/configuration/#route)を定義します:
 
@@ -139,6 +142,6 @@ alertmanager['global'] = {
    sudo gitlab-ctl reconfigure
    ```
 
-Alertmanagerは、`severity = high`アラートを`victorops-receiver`にルーティングするようになります。
+Alertmanagerは、`severity = high`のアラートを`victorops-receiver`にルーティングします。
 
-AlertmanagerのVictorOpsオプションの詳細については、[VictorOpsのドキュメント](https://help.victorops.com/knowledge-base/victorops-prometheus-integration/)を参照してください。
+[Alertmanager用VictorOpsオプション](https://help.splunk.com/en/splunk-observability-cloud/splunk-on-call/integrations-with-splunk-on-call/prometheus-integration-for-splunk-on-call)の詳細については、こちらをご覧ください。

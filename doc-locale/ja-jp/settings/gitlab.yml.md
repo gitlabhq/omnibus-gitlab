@@ -1,8 +1,8 @@
 ---
 stage: GitLab Delivery
 group: Operate
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
-title: 設定ファイルの設定の変更
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see <https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments>
+title: 設定ファイルの設定を変更する
 ---
 
 {{< details >}}
@@ -12,11 +12,11 @@ title: 設定ファイルの設定の変更
 
 {{< /details >}}
 
-一部のGitLab機能は、[`gitlab.yml`](https://gitlab.com/gitlab-org/gitlab-foss/blob/master/config/gitlab.yml.example)を使用してカスタマイズできます。Linuxパッケージのインストールで`gitlab.yml`設定を変更する場合は、`/etc/gitlab/gitlab.rb`で変更する必要があります。翻訳は次のように機能します。利用可能なオプションの完全なリストについては、[`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)を参照してください。
+GitLabの機能の一部は、[`gitlab.yml`](https://gitlab.com/gitlab-org/gitlab-foss/blob/master/config/gitlab.yml.example)を通じてカスタマイズできます。`gitlab.yml`の設定をLinuxパッケージインストール用に変更したい場合は、`/etc/gitlab/gitlab.rb`を使用する必要があります。翻訳は次のように機能します。利用可能なすべてのオプションについては、[`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)を参照してください。
 
-`/etc/gitlab/gitlab.rb`にリストされているテンプレートのすべてのオプションは、デフォルトで使用できます。
+`/etc/gitlab/gitlab.rb`にリストされているテンプレートのすべてのオプションは、デフォルトで利用可能です。
 
-`gitlab.yml`には、次のような構造があります:
+`gitlab.yml`では、次のような構造があります:
 
 ```yaml
 production: &base
@@ -24,26 +24,26 @@ production: &base
     default_theme: 2
 ```
 
-`gitlab.rb`では、これは次のように変換されます:
+`gitlab.rb`では、これは次のように解釈されます:
 
 ```ruby
 gitlab_rails['gitlab_default_theme'] = 2
 ```
 
-ここで何が起こるかというと、`production: &base`を無視し、`gitlab:`と`default_theme:`を`gitlab_default_theme`に結合します。すべての`gitlab.yml`設定を`gitlab.rb`経由で変更できるわけではありません。[`gitlab.yml.erb`テンプレート](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/templates/default/gitlab.yml.erb)を参照してください。属性が見つからない場合は、`omnibus-gitlab`リポジトリでマージリクエストを作成してください。
+ここで起きるのは、`production: &base`を無視し、`gitlab:`と`default_theme:`を結合して`gitlab_default_theme`にすることです。すべての`gitlab.yml`設定がまだ`gitlab.rb`経由で変更できるわけではないことに注意してください。[`gitlab.yml.erb`テンプレート](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/templates/default/gitlab.yml.erb)を参照してください。属性が不足していると思われる場合は、`omnibus-gitlab`リポジトリでマージリクエストを作成してください。
 
-`sudo gitlab-ctl reconfigure`を実行して、`gitlab.rb`の変更を有効にします。
+`gitlab.rb`での変更を有効にするには、`sudo gitlab-ctl reconfigure`を実行します。
 
-生成されたファイルを`/var/opt/gitlab/gitlab-rails/etc/gitlab.yml`で編集しないでください。次の`gitlab-ctl reconfigure`の実行時に上書きされるためです。
+`/var/opt/gitlab/gitlab-rails/etc/gitlab.yml`内の生成されたファイルを編集しないでください。次回の`gitlab-ctl reconfigure`実行時に上書きされます。
 
-## 新しい設定を`gitlab.yml`に追加する {#adding-a-new-setting-to-gitlabyml}
+## `gitlab.yml`に新しい設定を追加する {#adding-a-new-setting-to-gitlabyml}
 
-まず、`gitlab.yml`への設定の追加を見送ることを検討してください。**設定**については、[GitLab固有の考慮事項](https://docs.gitlab.com/development/code_review/#gitlab-specific-concerns)を参照してください。
+まず、`gitlab.yml`に設定を追加しないことを検討してください。[GitLab-specific concerns](https://docs.gitlab.com/development/code_review/#gitlab-specific-concerns)の下の**設定**を参照してください。
 
-新しい設定を追加するときは、次の5つのファイルを更新することを忘れないでください:
+新しい設定を追加する際は、次の5つのファイルを更新することを忘れないでください:
 
-- `/etc/gitlab/gitlab.rb`を介してエンドユーザーに設定を公開するための[`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)ファイル。
-- 新しい設定に対して適切なデフォルトを提供するための[`default.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/attributes/default.rb)ファイル。
-- `gitlab.rb`からの設定の値を実際に使用するための[`gitlab.yml.example`](https://gitlab.com/gitlab-org/gitlab/blob/master/config/gitlab.yml.example)ファイル。
-- [`gitlab.yml.erb`ファイル](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/templates/default/gitlab.yml.erb)
-- [`gitlab-rails_spec.rb`ファイル](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/spec/chef/cookbooks/gitlab/recipes/gitlab-rails_spec.rb)
+- [`gitlab.rb.template`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template)ファイルは、`/etc/gitlab/gitlab.rb`を介して設定をエンドユーザーに公開します。
+- [`default.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/attributes/default.rb)ファイルは、新しい設定に適切なデフォルトを提供します。
+- [`gitlab.yml.example`](https://gitlab.com/gitlab-org/gitlab/blob/master/config/gitlab.yml.example)ファイルは、`gitlab.rb`からの設定の値を実際に使用します。
+- [`gitlab.yml.erb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/templates/default/gitlab.yml.erb)ファイル
+- [`gitlab-rails_spec.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/spec/chef/cookbooks/gitlab/recipes/gitlab-rails_spec.rb)ファイル
