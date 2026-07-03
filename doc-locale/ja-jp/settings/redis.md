@@ -75,7 +75,7 @@ GitLabアプリケーションとは別のサーバーにRedisを設定したい
 
 ## Google Cloud Memorystoreを使用する {#using-google-cloud-memorystore}
 
-Google Cloud Memorystoreは、[Redisの`CLIENT`コマンドをサポートしていません](https://cloud.google.com/memorystore/docs/redis/product-constraints#blocked_redis_commands)。デフォルトでは、Sidekiqは`CLIENT`をデバッグ目的で設定しようとします。これは、次の設定で無効にできます:
+Google Cloud Memorystore [はRedis `CLIENT`コマンドをサポートしていません](https://docs.cloud.google.com/memorystore/docs/redis/product-constraints#blocked_redis_commands)。デフォルトでは、Sidekiqは`CLIENT`をデバッグ目的で設定しようとします。これは、次の設定で無効にできます:
 
 ```ruby
 gitlab_rails['redis_enable_client'] = false
@@ -139,7 +139,7 @@ RedisをSSLの背後で実行するように設定できます。
    ```
 
 > [!note]
-> 一部の`redis-cli`バイナリは、TLS経由でRedisサーバーに直接接続するサポートを組み込んで構築されていません。`redis-cli`が`--tls`フラグをサポートしていない場合は、デバッグ目的で`redis-cli`を使用してRedisサーバーに接続するために、[`stunnel`](https://redis.io/blog/stunnel-secure-redis-ssl/)のようなものを使用する必要があります。
+> 一部の`redis-cli`バイナリは、TLS経由でRedisサーバーに直接接続するためのサポートが組み込まれていません。`redis-cli`が`--tls`フラグをサポートしていない場合は、デバッグ目的で`redis-cli`を使用してRedisサーバーに接続するために、[`stunnel`](https://redis.io/blog/stunnel-secure-redis-ssl/)のようなものを使用する必要があります。
 
 ### GitLabクライアントをSSL経由でRedisサーバーに接続させる {#make-gitlab-client-connect-to-redis-server-over-ssl}
 
@@ -224,21 +224,14 @@ gitlab_rails['redis_write_timeout'] = 1
 
 ## Redisの代わりにValkeyを使用する {#using-valkey-instead-of-redis}
 
-{{< details >}}
-
-- ステータス: ベータ版
-
-{{< /details >}}
-
 {{< history >}}
 
-- GitLab 18.9で[ベータ](https://docs.gitlab.com/policy/development_stages_support/#beta)として[導入されました]。
+- GitLab 18.9で[ベータ版](https://docs.gitlab.com/policy/development_stages_support/#beta)として[導入](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/9113)されました。
+- GitLab 19.0で[一般提供](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/9383)になりました。
 
 {{< /history >}}
 
 [Valkey](https://valkey.io/)は、Redisのドロップイン代替として使用できるRedis互換のキーと値のストアです。Valkeyは、Redis OSS 7.2およびすべての以前のオープンソースRedisバージョンと互換性があります。
-
-Redisの代わりにValkeyを使用することは、[ベータ](https://docs.gitlab.com/policy/development_stages_support/#beta)機能です。
 
 Valkeyを使用する場合:
 
@@ -276,6 +269,23 @@ Redisの代わりにValkeyを使用するには:
 - Redisサービスは`redis-server`の代わりに`valkey-server`を使用します。
 - Sentinelサービスは`redis-sentinel`の代わりに`valkey-sentinel`を使用します。
 - その他のすべてのRedis設定 (ポート、パスワード、パスなど) は同じままです。
+
+#### サービス管理 {#service-management}
+
+後方互換性とシームレスな移行を確保するために、バックエンドとしてRedisまたはValkeyのどちらを使用するかに関わらず、サービス構造は一貫性を保ちます:
+
+- サービス名は`redis`です。サービスを管理するには`gitlab-ctl restart redis`を使用します。
+- ログファイルは`/var/log/gitlab/redis/`に書き込まれます。
+- データディレクトリは`/var/opt/gitlab/redis/`です。
+- 設定ファイルは`redis.conf`です。
+- `gitlab-ctl`コマンドは、構成されたバックエンドに基づいて、適切なCLIツール（`redis-cli`または`valkey-cli`）を使用します。
+- トラブルシューティングには、アクティブなバックエンドを自動的に検出するラッパースクリプトを使用してください:
+
+  ```shell
+  sudo gitlab-redis-cli
+  ```
+
+RedisからValkeyへの移行の詳細については、[Valkey移行ドキュメント](https://valkey.io/topics/migration/)を参照してください。
 
 ## トラブルシューティング {#troubleshooting}
 

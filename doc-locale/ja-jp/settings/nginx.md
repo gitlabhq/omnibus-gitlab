@@ -19,18 +19,15 @@ title: NGINX設定
 異なるサービス向けにNGINX設定を設定するには、`gitlab.rb`ファイルを編集します。
 
 > [!warning]
-> 不正確または互換性のない設定によって、サービスが利用できなくなる可能性があります。
+> 不正確または互換性のない設定により、サービスが利用できなくなる可能性があります。
 
-GitLab Railsアプリケーションを設定するには、`nginx['<setting>']`キーを使用します。GitLabは、`pages_nginx`、`mattermost_nginx`、`registry_nginx`のような他のサービスにも同様のキーを提供しています。`nginx`の設定は、これらの`<service_nginx>`設定にも利用でき、GitLab NGINXとデフォルトで同じ値を共有します。
+GitLab Railsアプリケーションを設定するには、`nginx['<setting>']`キーを使用します。GitLabは、`gitlab_pages['nginx']`、`registry['nginx']`、`gitlab_kas['nginx']`のような他のサービスにも同様のキーを提供します。これらの`<service>['nginx']`設定でも`nginx`の設定が利用可能であり、GitLab Rails NGINXと同じデフォルト値を共有します。
 
-Mattermostのような独立したサービスでNGINXを操作するには、`nginx['enable'] = false`の代わりに`gitlab_rails['enable'] = false`を使用します。詳細については、[Running GitLab Mattermost on its own server](https://docs.gitlab.com/integration/mattermost/#running-gitlab-mattermost-on-its-own-server)を参照してください。
-
-`gitlab.rb`ファイルを変更する際は、各サービス向けにNGINX設定を個別に設定します。`nginx['foo']`を使用して指定された設定は、サービス固有のNGINX設定（`registry_nginx['foo']`や`mattermost_nginx['foo']`など）にはレプリケートされません。例えば、GitLab、Mattermost、およびレジストリ向けのHTTPからHTTPSへのリダイレクトを設定するには、以下の設定を`gitlab.rb`に追加します:
+`gitlab.rb`ファイルを変更する際は、各サービス向けにNGINX設定を個別に設定します。サービス固有のNGINX設定（`registry['nginx']['foo']`など）には、`nginx['foo']`を使用して指定された設定はレプリケートされません。例えば、GitLabおよびレジストリのHTTPからHTTPSへのリダイレクトを設定するには、`gitlab.rb`に次の設定を追加します:
 
 ```ruby
 nginx['redirect_http_to_https'] = true
-registry_nginx['redirect_http_to_https'] = true
-mattermost_nginx['redirect_http_to_https'] = true
+registry['nginx']['redirect_http_to_https'] = true
 ```
 
 ## HTTPSを有効にする {#enable-https}
@@ -53,7 +50,7 @@ mattermost_nginx['redirect_http_to_https'] = true
 "X-Forwarded-Ssl" => "on"
 ```
 
-GitLab インスタンスがリバースプロキシの背後にあるなど、より複雑なセットアップになっている場合は、次のようなエラーを回避するためにプロキシヘッダーを調整する必要があるかもしれません:
+GitLabインスタンスがリバースプロキシの背後にあるなど、より複雑なセットアップになっている場合は、次のようなエラーを回避するためにプロキシヘッダーを調整する必要があるかもしれません:
 
 - `The change you wanted was rejected`
 - `Can't verify CSRF token authenticity Completed 422 Unprocessable`
@@ -115,7 +112,7 @@ GitLabの前にHAProxyのようなプロキシを[PROXYプロトコル](https://
 ## 非バンドル型Webサーバーを使用する {#use-a-non-bundled-web-server}
 
 > [!note]
-> GitLabは、非バンドル型Webサーバーのセットアップに関する情報のみを提供します。非バンドル型コンポーネントのトラブルシューティングは、[サポートのスコープ外](https://about.gitlab.com/support/statement-of-support/#out-of-scope-for-all-self-managed-and-saas-users)と見なされます。非バンドル型Webサーバーの使用に関してご質問や問題がある場合は、非バンドル型Webサーバーのドキュメントを参照してください。
+> GitLabは、バンドルされていないウェブサーバーの設定に関する情報のみをガイダンスとして提供します。バンドルされていないコンポーネントのトラブルシューティングは、[サポート対象外](https://support.gitlab.com/hc/en-us/articles/11625911285404-Statement-of-Support#out-of-scope)とみなされます。非バンドル型Webサーバーの使用に関してご質問や問題がある場合は、非バンドル型Webサーバーのドキュメントを参照してください。
 
 デフォルトでは、LinuxパッケージはバンドルされたNGINXとともにGitLabをインストールします。Linuxパッケージのインストールは、`gitlab-www`ユーザー（同名のグループに属する）を介したWebサーバーアクセスを許可します。外部WebサーバーがGitLabにアクセスできるようにするには、外部Webサーバーユーザーを`gitlab-www`グループに追加します。
 
@@ -196,9 +193,8 @@ GitLabは、特定のニーズに合わせてNGINXの動作をカスタマイズ
    ```ruby
    # Listen on all IPv4 and IPv6 addresses
    nginx['listen_addresses'] = ["0.0.0.0", "[::]"]
-   registry_nginx['listen_addresses'] = ['*', '[::]']
-   mattermost_nginx['listen_addresses'] = ['*', '[::]']
-   pages_nginx['listen_addresses'] = ['*', '[::]']
+   registry['nginx']['listen_addresses'] = ['*', '[::]']
+   gitlab_pages['nginx']['listen_addresses'] = ['*', '[::]']
    ```
 
 1. ファイルを保存し、変更を反映するために[GitLabを再設定](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)します。
@@ -257,9 +253,30 @@ GitLabは、特定のニーズに合わせてNGINXの動作をカスタマイズ
 1. ファイルを保存し、変更を反映するために[GitLabを再設定](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)します。
 
 > [!warning]
-> これを`origin`または`no-referrer`に設定すると、完全なリファラーURLを必要とするGitLab機能が破損します。
+> この設定を`origin`または`no-referrer`にすると、完全なリファラーURLを必要とするGitLabの機能が損なわれます。
 
 詳細については、[Referrer Policy仕様](https://www.w3.org/TR/referrer-policy/)を参照してください。
+
+### Cross-Origin-Resource-PolicyヘッダーとMermaidダイアグラム {#cross-origin-resource-policy-header-and-mermaid-diagrams}
+
+`Cross-Origin-Resource-Policy` (CORP) ヘッダーを`same-site`または`same-origin`の値で設定すると、Mermaidダイアグラムはサイレントにレンダリングに失敗します。
+
+例: 
+
+```ruby
+nginx['custom_gitlab_server_config'] = "add_header Cross-Origin-Resource-Policy same-site;"
+```
+
+Mermaidサンドボックス化されたiframeは、意図的に`allow-same-origin`サンドボックス属性を省略します。これにより、iframeのオリジンがnullになります。CORPが`same-site`または`same-origin`に設定されている場合、nullはどちらのポリシーも満たさないため、ブラウザはnullオリジンのリソース読み込みをブロックします。
+
+Mermaidダイアグラムのレンダリングを許可するには、`cross-origin`を使用します:
+
+```ruby
+nginx['custom_gitlab_server_config'] = "add_header Cross-Origin-Resource-Policy cross-origin;"
+```
+
+> [!warning]
+> `cross-origin`は、`same-site`または`same-origin`よりも制限が緩やかです。この設定を使用する前に、セキュリティ要件を確認してください。
 
 ### Gzip圧縮を無効にする {#disable-gzip-compression}
 
@@ -274,7 +291,7 @@ GitLabは、特定のニーズに合わせてNGINXの動作をカスタマイズ
 1. ファイルを保存し、変更を反映するために[GitLabを再設定](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)します。
 
 > [!note]
-> `gzip`設定は、主要なGitLabアプリケーションにのみ適用され、他のサービスには適用されません。
+> `gzip`設定は、メインのGitLabアプリケーションにのみ適用され、他のサービスには適用されません。
 
 ### プロキシリクエストのバッファリングを無効にする {#disable-proxy-request-buffering}
 
@@ -328,7 +345,7 @@ GitLab向けのNGINX `server`ブロックにカスタム設定を追加するに
 これにより、定義された文字列が`/var/opt/gitlab/nginx/conf/service_conf/gitlab-rails.conf`内の`server`ブロックの末尾に挿入されます。
 
 > [!warning]
-> カスタム設定は、`gitlab.rb`ファイル内の他の場所で定義されている設定と競合する可能性があります。
+> カスタム設定は、`gitlab.rb`ファイルの他の場所で定義されている設定と競合する可能性があります。
 
 #### デフォルトサーバーを無効にする {#disable-the-default-server}
 
@@ -429,7 +446,7 @@ GitLab向けのNGINX `server`ブロックにカスタム設定を追加するに
 
 既存のPassengerとNGINXのインストールでGitLabをホストしながら、更新とインストールにLinuxパッケージを使用できます。
 
-NGINXを無効にすると、Linuxパッケージのインストールに含まれるMattermostなどの他のサービスには、`nginx.conf`に手動で追加しない限りアクセスできません。
+NGINXを無効にした場合、`nginx.conf`に手動で追加しない限り、Linuxパッケージインストールに含まれる他のサービスにアクセスできません。
 
 #### 設定 {#configuration}
 
@@ -645,7 +662,7 @@ NGINXステータスオプションを設定するには:
    ```
 
 > [!note]
-> VTSが有効になっている場合、オプションに`"stub_status" => "on"`を含めないでください。この設定はすべてのエンドポイントに適用され、`/metrics`がPrometheusメトリクスの代わりに基本的な`nginx_status`出力を返す原因となります。
+> VTSが有効な場合、オプションに`"stub_status" => "on"`を含めないでください。この設定はすべてのエンドポイントに適用され、`/metrics`がPrometheusメトリクスの代わりに基本的な`nginx_status`出力を返す原因となります。
 
    VTSを無効にし、基本的な`nginx_status`メトリクスのみを使用するには:
 
