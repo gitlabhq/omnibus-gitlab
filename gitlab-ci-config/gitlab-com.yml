@@ -407,17 +407,26 @@ docs-lint-i18n markdown:
     - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
     - if: '$PIPELINE_TYPE == "DOCS_LOCALIZATION_PIPELINE"'
 
-# Perform link checking on translated documentation Markdown files
-docs-i18n-lint links:
+# Reports on broken links in the localized docs (doc-locale). The localization
+# team is building up translations incrementally, so many crosslinks point to
+# pages that are not translated yet. This job is therefore a report rather than
+# a lint check: it is a manual job that writes the lychee output to an artifact
+# that can be reviewed when needed.
+docs-i18n-report links:
   image: $DOCS_LINT_IMAGE
   stage: check
   cache: {}
   needs: []
   before_script: []
-  allow_failure: true
+  when: manual
   script:
     # Check Markdown links
-    - lychee --offline --include-fragments --exclude "\.(png|jpg|gif|svg)$"  --exclude "ja-jp/development.*#" doc-locale
+    - lychee --offline --include-fragments --exclude "\.(png|jpg|gif|svg)$"  --exclude "ja-jp/development.*#" doc-locale | tee docs-i18n-links-report.txt
+  artifacts:
+    when: always
+    expire_in: 2 weeks
+    paths:
+      - docs-i18n-links-report.txt
   rules:
     - if: '$PIPELINE_TYPE =~ /_TEST_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
