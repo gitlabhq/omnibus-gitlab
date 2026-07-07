@@ -101,6 +101,12 @@ No changes.
 - [Remove Spamcheck from Omnibus-GitLab for 19.0](gitlab-org/omnibus-gitlab@ca64c4627e2b95a2dec19e44e3f76561ebf4afb2) ([merge request](gitlab-org/omnibus-gitlab!9366))
 - [Remove Mattermost for SLES-12.5](gitlab-org/omnibus-gitlab@580302851cb4486434e0db203d4a1062b9abc4e0) ([merge request](gitlab-org/omnibus-gitlab!9274))
 
+## 18.11.7 (2026-07-07)
+
+### Security (1 change)
+
+- [Mattermost Security Updates June 12, 2026](gitlab-org/security/omnibus-gitlab@85137dd032404df2cbae470171ef3e2a48e9d7da)
+
 ## 18.11.6 (2026-06-23)
 
 ### Fixed (1 change)
