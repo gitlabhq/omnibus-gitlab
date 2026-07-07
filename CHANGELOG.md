@@ -41,6 +41,12 @@ omnibus-gitlab repository.
 - [Update dependency gitlab-exporter to v16.8.0](gitlab-org/omnibus-gitlab@9a6db0449a815454ff3bcda61c0b8815015260cf) ([merge request](gitlab-org/omnibus-gitlab!9388))
 - [Update dependency redis/redis to v7.2.13](gitlab-org/omnibus-gitlab@e3a190bfadb2f56b59b241e166f091cb5753e419) ([merge request](gitlab-org/omnibus-gitlab!9351))
 
+## 19.0.4 (2026-07-07)
+
+### Fixed (1 change)
+
+- [Create OAuth application via Authn::OauthApplication with org_id](gitlab-org/security/omnibus-gitlab@0398aaf6d64d491d516f41dc75e451fb5e661849)
+
 ## 19.0.3 (2026-06-23)
 
 ### Fixed (1 change)
