@@ -46,9 +46,10 @@ RSpec.describe SELinuxHelper do
       allow(File).to receive(:exist?).with('/var/opt/gitlab/gitlab-rails/etc/gitlab_shell_secret').and_return(true)
       allow(File).to receive(:exist?).with('/var/opt/gitlab/gitlab-shell/config.yml').and_return(true)
       allow(File).to receive(:exist?).with('/var/opt/gitlab/gitlab-workhorse/sockets').and_return(true)
-      # No contexts defined yet - fresh install path, all commands use -a
-      allow(SELinuxHelper).to receive(:existing_fcontext_patterns).and_return([])
-      # commands must never shell out directly - it must always go through existing_fcontext_patterns
+      # No contexts defined yet, no equivalences - fresh install path, all commands use -a.
+      # commands calls run_semanage_fcontext_l once and passes the output to both parsers.
+      allow(SELinuxHelper).to receive(:run_semanage_fcontext_l).and_return('')
+      # commands must never shell out directly - it must always go through run_semanage_fcontext_l
       expect(Mixlib::ShellOut).not_to receive(:new).with('semanage fcontext -l')
     end
 
@@ -130,10 +131,12 @@ RSpec.describe SELinuxHelper do
         allow(File).to receive(:exist?).with('/var/opt/gitlab/gitlab-rails/etc/gitlab_shell_secret').and_return(true)
         allow(File).to receive(:exist?).with('/var/opt/gitlab/gitlab-shell/config.yml').and_return(true)
         allow(File).to receive(:exist?).with('/var/opt/gitlab/gitlab-workhorse/sockets').and_return(true)
-        allow(SELinuxHelper).to receive(:existing_fcontext_patterns).and_return(
-          ['/var/opt/gitlab/.ssh(/.*)?',
-           '/var/opt/gitlab/.ssh/authorized_keys']
-        )
+        # Simulate semanage output with two paths already registered, no equivalences.
+        # commands calls run_semanage_fcontext_l once and feeds the output to both parsers.
+        allow(SELinuxHelper).to receive(:run_semanage_fcontext_l).and_return(<<~OUTPUT)
+          /var/opt/gitlab/.ssh(/.*)?    all files    system_u:object_r:gitlab_shell_t:s0
+          /var/opt/gitlab/.ssh/authorized_keys    all files    system_u:object_r:gitlab_shell_t:s0
+        OUTPUT
       end
 
       it 'uses -m for already-defined paths and -a for new ones' do
@@ -144,6 +147,34 @@ RSpec.describe SELinuxHelper do
         expect(lines).to include("semanage fcontext -a -t gitlab_shell_t '/var/opt/gitlab/gitlab-shell/config.yml'")
         expect(lines).to include("semanage fcontext -a -t gitlab_shell_t '/var/opt/gitlab/gitlab-rails/etc/gitlab_shell_secret'")
         expect(lines).to include("semanage fcontext -a -t gitlab_shell_t '/var/opt/gitlab/gitlab-workhorse/sockets'")
+      end
+    end
+
+    context 'when an fcontext equivalence covers the GitLab paths (e.g. EL10 /var/opt = /opt)' do
+      before do
+        # Simulate semanage output with the /var/opt = /opt equivalence and no pre-existing contexts.
+        allow(SELinuxHelper).to receive(:run_semanage_fcontext_l).and_return(<<~OUTPUT)
+          SELinux Distribution fcontext Equivalence
+
+          /var/opt = /opt
+
+        OUTPUT
+      end
+
+      it 'registers the substituted spec but runs restorecon against the real path' do
+        lines = SELinuxHelper.commands(chef_run.node)
+
+        # semanage refuses /var/opt/... specs under the equivalence, so register the /opt equivalent
+        expect(lines).to include("semanage fcontext -a -t gitlab_shell_t '/opt/gitlab/.ssh(/.*)?'")
+        expect(lines).to include("semanage fcontext -a -t gitlab_shell_t '/opt/gitlab/.ssh/authorized_keys'")
+        expect(lines).to include("semanage fcontext -a -t gitlab_shell_t '/opt/gitlab/gitlab-shell/config.yml'")
+        expect(lines).to include("semanage fcontext -a -t gitlab_shell_t '/opt/gitlab/gitlab-rails/etc/gitlab_shell_secret'")
+        expect(lines).to include("semanage fcontext -a -t gitlab_shell_t '/opt/gitlab/gitlab-workhorse/sockets'")
+
+        # restorecon still targets the real on-disk paths; the equivalence applies the label there
+        expect(lines).to include("restorecon -R -v '/var/opt/gitlab/.ssh'")
+        expect(lines).to include("restorecon -v '/var/opt/gitlab/gitlab-workhorse/sockets'")
+        expect(lines).not_to include("semanage fcontext -a -t gitlab_shell_t '/var/opt/gitlab/.ssh(/.*)?'")
       end
     end
   end
@@ -301,6 +332,72 @@ RSpec.describe SELinuxHelper do
       it 'returns true when all custom paths have contexts set' do
         expect(SELinuxHelper.context_set?(node)).to be true
       end
+    end
+
+    context 'when an fcontext equivalence covers the GitLab paths (e.g. EL10 /var/opt = /opt)' do
+      let(:semanage_output) do
+        <<~OUTPUT
+          SELinux Distribution fcontext Equivalence
+
+          /var/opt = /opt
+
+          /opt/gitlab/.ssh(/.*)?                             all files          system_u:object_r:gitlab_shell_t:s0
+          /opt/gitlab/.ssh/authorized_keys                   all files          system_u:object_r:gitlab_shell_t:s0
+          /opt/gitlab/gitlab-rails/etc/gitlab_shell_secret   all files          system_u:object_r:gitlab_shell_t:s0
+          /opt/gitlab/gitlab-shell/config.yml                all files          system_u:object_r:gitlab_shell_t:s0
+          /opt/gitlab/gitlab-workhorse/sockets               all files          system_u:object_r:gitlab_shell_t:s0
+        OUTPUT
+      end
+
+      before do
+        allow(Mixlib::ShellOut).to receive(:new).with('semanage fcontext -l').and_return(
+          double(run_command: double(exitstatus: 0, stdout: semanage_output, stderr: ''))
+        )
+      end
+
+      it 'returns true when the substituted /opt paths carry the context' do
+        expect(SELinuxHelper.context_set?(node)).to be true
+      end
+    end
+  end
+
+  context 'when parsing fcontext equivalences' do
+    it 'extracts source/target pairs, ignoring path entries and headers' do
+      output = <<~OUTPUT
+        SELinux Distribution fcontext Equivalence
+
+        /var/run = /run
+        /var/opt = /opt
+
+        /opt/gitlab/.ssh(/.*)?    all files    system_u:object_r:gitlab_shell_t:s0
+        /other/path=value    all files    system_u:object_r:other_t:s0
+      OUTPUT
+
+      expect(SELinuxHelper.parse_equivalences(output)).to eq([['/var/run', '/run'], ['/var/opt', '/opt']])
+    end
+
+    it 'sorts longest source first so the most specific equivalence wins' do
+      output = "/var = /x\n/var/opt = /opt\n"
+
+      expect(SELinuxHelper.parse_equivalences(output)).to eq([['/var/opt', '/opt'], ['/var', '/x']])
+    end
+  end
+
+  context 'when rewriting a spec to honor equivalences' do
+    let(:equivalences) { [['/var/opt', '/opt']] }
+
+    it 'substitutes the source prefix at a path boundary' do
+      expect(SELinuxHelper.equivalent_spec('/var/opt/gitlab/.ssh(/.*)?', equivalences)).to eq('/opt/gitlab/.ssh(/.*)?')
+      expect(SELinuxHelper.equivalent_spec('/var/opt/gitlab/.ssh/authorized_keys', equivalences)).to eq('/opt/gitlab/.ssh/authorized_keys')
+    end
+
+    it 'leaves specs outside the equivalence untouched' do
+      expect(SELinuxHelper.equivalent_spec('/var/optional/thing', equivalences)).to eq('/var/optional/thing')
+      expect(SELinuxHelper.equivalent_spec('/var/log/gitlab(/.*)?', equivalences)).to eq('/var/log/gitlab(/.*)?')
+    end
+
+    it 'returns the spec unchanged when there are no equivalences' do
+      expect(SELinuxHelper.equivalent_spec('/var/opt/gitlab/.ssh(/.*)?', [])).to eq('/var/opt/gitlab/.ssh(/.*)?')
     end
   end
 end
