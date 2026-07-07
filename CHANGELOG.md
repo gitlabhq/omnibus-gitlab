@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.1.2 (2026-07-07)
+
+### Fixed (1 change)
+
+- [Create OAuth application via Authn::OauthApplication with org_id](gitlab-org/security/omnibus-gitlab@ed8c7b70560dd589f612389b7344b3a2a976f90a)
+
 ## 19.1.1 (2026-06-23)
 
 ### Changed (1 change)
