@@ -35,9 +35,13 @@ once true
 # on. We want to disable as many Ohai plugins as we can to avoid plugin bugs
 # and speed up 'gitlab-ctl reconfigure'.
 #
-# The list below, based on Ohai 7.4.1, is a blacklist. UNcomment a plugin to
-# disable it. For example, ':Groovy,' is uncommented because omnibus-gitlab
-# does not care about Groovy.
+# The list below is a denylist. Uncomment a plugin to disable it. For example,
+# ':Groovy,' is uncommented because omnibus-gitlab does not care about Groovy.
+#
+# NOTE: refresh this denylist whenever the bundled Ohai is bumped. It was built
+# for Ohai 7.4.1; the package now ships Ohai 18.1.18, so plugins added since
+# (e.g. :Alibaba, :Oci, :C, :Haskell, :Scala) ran on every reconfigure until
+# added below.
 ohai.disabled_plugins = [
   :Azure,
   :Cloud,
@@ -70,5 +74,11 @@ ohai.disabled_plugins = [
   :VMware,
   :SystemProfile,
   :Zpools,
-  :Virtualization
+  :Virtualization,
+  # Postdate the 7.4.1 list above; cloud-metadata probes + language toolchain scans.
+  :Alibaba,
+  :Oci,
+  :C,
+  :Haskell,
+  :Scala
 ]
