@@ -15,7 +15,7 @@
 #
 
 name 'libarchive'
-default_version '3.8.3'
+default_version '3.8.6'
 
 license 'BSD-2-Clause'
 license_file 'COPYING'
@@ -28,7 +28,7 @@ if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
   build(&Build::UBT.install)
 else
   source url: "https://www.libarchive.org/downloads/libarchive-#{version}.tar.gz",
-         sha256: 'a290c2d82bce7b806d1e5309558a7bd0ef39067a868f4622a0e32e71a4de8cb6'
+         sha256: '213269b05aac957c98f6e944774bb438d0bd168a2ec60b9e4f8d92035925821c'
 
   relative_path "libarchive-#{version}"
 
