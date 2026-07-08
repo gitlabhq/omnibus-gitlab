@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.1.2 (2026-07-07)
+
+### Fixed (1 change)
+
+- [Create OAuth application via Authn::OauthApplication with org_id](gitlab-org/security/omnibus-gitlab@ed8c7b70560dd589f612389b7344b3a2a976f90a)
+
 ## 19.1.1 (2026-06-23)
 
 ### Changed (1 change)
@@ -34,6 +40,12 @@ omnibus-gitlab repository.
 - [Update gitlabsos digest to fb66af8](gitlab-org/omnibus-gitlab@38c041e357eda6217f03e6ddcc227d4a0dd769e8) ([merge request](gitlab-org/omnibus-gitlab!9429))
 - [Update dependency gitlab-exporter to v16.8.0](gitlab-org/omnibus-gitlab@9a6db0449a815454ff3bcda61c0b8815015260cf) ([merge request](gitlab-org/omnibus-gitlab!9388))
 - [Update dependency redis/redis to v7.2.13](gitlab-org/omnibus-gitlab@e3a190bfadb2f56b59b241e166f091cb5753e419) ([merge request](gitlab-org/omnibus-gitlab!9351))
+
+## 19.0.4 (2026-07-07)
+
+### Fixed (1 change)
+
+- [Create OAuth application via Authn::OauthApplication with org_id](gitlab-org/security/omnibus-gitlab@0398aaf6d64d491d516f41dc75e451fb5e661849)
 
 ## 19.0.3 (2026-06-23)
 
@@ -88,6 +100,12 @@ No changes.
 
 - [Remove Spamcheck from Omnibus-GitLab for 19.0](gitlab-org/omnibus-gitlab@ca64c4627e2b95a2dec19e44e3f76561ebf4afb2) ([merge request](gitlab-org/omnibus-gitlab!9366))
 - [Remove Mattermost for SLES-12.5](gitlab-org/omnibus-gitlab@580302851cb4486434e0db203d4a1062b9abc4e0) ([merge request](gitlab-org/omnibus-gitlab!9274))
+
+## 18.11.7 (2026-07-07)
+
+### Security (1 change)
+
+- [Mattermost Security Updates June 12, 2026](gitlab-org/security/omnibus-gitlab@85137dd032404df2cbae470171ef3e2a48e9d7da)
 
 ## 18.11.6 (2026-06-23)
 
