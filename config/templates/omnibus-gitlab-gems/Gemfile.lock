@@ -37,18 +37,6 @@ GEM
       vault (~> 0.16)
     chef-bin (18.3.0)
       chef (= 18.3.0)
-    chef-cli (5.6.14)
-      addressable (>= 2.3.5, < 2.9)
-      chef (>= 16.0)
-      cookbook-omnifetch (~> 0.5)
-      diff-lcs (>= 1.0, < 1.4)
-      ffi-yajl (>= 1.0, < 3.0)
-      license-acceptance (>= 1.0.11, < 3)
-      minitar (~> 0.6)
-      mixlib-cli (>= 1.7, < 3.0)
-      mixlib-shellout (>= 2.0, < 4.0)
-      pastel (~> 0.7)
-      solve (> 2.0, < 5.0)
     chef-config (18.3.0)
       addressable
       chef-utils (= 18.3.0)
@@ -102,8 +90,8 @@ GEM
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
-    addressable (2.8.7)
-      public_suffix (>= 2.0.2, < 7.0)
+    addressable (2.9.0)
+      public_suffix (>= 2.0.2, < 8.0)
     ast (2.4.2)
     aws-eventstream (1.3.0)
     aws-partitions (1.883.0)
@@ -141,8 +129,6 @@ GEM
     chef-vault (4.1.11)
     coderay (1.1.3)
     concurrent-ruby (1.2.3)
-    cookbook-omnifetch (0.12.2)
-      mixlib-archive (>= 0.4, < 2.0)
     corefoundation (0.3.13)
       ffi (>= 1.15.0)
     csv (3.3.2)
@@ -222,7 +208,6 @@ GEM
     mime-types (3.5.2)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2024.0806)
-    minitar (0.9)
     minitest (5.21.2)
     mixlib-archive (1.1.7)
       mixlib-log
@@ -234,7 +219,6 @@ GEM
       ffi (>= 1.15.5)
     mixlib-shellout (3.2.8)
       chef-utils
-    molinillo (0.8.0)
     multi_json (1.15.0)
     multipart-post (2.4.1)
     mutex_m (0.3.0)
@@ -276,7 +260,7 @@ GEM
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
-    public_suffix (5.0.5)
+    public_suffix (7.0.5)
     racc (1.7.3)
     rack (2.2.23)
     rainbow (3.1.1)
@@ -317,9 +301,6 @@ GEM
     rubyzip (2.3.2)
     semverse (3.0.2)
     servolux (0.10.0)
-    solve (4.0.4)
-      molinillo (~> 0.6)
-      semverse (>= 1.1, < 4.0)
     sslshake (1.3.1)
     strings (0.2.1)
       strings-ansi (~> 0.2)
@@ -420,7 +401,6 @@ DEPENDENCIES
   acme-client (= 2.0.31)
   chef (= 18.3.0)!
   chef-bin (= 18.3.0)!
-  chef-cli (= 5.6.14)!
   chef-config (= 18.3.0)!
   chef-zero (= 15.0.11)!
   erb (>= 4.0.3.1)
@@ -442,7 +422,7 @@ DEPENDENCIES
 CHECKSUMS
   acme-client (2.0.31) sha256=69c6c2bd015fdd4bdacdb3c2baa9f0034dbf91b855e08f15b78a533cc77ff360
   activesupport (7.0.8.4) sha256=69047070402b20fbaeebbeb56d21238db457c54c7e66f356dcba683e500ae197
-  addressable (2.8.7) sha256=462986537cf3735ab5f3c0f557f14155d778f4b43ea4f485a9deb9c8f7c58232
+  addressable (2.9.0) sha256=7fdf6ac3660f7f4e867a0838be3f6cf722ace541dd97767fa42bc6cfa980c7af
   ast (2.4.2) sha256=1e280232e6a33754cde542bc5ef85520b74db2aac73ec14acef453784447cc12
   aws-eventstream (1.3.0) sha256=f1434cc03ab2248756eb02cfa45e900e59a061d7fbdc4a9fd82a5dd23d796d3f
   aws-partitions (1.883.0) sha256=14c03676dd905ebb7a049790a776c999d36b5043cd593a240f4ef5ea218bb557
@@ -458,7 +438,6 @@ CHECKSUMS
   cgi (0.5.1) sha256=e93fcafc69b8a934fe1e6146121fa35430efa8b4a4047c4893764067036f18e9
   chef (18.3.0) sha256=ef1ed56a52ad4c9008225906329e75da7ab03ccde8ad0671053ab5e11df849fa
   chef-bin (18.3.0) sha256=062be04cae6fc2b141374375ec5367ddd77bf88f6514962047af9b0a7a632e91
-  chef-cli (5.6.14) sha256=6b5142f7e7ed354b9b5ab35dbf6a71657eae9a9f253eb1a0f04d58061e130a35
   chef-config (18.3.0) sha256=a03519cd79243a2db59d8d8fc9920b5c024cd591db50fc28f424ecb3093ac06c
   chef-licensing (0.7.5) sha256=2b0773c497f9e96588713d7d14af23edcca0f69d584ce580db4df7996d00d5c6
   chef-telemetry (1.1.1) sha256=bd004fd20cd0677936d3ada881b1d318185a76186e1774634542366707633151
@@ -467,7 +446,6 @@ CHECKSUMS
   chef-zero (15.0.11) sha256=791151a35d951d018e543b23b9cd74f3e1fc456b3930ec15f48ea4573954d595
   coderay (1.1.3) sha256=dc530018a4684512f8f38143cd2a096c9f02a1fc2459edcfe534787a7fc77d4b
   concurrent-ruby (1.2.3) sha256=82fdd3f8a0816e28d513e637bb2b90a45d7b982bdf4f3a0511722d2e495801e2
-  cookbook-omnifetch (0.12.2) sha256=56f86d75509b4b9af869de2b6aacda3545793cd0c7b07d311ae47567ae3110bf
   corefoundation (0.3.13) sha256=29c07766cc1d7e428b116b9ebe03b16bb829ef9104f0fa8fff899a61daf02f93
   csv (3.3.2) sha256=6ff0c135e65e485d1864dde6c1703b60d34cc9e19bed8452834a0b28a519bd4e
   date (3.3.4) sha256=971f2cb66b945bcbea4ddd9c7908c9400b31a71bc316833cb42fa584b59d3291
@@ -515,7 +493,6 @@ CHECKSUMS
   method_source (1.0.0) sha256=d779455a2b5666a079ce58577bfad8534f571af7cec8107f4dce328f0981dede
   mime-types (3.5.2) sha256=c1299f10fa34c75a6f168e99e9dadbd11bc507d9d62dc5cf98c4e65f2af8c4e4
   mime-types-data (3.2024.0806) sha256=f283f3521e8717b8221b572e255a32279a82f893f2ee459ac33f4d6d4082fb6f
-  minitar (0.9) sha256=23c0bebead35dbfe9e24088dc436c8a233d03f51d365a686b9a11dd30dc2d588
   minitest (5.21.2) sha256=7685cdb8db964c7f68fcee974f21b62f0b60aaea2a6c898782e27e720ffebac2
   mixlib-archive (1.1.7) sha256=cad86dbde1edcfb28ec4344d4e07451e6f37d7204f80ba2102a690a710047c9f
   mixlib-authentication (3.0.10) sha256=c5be44490cebf8481171f09cc25e646663aee3ae58ea2de6d9f94bc922c2a61e
@@ -523,7 +500,6 @@ CHECKSUMS
   mixlib-config (3.0.27) sha256=d7748b1898e4f16502afec1de00b5ad65c6de405114b1b0c65ec61b1a9100148
   mixlib-log (3.2.3) sha256=2a1d3fa83522a320edd493827c901b773fb5d185fac7efd81d028d8e1166a768
   mixlib-shellout (3.2.8) sha256=399439a68f1ca19856366918586a031ce8d1fd44b2bea3ee65af4f5c0e47521a
-  molinillo (0.8.0) sha256=efbff2716324e2a30bccd3eba1ff3a735f4d5d53ffddbc6a2f32c0ca9433045d
   multi_json (1.15.0) sha256=1fd04138b6e4a90017e8d1b804c039031399866ff3fbabb7822aea367c78615d
   multipart-post (2.4.1) sha256=9872d03a8e552020ca096adadbf5e3cb1cd1cdd6acd3c161136b8a5737cdb4a8
   mutex_m (0.3.0) sha256=cfcb04ac16b69c4813777022fdceda24e9f798e48092a2b817eb4c0a782b0751
@@ -542,7 +518,7 @@ CHECKSUMS
   plist (3.7.1) sha256=3f9542db1115d10fb77d87604dcb426755174920cc89453755efacb34a1cc42c
   proxifier2 (1.1.0) sha256=030ed248a649c77f2ad640195f5c57c9f76e5c56a5c9fc0c52ca8ed97000b332
   pry (0.14.2) sha256=c4fe54efedaca1d351280b45b8849af363184696fcac1c72e0415f9bdac4334d
-  public_suffix (5.0.5) sha256=72c340218bb384610536919988705cc29e09749c0021fd7005f715c7e5dfc493
+  public_suffix (7.0.5) sha256=1a8bb08f1bbea19228d3bed6e5ed908d1cb4f7c2726d18bd9cadf60bc676f623
   racc (1.7.3) sha256=b785ab8a30ec43bce073c51dbbe791fd27000f68d1c996c95da98bf685316905
   rack (2.2.23) sha256=a8fe9d7e07064770b8ec123663fded8a59ef7e2b6db5cda7173d45a5718ab69c
   rainbow (3.1.1) sha256=039491aa3a89f42efa1d6dec2fc4e62ede96eb6acd95e52f1ad581182b79bc6a
@@ -561,7 +537,6 @@ CHECKSUMS
   rubyzip (2.3.2) sha256=3f57e3935dc2255c414484fbf8d673b4909d8a6a57007ed754dde39342d2373f
   semverse (3.0.2) sha256=c9726aee7858d37c84948a4101daffdcf03a0963a12a33ad7cc39a72c03530ef
   servolux (0.10.0) sha256=1a367170ceec42fc00d091d881bf5dd73d9a6e41d53944165a2a1857c6cc4d22
-  solve (4.0.4) sha256=7e7a45c26cb616bb1967e38037a3425b97ff1d5817f170299b8566409cce3415
   sslshake (1.3.1) sha256=1069c97ed93441e1e1c167fb59f0eb952f64156784d9b321f60528d4f5747164
   strings (0.2.1) sha256=933293b3c95cf85b81eb44b3cf673e3087661ba739bbadfeadf442083158d6fb
   strings-ansi (0.2.0) sha256=90262d760ea4a94cc2ae8d58205277a343409c288cbe7c29416b1826bd511c88

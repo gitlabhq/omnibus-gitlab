@@ -18,7 +18,6 @@ gem 'unf_ext', '0.0.9.1'
 # testing stays consistent with the package contents.
 source 'https://packagecloud.io/cinc-project/stable' do
   gem 'chef', '18.3.0'
-  gem 'chef-cli', '5.6.14'
   gem 'chef-bin', '18.3.0'
   gem 'chef-config', '18.3.0'
   gem 'chef-zero', '15.0.11'
