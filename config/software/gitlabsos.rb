@@ -16,7 +16,7 @@
 #
 name 'gitlabsos'
 
-version = Gitlab::Version.new('gitlabsos', 'fb66af8d2b59dff8af04d0fa6312f178ce0ea78a')
+version = Gitlab::Version.new('gitlabsos', '7ba17f0dc3ace8bbe04297fa564d99b522a7ae85')
 default_version version.print(false)
 
 license 'MIT'
