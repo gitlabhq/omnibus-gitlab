@@ -6,7 +6,7 @@ spec:
       description: "If true, skips running QA tests for the current pipeline."
     skip_qa_full:
       type: boolean
-      default: true
+      default: false
       description: "If true, hides the qa-full trigger jobs."
 
 ---
@@ -54,10 +54,17 @@ include:
       - if: '$CI_PROJECT_PATH != $SECURITY_PROJECT_PATH'
   - local: '/gitlab-ci-config/gitlab-com.yml'
     rules:
-      - if: '$CI_SERVER_HOST == "gitlab.com"'
+      - if: '$CI_SERVER_HOST == "gitlab.com" && $CI_PROJECT_PATH == $CANONICAL_PROJECT_PATH'
     inputs:
       skip_qa_test: $[[ inputs.skip_qa_test ]]
-      skip_qa_full: $[[ inputs.skip_qa_full ]]
+      skip_qa_full: false
+  # skip qa-full in the non-canonical project pipelines
+  - local: '/gitlab-ci-config/gitlab-com.yml'
+    rules:
+      - if: '$CI_SERVER_HOST == "gitlab.com" && $CI_PROJECT_PATH != $CANONICAL_PROJECT_PATH'
+    inputs:
+      skip_qa_test: $[[ inputs.skip_qa_test ]]
+      skip_qa_full: true
 
 default:
   tags:
