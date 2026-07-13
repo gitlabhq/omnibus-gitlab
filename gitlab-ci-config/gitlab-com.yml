@@ -6,7 +6,7 @@ spec:
       description: "If true, skips running QA tests for the current pipeline."
     skip_qa_full:
       type: boolean
-      default: true
+      default: false
       description: "If true, hides the qa-full trigger jobs."
 ---
 # This config lists the jobs that will be run on omnibus-gitlab project in
@@ -139,7 +139,7 @@ include:
       - local: ".gitlab-ci.yml"
         inputs:
           skip_qa_test: $[[ inputs.skip_qa_test ]]
-          skip_qa_full: false
+          skip_qa_full: $[[ inputs.skip_qa_full ]]
     strategy: depend
 
 .review-docs:
@@ -718,11 +718,47 @@ redis-valkey-sentinel-test:
     - job: Docker-branch
       artifacts: false
 
+# Keep this list in sync with the *-branch package jobs in
+# gitlab-ci-config/dev-gitlab-org.yml. All entries are optional so qa-full
+# only waits for the package jobs actually present in a given pipeline.
+.qa-full-package-needs:
+  - job: generate-facts
+    artifacts: true
+  - job: build-package-on-all-os
+    optional: true
+  - { job: Ubuntu-22.04-branch,            optional: true, artifacts: false }
+  - { job: Ubuntu-24.04-branch,            optional: true, artifacts: false }
+  - { job: Ubuntu-22.04-arm64-branch,      optional: true, artifacts: false }
+  - { job: Ubuntu-24.04-arm64-branch,      optional: true, artifacts: false }
+  - { job: Ubuntu-22.04-fips-branch,       optional: true, artifacts: false }
+  - { job: Debian-11-branch,               optional: true, artifacts: false }
+  - { job: Debian-11-arm64-branch,         optional: true, artifacts: false }
+  - { job: Debian-12-branch,               optional: true, artifacts: false }
+  - { job: Debian-12-arm64-branch,         optional: true, artifacts: false }
+  - { job: Debian-13-branch,               optional: true, artifacts: false }
+  - { job: Debian-13-arm64-branch,         optional: true, artifacts: false }
+  - { job: AlmaLinux-8-branch,             optional: true, artifacts: false }
+  - { job: AlmaLinux-8-arm64-branch,       optional: true, artifacts: false }
+  - { job: AlmaLinux-8-fips-branch,        optional: true, artifacts: false }
+  - { job: AlmaLinux-9-branch,             optional: true, artifacts: false }
+  - { job: AlmaLinux-9-arm64-branch,       optional: true, artifacts: false }
+  - { job: AlmaLinux-9-fips-branch,        optional: true, artifacts: false }
+  - { job: AlmaLinux-10-branch,            optional: true, artifacts: false }
+  - { job: AlmaLinux-10-arm64-branch,      optional: true, artifacts: false }
+  - { job: OpenSUSE-15.6-branch,           optional: true, artifacts: false }
+  - { job: OpenSUSE-15.6-arm64-branch,     optional: true, artifacts: false }
+  - { job: AmazonLinux-2-branch,           optional: true, artifacts: false }
+  - { job: AmazonLinux-2-arm64-branch,     optional: true, artifacts: false }
+  - { job: AmazonLinux-2-fips-branch,      optional: true, artifacts: false }
+  - { job: AmazonLinux-2023-branch,        optional: true, artifacts: false }
+  - { job: AmazonLinux-2023-arm64-branch,  optional: true, artifacts: false }
+  - { job: AmazonLinux-2023-fips-branch,   optional: true, artifacts: false }
+  - { job: Raspberry-Pi-2-Bullseye-branch, optional: true, artifacts: false }
+  - { job: Raspberry-Pi-2-Bookworm-branch, optional: true, artifacts: false }
+
 .qa-full:
   stage: qa
-  needs:
-    - job: generate-facts
-      artifacts: true
+  needs: !reference [.qa-full-package-needs]
   trigger:
     project: "gitlab-org/distribution/build-architecture/sandbox/qa-runner-extra"
     branch: "main"
@@ -745,11 +781,11 @@ qa-full-ce:
     - if: '"$[[ inputs.skip_qa_full ]]" == "true"'
       when: never
     - if: "$PIPELINE_TYPE =~ /TRIGGERED_CE_PIPELINE/"
-      when: manual
+      when: on_success
     - if: '$PIPELINE_TYPE == "CE_BRANCH_BUILD_PIPELINE"'
-      when: manual
+      when: on_success
     - if: '$PIPELINE_TYPE == "CE_NIGHTLY_BUILD_PIPELINE"'
-      when: manual
+      when: on_success
 
 qa-full-ee:
   extends: .qa-full
@@ -760,11 +796,11 @@ qa-full-ee:
     - if: '"$[[ inputs.skip_qa_full ]]" == "true"'
       when: never
     - if: "$PIPELINE_TYPE =~ /TRIGGERED_EE_PIPELINE/"
-      when: manual
+      when: on_success
     - if: '$PIPELINE_TYPE == "EE_BRANCH_BUILD_PIPELINE"'
-      when: manual
+      when: on_success
     - if: '$PIPELINE_TYPE == "EE_NIGHTLY_BUILD_PIPELINE"'
-      when: manual
+      when: on_success
 
 GET:Geo:
   stage: qa
