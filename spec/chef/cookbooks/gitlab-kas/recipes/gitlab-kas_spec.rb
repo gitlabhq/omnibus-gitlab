@@ -465,6 +465,71 @@ RSpec.describe 'gitlab-kas' do
         end
       end
 
+      context 'when there is a username' do
+        cached(:chef_run) { kas_chef_run }
+
+        before do
+          stub_gitlab_rb(
+            external_url: 'https://gitlab.example.com',
+            gitlab_kas: { enable: true },
+            gitlab_rails: {
+              redis_username: 'kas-user',
+              redis_password: 'examplepassword'
+            }
+          )
+        end
+
+        it 'writes username into the kas config' do
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content { |content|
+            kas_redis_cfg = YAML.safe_load(content)['redis']
+            expect(kas_redis_cfg).to include('username' => 'kas-user')
+          }
+        end
+      end
+
+      context 'when there is no username' do
+        cached(:chef_run) { kas_chef_run }
+
+        before do
+          stub_gitlab_rb(
+            external_url: 'https://gitlab.example.com',
+            gitlab_kas: { enable: true }
+          )
+        end
+
+        it 'does not write username into the config' do
+          expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content { |content|
+            kas_cfg = YAML.safe_load(content)
+            expect(kas_cfg['redis']).not_to include('username')
+          }
+        end
+      end
+    end
+
+    context 'when set directly on gitlab_kas' do
+      cached(:chef_run) { kas_chef_run }
+
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_kas: {
+            enable: true,
+            redis_host: 'the-host',
+            redis_username: 'kas-user',
+            redis_password: 'examplepassword'
+          }
+        )
+      end
+
+      it 'writes the gitlab_kas username into the kas config' do
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-kas/gitlab-kas-config.yml').with_content { |content|
+          kas_redis_cfg = YAML.safe_load(content)['redis']
+          expect(kas_redis_cfg).to include('username' => 'kas-user')
+        }
+      end
+    end
+
+    context 'when same as gitlab_rails (sentinels)' do
       context 'without sentinel host only' do
         before do
           stub_gitlab_rb(

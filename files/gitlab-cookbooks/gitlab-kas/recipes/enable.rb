@@ -30,6 +30,7 @@ gitlab_kas_websocket_token_secret_file = File.join(working_dir, 'websocket_token
 
 redis_params = redis_helper.redis_params
 
+redis_username = redis_params[:username]
 redis_password = redis_params[:password]
 redis_password_present = redis_password && !redis_password.empty?
 gitlab_kas_redis_password_file = File.join(working_dir, 'redis_password_file')
@@ -136,6 +137,7 @@ template gitlab_kas_config_file do
       redis_tls_client_cert_file: redis_tls_client_cert_file,
       redis_tls_client_key_file: redis_tls_client_key_file,
       redis_default_port: URI::Redis::DEFAULT_PORT,
+      redis_username: redis_username,
       redis_password_file: redis_password_present ? gitlab_kas_redis_password_file : nil,
       redis_sentinels_master_name: redis_params[:sentinelMaster],
       redis_sentinels: redis_params[:sentinels],

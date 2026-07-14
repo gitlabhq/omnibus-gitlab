@@ -4,6 +4,7 @@ module RedisHelper
       {
         network: redis_network,
         address: redis_address,
+        username: redis_credentials[:username],
         password: redis_credentials[:password],
         sentinels: redis_sentinels,
         sentinelMaster: master_name,
