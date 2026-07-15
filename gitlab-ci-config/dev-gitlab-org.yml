@@ -174,7 +174,7 @@
     - bundle exec rake repository:upload:staging[$STAGING_REPO]
   cache: !reference [.tag-cache]
   retry: 2
-  timeout: 35 minutes
+  timeout: 60 minutes
   tags:
   - ${PACKAGE_PROMOTION_RUNNER_TAG}
   rules:
@@ -202,7 +202,7 @@
   script:
     - bundle exec rake repository:upload:production
   retry: 2
-  timeout: 35 minutes
+  timeout: 60 minutes
   cache: !reference [.tag-cache]
   tags:
   - ${PACKAGE_PROMOTION_RUNNER_TAG}
