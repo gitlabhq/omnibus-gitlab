@@ -15,7 +15,7 @@
 #
 
 name 'graphicsmagick'
-default_version '1.3.46'
+default_version '1.3.47'
 
 license 'MIT'
 license_file 'Copyright.txt'
@@ -28,11 +28,11 @@ dependency 'libtiff'
 dependency 'zlib-ng'
 
 if Build::Check.use_ubt?
-  source Build::UBT.source_args(name, "#{default_version}-1ubt", "59ed889d826abaf7b713887dc517aa7512f885b6a66cd8431a30e3433a0d23a3", OhaiHelper.arch)
+  source Build::UBT.source_args(name, "#{default_version}-1ubt", "deff21e97fc3fac6b460acbb1c690ea172aa30c70f26980c29ec11c45beeae69", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
   source url: "https://sourceforge.net/projects/graphicsmagick/files/graphicsmagick/#{version}/GraphicsMagick-#{version}.tar.xz",
-         sha256: 'c7c706a505e9c6c3764156bb94a0c9644d79131785df15a89c9f8721d1abd061'
+         sha256: '95fb682dab0206a9db168d065963f4ffdf5a60b0b2a375aca1f4492fb18d0627'
 
   relative_path "GraphicsMagick-#{version}"
 
