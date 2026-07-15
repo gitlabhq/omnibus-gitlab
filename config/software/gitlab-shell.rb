@@ -35,7 +35,10 @@ build do
   mkdir "#{install_dir}/embedded/service/gitlab-shell"
 
   env['GOTOOLCHAIN'] = 'local'
-  env['FIPS_MODE'] = '1' if Build::Check.use_system_ssl?
+  if Build::Check.use_system_ssl?
+    env['FIPS_MODE'] = '1'
+    env['GOFIPS140'] = Build::Check.go_fips_module_version if Build::Check.use_go_fips_module?
+  end
 
   command 'make build', env: env
   sync './', "#{install_dir}/embedded/service/gitlab-shell/", exclude: ['.agents', '.claude', '.git', '.gitignore', 'go', 'go_build']

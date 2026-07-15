@@ -9,6 +9,11 @@ variables:
   DEV_BUILDER_IMAGE_REGISTRY: 'dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder'
   PULP_USER: $PULP_USER_RO
   PULP_PASSWORD: $PULP_PASSWORD_RO
+  # Suffix appended to FIPS builder image names. "_fips" (default) selects the
+  # golang-fips images. Set to "" with USE_GO_FIPS_MODULE="true" to verify
+  # native FIPS packages on the base (upstream Go) images. Keep in sync with the
+  # parent pipeline value in gitlab-ci-config/variables.yml.
+  FIPS_BUILDER_IMAGE_SUFFIX: "_fips"
 
 include:
   - local: '/gitlab-ci-config/dind-config.yml'
@@ -126,7 +131,7 @@ Raspberry-Pi-2-Bookworm-check:
     package_repository: 'raspberry-pi2'
   tags: !reference [.distribution-armhf-tags]
 Ubuntu-22.04-fips-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_fips:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04${FIPS_BUILDER_IMAGE_SUFFIX}:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install
   rules:
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_FUNCTIONALITY_PIPELINE"'
@@ -167,7 +172,7 @@ AmazonLinux-2023-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .yum-arm-install
 AlmaLinux-8-fips-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_fips:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8${FIPS_BUILDER_IMAGE_SUFFIX}:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
   rules:
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_FUNCTIONALITY_PIPELINE"'
@@ -176,7 +181,7 @@ AlmaLinux-8-fips-check:
     USE_SYSTEM_SSL: "true"
     USE_SYSTEM_LIBGCRYPT: "true"
 AlmaLinux-9-fips-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_fips:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9${FIPS_BUILDER_IMAGE_SUFFIX}:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
   rules:
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_FUNCTIONALITY_PIPELINE"'
@@ -185,7 +190,7 @@ AlmaLinux-9-fips-check:
     USE_SYSTEM_SSL: "true"
     USE_SYSTEM_LIBGCRYPT: "true"
 AmazonLinux-2-fips-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_fips:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2${FIPS_BUILDER_IMAGE_SUFFIX}:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
   rules:
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_FUNCTIONALITY_PIPELINE"'
@@ -194,7 +199,7 @@ AmazonLinux-2-fips-check:
     USE_SYSTEM_SSL: "true"
     USE_SYSTEM_LIBGCRYPT: "false" # AL2 libgcrypt is not compatible with Omnibus gpgme/gnupg
 AmazonLinux-2023-fips-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_fips:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023${FIPS_BUILDER_IMAGE_SUFFIX}:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
   rules:
     - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_FUNCTIONALITY_PIPELINE"'

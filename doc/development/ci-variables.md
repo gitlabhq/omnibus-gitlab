@@ -48,6 +48,9 @@ These additional variables are available to override or enable different build b
 | `QA_BUILD_TARGET`              | Build specified QA image. See this [MR](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/91250) for details. Defaults to `qa`. |
 | `GITLAB_ASSETS_TAG`            | Tag of the assets image built by the `build-assets-image` job in the `gitlab-org/gitlab` pipelines. Defaults to `$GITLAB_REF_SLUG` or the `gitlab-rails` version. |
 | `BUILD_ON_ALL_OS`              | Build all OS images without using manual trigger if set to `true`. |
+| `USE_GO_FIPS_MODULE`           | Set to `true` on FIPS builds (`USE_SYSTEM_SSL=true`) to build Go components against upstream Go native FIPS 140-3 module (`GOFIPS140`) instead of the `golang-fips` fork (`GOEXPERIMENT=boringcrypto`). Set `FIPS_BUILDER_IMAGE_SUFFIX` to `""` at the same time so FIPS jobs use the base builder images, which ship upstream Go. Defaults to off. |
+| `FIPS_BUILDER_IMAGE_SUFFIX`    | Suffix appended to FIPS builder image names. `_fips` (default) selects the `golang-fips` images. Set to `""` with `USE_GO_FIPS_MODULE="true"` to build native FIPS on the base (upstream Go) images. |
+| `GO_FIPS_MODULE_VERSION`       | Overrides the Go Cryptographic Module version used with `USE_GO_FIPS_MODULE`. Defaults to the version pinned in `Build::Check::GO_FIPS_MODULE_VERSION`. |
 
 ## Test variables
 

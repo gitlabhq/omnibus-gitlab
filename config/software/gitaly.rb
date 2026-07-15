@@ -90,6 +90,7 @@ build do
   if Build::Check.use_system_ssl?
     env['CMAKE_FLAGS'] = "#{OpenSSLHelper.cmake_flags} #{CurlHelper.cmake_flags}"
     env['FIPS_MODE'] = '1'
+    env['GOFIPS140'] = Build::Check.go_fips_module_version if Build::Check.use_go_fips_module?
 
     pkg_config_overrides = File.join(project_dir, 'pkg-config-overrides')
     mkdir pkg_config_overrides

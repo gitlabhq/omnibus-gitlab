@@ -380,21 +380,21 @@ AmazonLinux-2023-arm64-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_branch_template
 AmazonLinux-2-fips-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_fips:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2${FIPS_BUILDER_IMAGE_SUFFIX}:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
   variables:
     USE_SYSTEM_LIBGCRYPT: "false" # AL2 libgcrypt is not compatible with Omnibus gpgme/gnupg
 AmazonLinux-2023-fips-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_fips:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023${FIPS_BUILDER_IMAGE_SUFFIX}:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
 AlmaLinux-8-fips-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_fips:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8${FIPS_BUILDER_IMAGE_SUFFIX}:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
 AlmaLinux-9-fips-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_fips:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9${FIPS_BUILDER_IMAGE_SUFFIX}:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
 Ubuntu-22.04-fips-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_fips:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04${FIPS_BUILDER_IMAGE_SUFFIX}:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
   rules:
     - !reference [.default_rules, rules]
@@ -694,21 +694,21 @@ AmazonLinux-2023-arm64:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_tag_template
 AmazonLinux-2-fips:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_fips:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2${FIPS_BUILDER_IMAGE_SUFFIX}:${BUILDER_IMAGE_REVISION}"
   extends: .fips_tag_template
   variables:
     USE_SYSTEM_LIBGCRYPT: "false" # AL2 libgcrypt is not compatible with Omnibus gpgme/gnupg
 AmazonLinux-2023-fips:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_fips:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023${FIPS_BUILDER_IMAGE_SUFFIX}:${BUILDER_IMAGE_REVISION}"
   extends: .fips_tag_template
 AlmaLinux-8-fips:
-  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8_fips:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_8${FIPS_BUILDER_IMAGE_SUFFIX}:${BUILDER_IMAGE_REVISION}"
   extends: .fips_tag_template
 AlmaLinux-9-fips:
-  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9_fips:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/almalinux_9${FIPS_BUILDER_IMAGE_SUFFIX}:${BUILDER_IMAGE_REVISION}"
   extends: .fips_tag_template
 Ubuntu-22.04-fips:
-  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_fips:${BUILDER_IMAGE_REVISION}"
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04${FIPS_BUILDER_IMAGE_SUFFIX}:${BUILDER_IMAGE_REVISION}"
   extends: .fips_tag_template
 
 Docker-amd64:
