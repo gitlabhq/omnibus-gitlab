@@ -9,6 +9,18 @@ variables:
   DEV_BUILDER_IMAGE_REGISTRY: 'dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder'
   PUBLIC_BUILDER_IMAGE_REGISTRY: "registry.gitlab.com/gitlab-org/gitlab-omnibus-builder"
   BUILDER_IMAGE_REVISION: "5.64.0"
+  # Two-way-door toggle for FIPS builds. When "true", Go components build
+  # against upstream Go native FIPS 140-3 module (GOFIPS140) instead of the
+  # golang-fips fork (GOEXPERIMENT=boringcrypto). Set FIPS_BUILDER_IMAGE_SUFFIX
+  # to "" at the same time so FIPS build jobs use the base builder images, which
+  # already ship upstream Go. Defaults to off (legacy golang-fips). Toolchain
+  # coordination is tracked in
+  # https://gitlab.com/groups/gitlab-org/-/work_items/22761
+  USE_GO_FIPS_MODULE: "false"
+  # Suffix appended to FIPS builder image names. "_fips" selects the golang-fips
+  # images. Set to "" together with USE_GO_FIPS_MODULE="true" to build native
+  # FIPS on the base (upstream Go) images.
+  FIPS_BUILDER_IMAGE_SUFFIX: "_fips"
   # The registry to pull the assets image from
   ASSET_REGISTRY: "${CI_REGISTRY}"
   ASSET_SYNC_EXISTING_REMOTE_FILES: "keep"

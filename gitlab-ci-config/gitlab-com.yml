@@ -99,6 +99,12 @@ include:
   TOP_UPSTREAM_SOURCE_REF: ${TOP_UPSTREAM_SOURCE_REF}
   DEPENDENCY_PROXY_LOGIN: ${DEPENDENCY_PROXY_LOGIN}
   DOCKERHUB_PREFIX: ${DOCKERHUB_PREFIX}
+  # Forward the native-FIPS two-way-door toggle into triggered package and
+  # check-packages child pipelines. Child pipelines do not inherit parent
+  # manual pipeline variables, so without these they fall back to the
+  # variables.yml defaults (USE_GO_FIPS_MODULE=false, suffix=_fips).
+  USE_GO_FIPS_MODULE: ${USE_GO_FIPS_MODULE}
+  FIPS_BUILDER_IMAGE_SUFFIX: ${FIPS_BUILDER_IMAGE_SUFFIX}
 
 .ce-trigger-job-variables:
   extends: .base-trigger-job-variables

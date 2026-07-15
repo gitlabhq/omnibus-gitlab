@@ -5,6 +5,13 @@ require_relative 'info/package'
 module Build
   class Check
     AUTO_DEPLOY_TAG_REGEX = /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/.freeze
+
+    # Version of the Go Cryptographic Module (GOFIPS140) used when building with
+    # upstream Go's native FIPS 140-3 support instead of the golang-fips fork.
+    # v1.0.0 holds full CMVP certification (#5247). Overridable via the
+    # GO_FIPS_MODULE_VERSION environment variable.
+    GO_FIPS_MODULE_VERSION = 'v1.0.0'.freeze
+
     class << self
       def is_ee?
         Gitlab::Util.get_env('ee') == 'true' || \
@@ -25,6 +32,18 @@ module Build
 
       def boringcrypto_supported?
         system({ 'GOEXPERIMENT' => 'boringcrypto' }, *%w(go version))
+      end
+
+      def go_fips_module_version
+        Gitlab::Util.get_env('GO_FIPS_MODULE_VERSION') || GO_FIPS_MODULE_VERSION
+      end
+
+      # Two-way door: when true, Go components build against upstream Go's native
+      # FIPS 140-3 module (GOFIPS140) instead of the golang-fips fork
+      # (GOEXPERIMENT=boringcrypto). Only meaningful for FIPS builds, and requires
+      # a builder image that ships upstream Go. Defaults to off (opt-in).
+      def use_go_fips_module?
+        use_system_ssl? && Gitlab::Util.get_env('USE_GO_FIPS_MODULE') == 'true'
       end
 
       def fips?

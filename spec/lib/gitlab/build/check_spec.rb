@@ -390,4 +390,45 @@ RSpec.describe Build::Check do
       end
     end
   end
+
+  describe 'go_fips_module_version' do
+    it 'defaults to the pinned module version' do
+      stub_env_var('GO_FIPS_MODULE_VERSION', nil)
+      expect(described_class.go_fips_module_version).to eq(Build::Check::GO_FIPS_MODULE_VERSION)
+    end
+
+    it 'honors the GO_FIPS_MODULE_VERSION environment variable' do
+      stub_env_var('GO_FIPS_MODULE_VERSION', 'v1.2.3')
+      expect(described_class.go_fips_module_version).to eq('v1.2.3')
+    end
+  end
+
+  describe 'use_go_fips_module?' do
+    context 'when building with system SSL (FIPS)' do
+      before do
+        allow(described_class).to receive(:use_system_ssl?).and_return(true)
+      end
+
+      it 'returns true when USE_GO_FIPS_MODULE=true' do
+        stub_env_var('USE_GO_FIPS_MODULE', 'true')
+        expect(described_class.use_go_fips_module?).to be_truthy
+      end
+
+      it 'returns false when USE_GO_FIPS_MODULE is unset' do
+        stub_env_var('USE_GO_FIPS_MODULE', nil)
+        expect(described_class.use_go_fips_module?).to be_falsey
+      end
+    end
+
+    context 'when not building with system SSL' do
+      before do
+        allow(described_class).to receive(:use_system_ssl?).and_return(false)
+      end
+
+      it 'returns false even when USE_GO_FIPS_MODULE=true' do
+        stub_env_var('USE_GO_FIPS_MODULE', 'true')
+        expect(described_class.use_go_fips_module?).to be_falsey
+      end
+    end
+  end
 end

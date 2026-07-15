@@ -40,7 +40,12 @@ build do
   # FIPS mode explicitly.
   if Build::Check.use_system_ssl?
     env['FIPS_MODE'] = '1'
-    env['GOEXPERIMENT'] = 'boringcrypto' if Build::Check.boringcrypto_supported?
+    if Build::Check.use_go_fips_module?
+      # Native Go FIPS 140-3 module. Mutually exclusive with GOEXPERIMENT=boringcrypto.
+      env['GOFIPS140'] = Build::Check.go_fips_module_version
+    elsif Build::Check.boringcrypto_supported?
+      env['GOEXPERIMENT'] = 'boringcrypto'
+    end
   end
 
   make 'gitlab-pages', env: env
