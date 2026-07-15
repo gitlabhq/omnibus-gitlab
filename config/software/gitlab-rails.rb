@@ -205,6 +205,18 @@ build do
     %w[3.3.9 3.4.0].each do |version|
       command "#{embedded_bin('gem')} uninstall rexml -v #{version}"
     end
+
+    # The default net-imap gem shipped with Ruby is vulnerable, and GitLab Rails
+    # already bundles a newer, patched version. Uninstall the default version so the
+    # vulnerable copy is not left on disk. The expected default version depends on the
+    # Ruby version (https://stdgems.org/net-imap/), so update this when bumping Ruby.
+    # See https://gitlab.com/gitlab-org/gitlab/-/work_items/600949.
+    #   Ruby 3.3.9-3.3.11 -> net-imap 0.4.21
+    #   Ruby 3.4.4-3.4.9  -> net-imap 0.5.8
+    #   Ruby 4.0          -> net-imap 0.6.2
+    %w[0.4.21 0.5.8 0.6.2].each do |version|
+      command "#{embedded_bin('gem')} uninstall net-imap -v #{version}"
+    end
   end
 
   # In order to compile the assets, we need to get to a state where rake can
