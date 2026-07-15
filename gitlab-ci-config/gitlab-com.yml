@@ -322,7 +322,7 @@ docs-lint links:
     - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
 
 docs-lint hugo:
-  image: registry.gitlab.com/gitlab-org/technical-writing/docs-gitlab-com/docs-gitlab-com-builder:hugo-0.150.1
+  image: $DOCS_HUGO_IMAGE
   stage: check
   retry: 1
   rules:
