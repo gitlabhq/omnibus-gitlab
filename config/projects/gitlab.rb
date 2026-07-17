@@ -78,9 +78,6 @@ if rhel?
   end
 elsif amazon?
   case OhaiHelper.get_amazon_version
-  when '2'
-    runtime_dependency 'policycoreutils-python'
-    runtime_dependency 'perl'
   when '2023'
     runtime_dependency 'policycoreutils-python-utils'
     runtime_dependency 'perl-interpreter'
@@ -102,12 +99,7 @@ end
 
 # FIPS requires system OpenSSL packages to run
 if Build::Check.use_system_ssl?
-  if OhaiHelper.amazon_linux_2?
-    runtime_dependency 'openssl-perl'
-    runtime_dependency 'openssl11'
-  else
-    runtime_dependency 'openssl'
-  end
+  runtime_dependency 'openssl'
 
   # FIPS requires system CURL Packages
   runtime_dependency 'curl'

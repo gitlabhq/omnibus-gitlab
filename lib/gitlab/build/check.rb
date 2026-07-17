@@ -63,9 +63,6 @@ module Build
         # Until we get UBT builds for arm64 we should avoid using precompiled binaries.
         return allow_arm if OhaiHelper.arm?
 
-        # AL2 should not be built with UBT as it is not supported.
-        return false if OhaiHelper.amazon_linux_2?
-
         true
       end
 

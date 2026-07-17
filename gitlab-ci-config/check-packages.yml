@@ -159,12 +159,6 @@ AlmaLinux-10-check:
 AlmaLinux-10-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/almalinux_10_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .yum-arm-install
-AmazonLinux-2-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2:${BUILDER_IMAGE_REVISION}"
-  extends: .yum-install
-AmazonLinux-2-arm64-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .yum-arm-install
 AmazonLinux-2023-check:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install
@@ -189,15 +183,6 @@ AlmaLinux-9-fips-check:
   variables:
     USE_SYSTEM_SSL: "true"
     USE_SYSTEM_LIBGCRYPT: "true"
-AmazonLinux-2-fips-check:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2${FIPS_BUILDER_IMAGE_SUFFIX}:${BUILDER_IMAGE_REVISION}"
-  extends: .yum-install
-  rules:
-    - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_FUNCTIONALITY_PIPELINE"'
-    - if: '$PIPELINE_TYPE == "EE_CHECK_PACKAGE_AVAILABILITY_PIPELINE"'
-  variables:
-    USE_SYSTEM_SSL: "true"
-    USE_SYSTEM_LIBGCRYPT: "false" # AL2 libgcrypt is not compatible with Omnibus gpgme/gnupg
 AmazonLinux-2023-fips-check:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023${FIPS_BUILDER_IMAGE_SUFFIX}:${BUILDER_IMAGE_REVISION}"
   extends: .yum-install

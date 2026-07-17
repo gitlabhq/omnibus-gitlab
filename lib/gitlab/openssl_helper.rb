@@ -1,4 +1,3 @@
-require_relative 'ohai_helper'
 require_relative 'linker_libs_helper'
 
 class OpenSSLHelper
@@ -6,7 +5,7 @@ class OpenSSLHelper
     def linker_libs
       @linker_libs ||= LinkerLibsHelper.new(
         base_libs: %w[libssl libcrypto],
-        pkg_config_files: OhaiHelper.amazon_linux_2? ? { "openssl11.pc" => nil, "libssl11.pc" => nil, "libcrypto11.pc" => nil } : { "openssl.pc" => nil, "libssl.pc" => nil, "libcrypto.pc" => nil },
+        pkg_config_files: { "openssl.pc" => nil, "libssl.pc" => nil, "libcrypto.pc" => nil },
         pkg_config_threshold: 3
       )
     end
