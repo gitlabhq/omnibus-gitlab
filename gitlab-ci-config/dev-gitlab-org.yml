@@ -367,23 +367,12 @@ OpenSUSE-15.6-branch:
 OpenSUSE-15.6-arm64-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.6_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_branch_template
-AmazonLinux-2-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2:${BUILDER_IMAGE_REVISION}"
-  extends: .branch_template
-AmazonLinux-2-arm64-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .arm64_branch_template
 AmazonLinux-2023-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
 AmazonLinux-2023-arm64-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_branch_template
-AmazonLinux-2-fips-branch:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2${FIPS_BUILDER_IMAGE_SUFFIX}:${BUILDER_IMAGE_REVISION}"
-  extends: .fips_branch_template
-  variables:
-    USE_SYSTEM_LIBGCRYPT: "false" # AL2 libgcrypt is not compatible with Omnibus gpgme/gnupg
 AmazonLinux-2023-fips-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023${FIPS_BUILDER_IMAGE_SUFFIX}:${BUILDER_IMAGE_REVISION}"
   extends: .fips_branch_template
@@ -681,23 +670,12 @@ OpenSUSE-15.6:
 OpenSUSE-15.6-arm64:
   image: "${BUILDER_IMAGE_REGISTRY}/opensuse_15.6_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_tag_template
-AmazonLinux-2:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2:${BUILDER_IMAGE_REVISION}"
-  extends: .tag_template
-AmazonLinux-2-arm64:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2_arm64:${BUILDER_IMAGE_REVISION}"
-  extends: .arm64_tag_template
 AmazonLinux-2023:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023:${BUILDER_IMAGE_REVISION}"
   extends: .tag_template
 AmazonLinux-2023-arm64:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .arm64_tag_template
-AmazonLinux-2-fips:
-  image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2${FIPS_BUILDER_IMAGE_SUFFIX}:${BUILDER_IMAGE_REVISION}"
-  extends: .fips_tag_template
-  variables:
-    USE_SYSTEM_LIBGCRYPT: "false" # AL2 libgcrypt is not compatible with Omnibus gpgme/gnupg
 AmazonLinux-2023-fips:
   image: "${BUILDER_IMAGE_REGISTRY}/amazonlinux_2023${FIPS_BUILDER_IMAGE_SUFFIX}:${BUILDER_IMAGE_REVISION}"
   extends: .fips_tag_template
@@ -896,22 +874,6 @@ OpenSUSE-15.6-arm64-staging:
     - job: OpenSUSE-15.6-arm64-branch
       optional: true
 
-AmazonLinux-2-staging:
-  extends: .staging_upload_template
-  needs:
-    - job: AmazonLinux-2
-      optional: true
-    - job: AmazonLinux-2-branch
-      optional: true
-
-AmazonLinux-2-arm64-staging:
-  extends: .staging_upload_template
-  needs:
-    - job: AmazonLinux-2-arm64
-      optional: true
-    - job: AmazonLinux-2-arm64-branch
-      optional: true
-
 AmazonLinux-2023-staging:
   extends: .staging_upload_template
   needs:
@@ -926,16 +888,6 @@ AmazonLinux-2023-arm64-staging:
     - job: AmazonLinux-2023-arm64
       optional: true
     - job: AmazonLinux-2023-arm64-branch
-      optional: true
-
-AmazonLinux-2-fips-staging:
-  extends: .fips_staging_upload_template
-  variables:
-    USE_SYSTEM_LIBGCRYPT: "false" # AL2 libgcrypt is not compatible with Omnibus gpgme/gnupg
-  needs:
-    - job: AmazonLinux-2-fips
-      optional: true
-    - job: AmazonLinux-2-fips-branch
       optional: true
 
 AmazonLinux-2023-fips-staging:
@@ -1043,14 +995,6 @@ OpenSUSE-15.6-arm64-release:
   extends: .production_release_template
   needs:
     - OpenSUSE-15.6-arm64
-AmazonLinux-2-release:
-  extends: .production_release_template
-  needs:
-    - AmazonLinux-2
-AmazonLinux-2-arm64-release:
-  extends: .production_release_template
-  needs:
-    - AmazonLinux-2-arm64
 AmazonLinux-2023-release:
   extends: .production_release_template
   needs:
@@ -1059,12 +1003,6 @@ AmazonLinux-2023-arm64-release:
   extends: .production_release_template
   needs:
     - AmazonLinux-2023-arm64
-AmazonLinux-2-fips-release:
-  extends: .fips_release_template
-  variables:
-    USE_SYSTEM_LIBGCRYPT: "false" # AL2 libgcrypt is not compatible with Omnibus gpgme/gnupg
-  needs:
-    - AmazonLinux-2-fips
 AmazonLinux-2023-fips-release:
   extends: .fips_release_template
   needs:

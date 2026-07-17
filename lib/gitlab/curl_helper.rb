@@ -7,10 +7,6 @@ class CurlHelper
   #     libbrotlicommon.pc, libbrotlidec.pc, libcurl.pc, libidn2.pc,
   #     libnghttp2.pc, libpsl.pc, libssh2.pc
   #
-  # - AmazonLinux 2 has libssh2 installed but libssh2-devel conflicts with
-  #     openssl11-devel, so libssh2.pc is not available and only 5 pkg-config
-  #     files are present on that platform.
-  #
   # - AmazonLinux 2023 ships libssh.pc as a transitive dependency of
   #     libcurl.pc; we install libssh-devel for the .pc file. It also
   #     requires libngtcp2.pc, libngtcp2_crypto_ossl.pc, and libnghttp3.pc
