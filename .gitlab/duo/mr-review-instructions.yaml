@@ -1,0 +1,73 @@
+instructions:
+  - name: User-Facing Change Validation
+    fileFilters:
+      - "files/**/*"
+      - "config/**/*"
+      - "docker/**/*"
+    instructions: |
+      This MR changes runtime behavior on real GitLab deployments (Chef recipes,
+      ctl commands, configuration templates, software components, scripts, or Docker
+      image). Check the description and notes of this MR for the test results from the
+      deployment of the changes on a real GitLab instance or end-to-end test run.
+      ONLY IF the results couldn't be reliably located, `create_merge_request_note`
+      with this message verbatim:
+
+      Ask the author:
+      "I couldn't find any results indicating this change is validated end-to-end
+      on a real GitLab instance.
+
+      Before requesting a review, please confirm you have validated this change
+      end-to-end on a real GitLab deployment and post the results in the MR
+      discussion, or link to a passing automated e2e test. Then check off the
+      test plan item in the MR checklist.
+
+      This MR affects runtime behavior - skipping end-to-end validation risks
+      shipping broken deployments to users.
+
+      See: [Hand testing built packages in CONTRIBUTING.md](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/CONTRIBUTING.md#hand-testing-built-packages) and [Setting up development environment](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/doc/development/setup.md)."
+
+      If this change introduces or modifies a user-facing configuration option or
+      feature (for example, if Chef attributes are added/removed/renamed/restructured),
+      and no documentation updates are included in this MR, ask: "Have
+      you updated the relevant documentation, or opened a follow-up issue to do so?"
+
+  - name: Chef Cookbook Changes
+    fileFilters:
+      - "files/gitlab-cookbooks/**/*"
+    instructions: |
+      1. Validate potential values for new configuration settings. Formats such as
+        integer `10`, duration `10s`, URI `scheme://host:port` may require quotation
+        or other special handling when rendered in a template and written to a
+        configuration file.
+      2. Confirm that ChefSpec tests in spec/chef/ cover the changed recipes or
+        libraries. Flag if tests are missing or do not cover the new behavior.
+
+  - name: Software Component Definitions
+    fileFilters:
+      - "config/software/**/*"
+      - "config/patches/**/*"
+    instructions: |
+      1. Ask: "Have you triggered the `Trigger:ee-package` manual job and confirmed
+         the `build-package-on-all-os` job within its downstream pipeline is green?
+         This is required for all changes to config/software or config/patches."
+      2. If SSL-related files are changed, note that the `Trigger:package:fips` job
+         must also pass.
+      3. If a UBT-sourced component is modified (source built via Build::UBT.source_args),
+         confirm that both the UBT version string (e.g. "1.2.3-4ubt") and its
+         corresponding sha256 checksum have been updated together. Flag if only
+         one has changed.
+         Ask: "Have you triggered the `Trigger:ee-package-ubt` downstream pipeline
+         job and confirmed it is green? This is required by the MR checklist when
+         a UBT-sourced component is modified."
+
+  - name: CI Configuration Changes
+    fileFilters:
+      - ".gitlab-ci.yml"
+      - "gitlab-ci-config/**/*"
+      - "scripts/ci/**/*"
+    instructions: |
+      1. Flag if the branch should be pushed to dev.gitlab.org to validate regular
+         branch builds are not broken.
+      2. If scripts/ci/ helper scripts are changed, confirm the affected CI jobs
+         still invoke them with the correct arguments and that any interface changes
+         are reflected in all callers.
