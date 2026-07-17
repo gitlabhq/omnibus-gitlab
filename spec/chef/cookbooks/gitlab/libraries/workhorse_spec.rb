@@ -486,5 +486,77 @@ RSpec.describe 'GitlabWorkhorse' do
         expect(node['gitlab']['gitlab_workhorse']['redis_username']).to eq('workhorse-user')
       end
     end
+
+    context 'when gitlab_workhorse redis_sentinels_username is set directly' do
+      let(:chef_run) { converge_config }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_workhorse: {
+            listen_network: 'unix',
+            redis_host: 'workhorse-redis',
+            redis_sentinels: [
+              { host: 'sentinel1.example.com', port: 26379 }
+            ],
+            redis_sentinels_username: 'workhorse-sentinel-user',
+            redis_sentinels_password: 'workhorse-sentinel-pass'
+          }
+        )
+      end
+
+      it 'keeps the gitlab_workhorse redis_sentinels_username' do
+        expect(node['gitlab']['gitlab_workhorse']['redis_sentinels_username']).to eq('workhorse-sentinel-user')
+      end
+
+      it 'populates gitlab_rails redis_workhorse_sentinels_username' do
+        expect(node['gitlab']['gitlab_rails']['redis_workhorse_sentinels_username']).to eq('workhorse-sentinel-user')
+      end
+    end
+
+    context 'when rails redis_workhorse_sentinels_username is set' do
+      let(:chef_run) { converge_config }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_workhorse_sentinels: [
+              { host: 'sentinel1.example.com', port: 26379 }
+            ],
+            redis_workhorse_sentinels_username: 'rails-workhorse-sentinel-user',
+            redis_workhorse_sentinels_password: 'rails-workhorse-sentinel-pass'
+          },
+          gitlab_workhorse: {
+            listen_network: 'unix'
+          }
+        )
+      end
+
+      it 'populates gitlab_workhorse redis_sentinels_username from the instance-specific setting' do
+        expect(node['gitlab']['gitlab_workhorse']['redis_sentinels_username']).to eq('rails-workhorse-sentinel-user')
+      end
+    end
+
+    context 'when shared state redis_shared_state_sentinels_username is set' do
+      let(:chef_run) { converge_config }
+
+      before do
+        stub_gitlab_rb(
+          gitlab_rails: {
+            redis_shared_state_sentinels: [
+              { host: 'sentinel1.example.com', port: 26379 }
+            ],
+            redis_shared_state_sentinels_username: 'shared-state-sentinel-user',
+            redis_shared_state_sentinels_password: 'shared-state-sentinel-pass'
+          },
+          gitlab_workhorse: {
+            listen_network: 'unix'
+          }
+        )
+      end
+
+      it 'populates gitlab_workhorse redis_sentinels_username from the shared state setting' do
+        expect(node['gitlab']['gitlab_workhorse']['redis_sentinels_username']).to eq('shared-state-sentinel-user')
+      end
+    end
   end
 end

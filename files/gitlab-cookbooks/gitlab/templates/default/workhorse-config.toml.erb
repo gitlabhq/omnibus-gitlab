@@ -17,12 +17,18 @@ config_command = "<%= @extra_config_command %>"
 
 <%- if @workhorse_keywatcher %>
 [redis]
+<%- if @username %>
+Username = "<%= @username %>"
+<%- end %>
 Password = "<%= @password %>"
 <%- if @sentinels.empty? %>
 URL = "<%= @redis_url %>"
 <%- else %>
 Sentinel = <%= @sentinels.to_json %>
 SentinelMaster = "<%= @sentinel_master %>"
+<%- if @sentinel_username %>
+SentinelUsername = "<%= @sentinel_username %>"
+<%- end %>
 SentinelPassword = "<%= @sentinel_password %>"
 <%- if @sentinels_ssl %>
 [Sentinel.tls]

@@ -652,6 +652,7 @@ default['gitlab']['gitlab_rails']['redis_cluster_rate_limiting_tls_client_cert_f
 default['gitlab']['gitlab_rails']['redis_cluster_rate_limiting_tls_client_key_file'] = nil
 default['gitlab']['gitlab_rails']['redis_workhorse_instance'] = nil
 default['gitlab']['gitlab_rails']['redis_workhorse_sentinels'] = []
+default['gitlab']['gitlab_rails']['redis_workhorse_sentinels_username'] = nil
 default['gitlab']['gitlab_rails']['redis_workhorse_sentinels_password'] = nil
 default['gitlab']['gitlab_rails']['redis_workhorse_sentinels_ssl'] = false
 default['gitlab']['gitlab_rails']['redis_workhorse_sentinels_tls_ca_cert_file'] = nil
@@ -946,6 +947,7 @@ default['gitlab']['gitlab_workhorse']['redis_password'] = nil
 default['gitlab']['gitlab_workhorse']['redis_ssl'] = false
 default['gitlab']['gitlab_workhorse']['redis_cluster_nodes'] = []
 default['gitlab']['gitlab_workhorse']['redis_sentinels'] = []
+default['gitlab']['gitlab_workhorse']['redis_sentinels_username'] = nil
 default['gitlab']['gitlab_workhorse']['redis_sentinels_password'] = nil
 default['gitlab']['gitlab_workhorse']['redis_sentinels_ssl'] = false
 default['gitlab']['gitlab_workhorse']['redis_sentinels_tls_ca_cert_file'] = nil

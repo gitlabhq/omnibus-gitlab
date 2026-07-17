@@ -3,9 +3,11 @@ module RedisHelper
     def redis_params
       {
         url: redis_url.to_s,
+        username: redis_credentials[:username],
         password: redis_credentials[:password],
         sentinels: sentinel_urls,
         sentinelMaster: master_name,
+        sentinelUsername: redis_sentinels_username,
         sentinelPassword: redis_sentinels_password,
         sentinelTLS: redis_sentinels_ssl,
         sentinelTLSOptions: sentinel_tls_options,

@@ -150,6 +150,10 @@ module RedisHelper
       node_attr['redis_sentinel_master_port']
     end
 
+    def redis_sentinels_username
+      node_attr['redis_sentinels_username']
+    end
+
     def redis_sentinels_password
       node_attr['redis_sentinels_password']
     end
