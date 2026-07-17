@@ -101,7 +101,7 @@ module GitlabWorkhorse
         Gitlab['gitlab_rails']['redis_workhorse_instance'] = "unix://#{workhorse_redis_socket}" if workhorse_redis_socket != rails_redis_socket
       end
 
-      %w[username password cluster_nodes sentinels sentinel_master sentinels_password sentinels_ssl].each do |setting|
+      %w[username password cluster_nodes sentinels sentinel_master sentinels_username sentinels_password sentinels_ssl].each do |setting|
         Gitlab['gitlab_rails']["redis_workhorse_#{setting}"] ||= Gitlab['gitlab_workhorse']["redis_#{setting}"]
       end
     end
@@ -147,7 +147,7 @@ module GitlabWorkhorse
     end
 
     def copy_redis_settings(source_prefix)
-      %w[username password cluster_nodes sentinels sentinel_master sentinels_password sentinels_ssl sentinels_tls_ca_cert_file sentinels_tls_client_cert_file sentinels_tls_client_key_file].each do |setting|
+      %w[username password cluster_nodes sentinels sentinel_master sentinels_username sentinels_password sentinels_ssl sentinels_tls_ca_cert_file sentinels_tls_client_cert_file sentinels_tls_client_key_file].each do |setting|
         Gitlab['gitlab_workhorse']["redis_#{setting}"] ||= Gitlab['gitlab_rails']["#{source_prefix}_#{setting}"]
       end
     end

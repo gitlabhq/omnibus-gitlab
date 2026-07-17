@@ -1081,6 +1081,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['redis_repository_cache_tls_client_key_file'] = nil
 # gitlab_rails['redis_workhorse_instance'] = nil
 # gitlab_rails['redis_workhorse_sentinels'] = nil
+# gitlab_rails['redis_workhorse_sentinels_username'] = nil
 # gitlab_rails['redis_workhorse_sentinels_password'] = nil
 # gitlab_rails['redis_workhorse_sentinels_ssl'] = false
 # gitlab_rails['redis_workhorse_sentinels_tls_ca_cert_file'] = nil
@@ -1387,6 +1388,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_workhorse['redis_ssl'] = false
 # gitlab_workhorse['redis_cluster_nodes'] = []
 # gitlab_workhorse['redis_sentinels'] = []
+# gitlab_workhorse['redis_sentinels_username'] = nil
 # gitlab_workhorse['redis_sentinels_password'] = nil
 # gitlab_workhorse['redis_sentinels_ssl'] = false
 # gitlab_workhorse['redis_sentinels_tls_ca_cert_file'] = nil

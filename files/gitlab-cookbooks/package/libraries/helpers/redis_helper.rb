@@ -28,7 +28,9 @@ module RedisHelper
           path: '',
           password: password
           # No username: Sentinel authentication uses SentinelUsername in Go,
-          # not the main Redis username.
+          # not the main Redis username. A dedicated Sentinel username
+          # (redis_sentinels_username) is passed separately via the
+          # SentinelUsername config field instead of the URL.
         )
       end
     end

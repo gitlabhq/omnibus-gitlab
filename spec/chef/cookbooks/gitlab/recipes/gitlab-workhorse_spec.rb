@@ -672,6 +672,75 @@ RSpec.describe 'gitlab::gitlab-workhorse' do
       expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_sentinel_password)
       expect(chef_run).not_to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_url)
     end
+
+    it 'should not render SentinelUsername when no username is specified' do
+      expect(chef_run).not_to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(/SentinelUsername/)
+    end
+
+    it 'should not render the Redis master Username when no username is specified' do
+      expect(chef_run).not_to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(/^Username =/)
+    end
+  end
+
+  context 'with Sentinels username and password specified' do
+    before do
+      stub_gitlab_rb(
+        gitlab_workhorse: {
+          redis_sentinels_username: 'sentinel-acl-user'
+        },
+        gitlab_rails: {
+          redis_sentinels: [
+            { 'host' => '127.0.0.1', 'port' => 26379 },
+            { 'host' => '127.0.8.1', 'port' => 12345 }
+          ],
+          redis_sentinels_password: 'some pass'
+        },
+        redis: {
+          master_name: 'examplemaster',
+          master_password: 'examplepassword'
+        }
+      )
+    end
+
+    it 'should generate config file with the Sentinel username' do
+      content = 'Sentinel = ["redis://:some%20pass@127.0.0.1:26379","redis://:some%20pass@127.0.8.1:12345"]'
+      content_sentinel_master = 'SentinelMaster = "examplemaster"'
+      content_sentinel_username = 'SentinelUsername = "sentinel-acl-user"'
+      content_sentinel_password = 'SentinelPassword = "some pass"'
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content)
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_sentinel_master)
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_sentinel_username)
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_sentinel_password)
+    end
+  end
+
+  context 'with Sentinels and Redis master username specified' do
+    before do
+      stub_gitlab_rb(
+        gitlab_rails: {
+          redis_sentinels: [
+            { 'host' => '127.0.0.1', 'port' => 26379 },
+            { 'host' => '127.0.8.1', 'port' => 12345 }
+          ]
+        },
+        gitlab_workhorse: {
+          redis_username: 'master-acl-user'
+        },
+        redis: {
+          master_name: 'examplemaster',
+          master_password: 'examplepassword'
+        }
+      )
+    end
+
+    it 'should render the Redis master username alongside the Sentinel settings' do
+      content_username = 'Username = "master-acl-user"'
+      content_sentinel_master = 'SentinelMaster = "examplemaster"'
+      content_url = 'URL ='
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_username)
+      expect(chef_run).to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_sentinel_master)
+      expect(chef_run).not_to render_file("/var/opt/gitlab/gitlab-workhorse/config.toml").with_content(content_url)
+    end
   end
 
   context 'with separate workhorse redis details specified' do
