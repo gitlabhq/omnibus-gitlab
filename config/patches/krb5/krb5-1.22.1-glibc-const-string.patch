@@ -1,0 +1,36 @@
+diff -ruN a/src/lib/krb5/ccache/ccbase.c b/src/lib/krb5/ccache/ccbase.c
+--- a/src/lib/krb5/ccache/ccbase.c	2026-06-23 03:27:18.488834808 +0000
++++ b/src/lib/krb5/ccache/ccbase.c	2026-06-23 03:27:18.966892320 +0000
+@@ -210,7 +210,7 @@
+     if (name == NULL)
+         return KRB5_CC_BADNAME;
+     pfx = NULL;
+-    cp = strchr (name, ':');
++    cp = (char *)strchr (name, ':');
+     if (!cp) {
+         if (krb5_cc_dfl_ops)
+             return (*krb5_cc_dfl_ops->resolve)(context, cache, name);
+diff -ruN a/src/lib/krb5/os/expand_path.c b/src/lib/krb5/os/expand_path.c
+--- a/src/lib/krb5/os/expand_path.c	2026-06-23 03:27:18.470835006 +0000
++++ b/src/lib/krb5/os/expand_path.c	2026-06-23 03:27:18.968005350 +0000
+@@ -492,7 +492,7 @@
+     while (TRUE) {
+         /* Find the next token in path_left and add the literal text up to it.
+          * If there are no more tokens, we can finish up. */
+-        tok_begin = strstr(path_left, "%{");
++        tok_begin = (char *)strstr(path_left, "%{");
+         if (tok_begin == NULL) {
+             k5_buf_add(&buf, path_left);
+             break;
+diff -ruN a/src/lib/krb5/os/locate_kdc.c b/src/lib/krb5/os/locate_kdc.c
+--- a/src/lib/krb5/os/locate_kdc.c	2026-06-23 03:27:18.469835017 +0000
++++ b/src/lib/krb5/os/locate_kdc.c	2026-06-23 03:27:18.968937423 +0000
+@@ -223,7 +223,7 @@
+         *transport = HTTPS;
+         *host = host_or_uri + 8;
+ 
+-        cp = strchr(*host, '/');
++        cp = (char *)strchr(*host, '/');
+         if (cp != NULL) {
+             *cp = '\0';
+             *uri_path = cp + 1;

@@ -92,6 +92,12 @@ Ubuntu-24.04-check:
 Ubuntu-24.04-arm64-check:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_24.04_arm64:${BUILDER_IMAGE_REVISION}"
   extends: .apt-arm-install
+Ubuntu-26.04-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_26.04:${BUILDER_IMAGE_REVISION}"
+  extends: .apt-install
+Ubuntu-26.04-arm64-check:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_26.04_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .apt-arm-install
 Debian-11-check:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_11:${BUILDER_IMAGE_REVISION}"
   extends: .apt-install

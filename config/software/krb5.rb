@@ -41,6 +41,8 @@ else
     env = with_standard_compiler_flags(with_embedded_path)
     cwd = "#{Omnibus::Config.source_dir}/krb5/src"
 
+    patch source: 'krb5-1.22.1-glibc-const-string.patch', plevel: 1, env: env if ohai['platform'] == 'ubuntu' && ohai['platform_version'].start_with?('26.')
+
     command "autoreconf", env: env, cwd: cwd
     command './configure' \
            " --prefix=#{install_dir}/embedded --without-system-verto --without-keyutils --disable-pkinit", env: env, cwd: cwd
