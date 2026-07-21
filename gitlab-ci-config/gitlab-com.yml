@@ -544,7 +544,6 @@ ChefSpec specs:
   needs:
   - knapsack
 
-
 update-knapsack:
   extends: .knapsack-state
   image: "${RUBY_IMAGE}"
@@ -734,8 +733,10 @@ redis-valkey-sentinel-test:
     optional: true
   - { job: Ubuntu-22.04-branch,            optional: true, artifacts: false }
   - { job: Ubuntu-24.04-branch,            optional: true, artifacts: false }
+  - { job: Ubuntu-26.04-branch,            optional: true, artifacts: false }
   - { job: Ubuntu-22.04-arm64-branch,      optional: true, artifacts: false }
   - { job: Ubuntu-24.04-arm64-branch,      optional: true, artifacts: false }
+  - { job: Ubuntu-26.04-arm64-branch,      optional: true, artifacts: false }
   - { job: Ubuntu-22.04-fips-branch,       optional: true, artifacts: false }
   - { job: Debian-11-branch,               optional: true, artifacts: false }
   - { job: Debian-11-arm64-branch,         optional: true, artifacts: false }

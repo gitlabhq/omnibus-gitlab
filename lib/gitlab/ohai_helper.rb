@@ -65,6 +65,8 @@ class OhaiHelper
         'jammy'
       when /^24\.04/
         'noble'
+      when /^26\.04/
+        'resolute'
       end
     end
 

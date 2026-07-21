@@ -305,6 +305,14 @@ Ubuntu-24.04-arm64-branch:
     - if: '$PIPELINE_TYPE =~ /TRIGGERED_(CE|EE)_PIPELINE/'
     - if: '$PIPELINE_TYPE == "TRIGGER_CACHE_UPDATE_PIPELINE"'
 
+Ubuntu-26.04-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_26.04:${BUILDER_IMAGE_REVISION}"
+  extends: .branch_template
+
+Ubuntu-26.04-arm64-branch:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_26.04_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .arm64_branch_template
+
 Debian-11-branch:
   image: "${BUILDER_IMAGE_REGISTRY}/debian_11:${BUILDER_IMAGE_REVISION}"
   extends: .branch_template
@@ -547,6 +555,14 @@ Ubuntu-24.04-arm64:
     # Also build for auto-deploy tags
     - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY)_BUILD_PIPELINE$/'
 
+Ubuntu-26.04:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_26.04:${BUILDER_IMAGE_REVISION}"
+  extends: .tag_template
+
+Ubuntu-26.04-arm64:
+  image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_26.04_arm64:${BUILDER_IMAGE_REVISION}"
+  extends: .arm64_tag_template
+
 ## Build the docker image for QA
 ## This is necessary for the deployment
 ## pipeline so it must happen before
@@ -623,6 +639,14 @@ Ubuntu-24.04-staging:
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /(_RC|_TAG|AUTO_DEPLOY|NIGHTLY|INTERNAL_RELEASE|RELEASE_ENVIRONMENT)_BUILD_PIPELINE$/'
+
+Ubuntu-26.04-staging:
+  extends: .staging_upload_template
+  needs:
+    - job: Ubuntu-26.04
+      optional: true
+    - job: Ubuntu-26.04-branch
+      optional: true
 
 ### Package builds
 Debian-11:
@@ -810,6 +834,14 @@ Ubuntu-24.04-arm64-staging:
     - job: Ubuntu-24.04-arm64-branch
       optional: true
 
+Ubuntu-26.04-arm64-staging:
+  extends: .staging_upload_template
+  needs:
+    - job: Ubuntu-26.04-arm64
+      optional: true
+    - job: Ubuntu-26.04-arm64-branch
+      optional: true
+
 AlmaLinux-8-staging:
   extends: .staging_upload_template
   needs:
@@ -939,6 +971,14 @@ Ubuntu-24.04-arm64-release:
   extends: .production_release_template
   needs:
     - Ubuntu-24.04-arm64
+Ubuntu-26.04-release:
+  extends: .production_release_template
+  needs:
+    - Ubuntu-26.04
+Ubuntu-26.04-arm64-release:
+  extends: .production_release_template
+  needs:
+    - Ubuntu-26.04-arm64
 Debian-11-release:
   extends: .production_release_template
   needs:
