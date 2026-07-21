@@ -3,7 +3,7 @@ variables:
   BUILDER_IMAGE_REGISTRY: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder
   DEV_BUILDER_IMAGE_REGISTRY: dev.gitlab.org:5005/cookbooks/gitlab-omnibus-builder
   PUBLIC_BUILDER_IMAGE_REGISTRY: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder
-  BUILDER_IMAGE_REVISION: 5.57.2
+  BUILDER_IMAGE_REVISION: 5.60.2
   ASSET_REGISTRY: "${CI_REGISTRY}"
   ASSET_SYNC_EXISTING_REMOTE_FILES: keep
   ASSET_SYNC_GZIP_COMPRESSION: 'true'
@@ -48,9 +48,11 @@ variables:
   DISABLE_RPI_BUILDS: 'true'
   PUBLIC_IMAGE_ARCHIVE_REGISTRY: registry.gitlab.com
   PUBLIC_IMAGE_ARCHIVE_REGISTRY_PATH: gitlab-org/public-image-archive
-  GIT_CONFIG_COUNT: 2
-  GIT_CONFIG_KEY_0: credential.https://gitlab.com.helper
-  GIT_CONFIG_VALUE_0: '!f() { echo username=gitlab-ci-token; echo "password=${CI_JOB_TOKEN}";
-    }; f'
-  GIT_CONFIG_KEY_1: http."https://gitlab.com".proactiveAuth
-  GIT_CONFIG_VALUE_1: basic
+  # Authenticate clones/fetches of gitlab-org/gitlab so they use the higher
+  # authenticated Gitaly rate limit. The auth config (credential helper +
+  # path-scoped proactiveAuth) is written to this file in before_script rather
+  # than set via GIT_CONFIG_* here, because GitLab expands ${CI_JOB_TOKEN} when
+  # resolving the variables block -- before the job token exists -- baking in an
+  # empty password. Pointing GIT_CONFIG_GLOBAL at the file makes every git
+  # invocation read it, including those omnibus spawns.
+  GIT_CONFIG_GLOBAL: '/tmp/.gitconfig'
