@@ -11,19 +11,6 @@ module Gitlab
 
     CUSTOM_SOURCES_FILENAME = '.custom_sources.yml'.freeze
 
-    # Components whose `alternative` source lives in a project the CI job token
-    # is authorized to read via the CI job token allowlist. We only embed
-    # credentials in the `alternative` source URL for these components.
-    #
-    # The job token is rejected with "HTTP Basic: Access denied" for gitlab.com
-    # projects where omnibus-gitlab is not allowlisted (e.g. gitaly,
-    # gitlab-shell), and those public mirrors clone fine anonymously, so we must
-    # not attach credentials to them. Extend this list as projects are added to
-    # the allowlist.
-    CREDENTIALED_ALTERNATIVE_SOFTWARE = %w[
-      gitlab-rails-ee
-    ].freeze
-
     COMPONENTS_ENV_VARS = {
       'gitlab-rails' => 'GITLAB_VERSION',
       'gitlab-rails-ee' => 'GITLAB_VERSION',
@@ -162,12 +149,9 @@ module Gitlab
 
       return "" unless sources
 
-      case channel
-      when SECURITY_SOURCE
+      if channel == SECURITY_SOURCE
         token = Gitlab::Util.get_env("SECURITY_PRIVATE_TOKEN") || Gitlab::Util.get_env("CI_JOB_TOKEN")
         attach_remote_credential(sources[channel], token) || sources[::Gitlab::Version.fallback_sources_channel]
-      when ALTERNATIVE_SOURCE
-        attach_alternative_credential(sources[channel])
       else
         sources[channel]
       end
@@ -178,38 +162,6 @@ module Gitlab
     end
 
     private
-
-    # Embed the CI job token in the `alternative` (gitlab.com) source URL so
-    # requests are authenticated on the first connection. This gives the higher
-    # authenticated Gitaly rate limit and avoids relying on
-    # `http.<url>.proactiveAuth` plus a credential helper, which requires
-    # git >= 2.46 and is easy to misconfigure.
-    #
-    # Credentials are only attached for components in
-    # CREDENTIALED_ALTERNATIVE_SOFTWARE (see that constant for why), and only
-    # when a token is available -- otherwise the original URL is returned so
-    # anonymous clones keep working (e.g. local builds without a token).
-    def attach_alternative_credential(url)
-      return url unless url
-      return url unless CREDENTIALED_ALTERNATIVE_SOFTWARE.include?(@software)
-      # Only attach the token to an HTTPS gitlab.com URL. This skips SSH remotes
-      # (where the credential is useless and would mangle the URL) and avoids
-      # leaking the gitlab.com job token to any other host, in case the source
-      # is ever changed to a different remote.
-      return url unless gitlab_com_https_url?(url)
-
-      token = Gitlab::Util.get_env("ALTERNATIVE_PRIVATE_TOKEN") || Gitlab::Util.get_env("CI_JOB_TOKEN")
-      return url if token.to_s.empty?
-
-      attach_remote_credential(url, token)
-    end
-
-    def gitlab_com_https_url?(url)
-      uri = URI.parse(url)
-      uri.scheme == "https" && uri.host == "gitlab.com"
-    rescue URI::InvalidURIError
-      false
-    end
 
     def attach_remote_credential(url, token)
       return unless url
