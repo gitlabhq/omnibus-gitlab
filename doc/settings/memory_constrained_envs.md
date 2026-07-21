@@ -169,15 +169,6 @@ gitaly['configuration'] = {
         'max_per_repo' => 3,
       },
     ],
-    cgroups: {
-        repositories: {
-            count: 2,
-        },
-        mountpoint: '/sys/fs/cgroup',
-        hierarchy_root: 'gitaly',
-        memory_bytes: 500000,
-        cpu_shares: 512,
-    },
 }
 
 gitaly['env'] = {
@@ -272,15 +263,6 @@ and disable the Prometheus Metrics feature:
          'max_per_repo' => 3,
        },
      ],
-     cgroups: {
-       repositories: {
-         count: 2,
-       },
-       mountpoint: '/sys/fs/cgroup',
-       hierarchy_root: 'gitaly',
-       memory_bytes: 500000,
-       cpu_shares: 512,
-     },
    }
    gitaly['env'] = {
      'MALLOC_CONF' => 'dirty_decay_ms:1000,muzzy_decay_ms:1000',
