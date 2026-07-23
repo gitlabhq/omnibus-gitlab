@@ -1738,6 +1738,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['sql_replication_user'] = "gitlab_replicator"
 # postgresql['sql_replication_password'] = "md5 hash of postgresql password" # You can generate with `gitlab-ctl pg-password-md5 <dbuser>`
 # postgresql['wal_keep_segments'] = 10
+###! wal_keep_size is the PostgreSQL 13 and later replacement for wal_keep_segments, expressed in MB.
+###! If wal_keep_size is not set, Omnibus derives it from wal_keep_segments as wal_keep_segments * 16 MB (the default 10 segments becomes 160 MB).
+# postgresql['wal_keep_size'] = 160
 # postgresql['max_standby_archive_delay'] = "30s"
 # postgresql['max_standby_streaming_delay'] = "30s"
 # postgresql['synchronous_commit'] = on
