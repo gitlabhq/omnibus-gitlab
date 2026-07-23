@@ -15,7 +15,7 @@
 #
 
 name 'graphicsmagick'
-default_version '1.3.47'
+default_version '1.3.48'
 
 license 'MIT'
 license_file 'Copyright.txt'
@@ -32,7 +32,7 @@ if Build::Check.use_ubt?
   build(&Build::UBT.install)
 else
   source url: "https://sourceforge.net/projects/graphicsmagick/files/graphicsmagick/#{version}/GraphicsMagick-#{version}.tar.xz",
-         sha256: '95fb682dab0206a9db168d065963f4ffdf5a60b0b2a375aca1f4492fb18d0627'
+         sha256: '9218eb78179110f91371066ab75cb3b4dd034b9bb464b29ce9bab7a11979232b'
 
   relative_path "GraphicsMagick-#{version}"
 
