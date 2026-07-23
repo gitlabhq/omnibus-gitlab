@@ -48,12 +48,6 @@ module Gitlab
             note: "`gitlab_shell['migration'] will be ignored from 17.3 and removed in 18.0. See https://gitlab.com/groups/gitlab-org/-/epics/14845."
           },
           {
-            config_keys: %w(mattermost),
-            deprecation: '19.0',
-            removal: '19.0',
-            note: "Bundled Mattermost has been removed from the Linux package in 19.0; `mattermost[...]` keys are no longer supported. Deploy Mattermost separately and point GitLab at it with `gitlab_rails['mattermost_host']`. See https://docs.gitlab.com/integration/mattermost/#running-gitlab-mattermost-on-its-own-server for setup instructions."
-          },
-          {
             config_keys: %w(gitlab mattermost_external_url),
             deprecation: '19.0',
             removal: '20.0',
@@ -158,12 +152,32 @@ module Gitlab
       def additional_deprecations(incoming_version, existing_config, type)
         messages = []
 
+        messages += remove_mattermost(incoming_version, existing_config, type, '19.0', '19.0')
+
         messages += deprecate_registry_notifications(incoming_version, existing_config, type, ['registry', 'notifications'], 'threshold', 17.1, 23.0)
 
         messages += remove_git_data_dirs(incoming_version, existing_config, type, '17.8', '18.0')
 
         messages += remove_gitaly_use_bundled_binaries(incoming_version, existing_config, type, '18.3', '19.0')
         messages += remove_gitaly_bin_path(incoming_version, existing_config, type, '18.3', '19.0')
+
+        messages
+      end
+
+      def remove_mattermost(incoming_version, existing_config, type, deprecated_version, removed_version)
+        config = existing_config['mattermost']
+        return [] unless config.is_a?(Hash)
+        return [] unless config['enable'] == true
+
+        note = "Bundled Mattermost has been removed from the Linux package in 19.0; `mattermost[...]` keys are no longer supported. Deploy Mattermost separately and point GitLab at it with `gitlab_rails['mattermost_host']`. See https://docs.gitlab.com/integration/mattermost/#running-gitlab-mattermost-on-its-own-server for setup instructions."
+
+        messages = []
+
+        if Gem::Version.new(incoming_version) >= Gem::Version.new(removed_version) && type == :removal
+          messages << "* mattermost has been deprecated since #{deprecated_version} and was removed in #{removed_version}. #{note}"
+        elsif Gem::Version.new(incoming_version) >= Gem::Version.new(deprecated_version) && type == :deprecation
+          messages << "* mattermost has been deprecated since #{deprecated_version} and will be removed in #{removed_version}. #{note}"
+        end
 
         messages
       end
