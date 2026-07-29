@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.2.1 (2026-07-29)
+
+No changes.
+
 ## 19.2.0 (2026-07-15)
 
 ### Added (2 changes)
@@ -23,6 +27,21 @@ omnibus-gitlab repository.
 ### Security (1 change)
 
 - [Uninstall the default net-imap gem shipped with Ruby](gitlab-org/omnibus-gitlab@814da0ffe03af81d77d692464f0986e26325ef02) ([merge request](gitlab-org/omnibus-gitlab!9523))
+
+## 19.1.3 (2026-07-29)
+
+### Fixed (1 change)
+
+- [Merge branch 'ramereth/9940-selinux-fcontext-equivalence-el10' into 'master'](gitlab-org/security/omnibus-gitlab@b31b7eaec294a7ba9f276afc691e2c88b10d3217)
+
+### Changed (2 changes)
+
+- [Bump gitlab-omnibus-builder version to 5.64.0](gitlab-org/security/omnibus-gitlab@081fa9fa0242722d99f89967f1e2cc024064b0de)
+- [Bump PostgreSQL to 17.10](gitlab-org/security/omnibus-gitlab@9a1c24cf02fd4036995a3006d7c3787e5f437955)
+
+### Security (1 change)
+
+- [Uninstall the default net-imap gem shipped with Ruby](gitlab-org/security/omnibus-gitlab@0ebf6f8749be716e3061a19b40342d2f2bb20802)
 
 ## 19.1.2 (2026-07-07)
 
@@ -61,6 +80,21 @@ omnibus-gitlab repository.
 - [Update gitlabsos digest to fb66af8](gitlab-org/omnibus-gitlab@38c041e357eda6217f03e6ddcc227d4a0dd769e8) ([merge request](gitlab-org/omnibus-gitlab!9429))
 - [Update dependency gitlab-exporter to v16.8.0](gitlab-org/omnibus-gitlab@9a6db0449a815454ff3bcda61c0b8815015260cf) ([merge request](gitlab-org/omnibus-gitlab!9388))
 - [Update dependency redis/redis to v7.2.13](gitlab-org/omnibus-gitlab@e3a190bfadb2f56b59b241e166f091cb5753e419) ([merge request](gitlab-org/omnibus-gitlab!9351))
+
+## 19.0.5 (2026-07-29)
+
+### Changed (2 changes)
+
+- [Bump gitlab-omnibus-builder version to 5.64.0](gitlab-org/security/omnibus-gitlab@46e5425b798c258ac8dff705f957735b44ae248f)
+- [Bump PostgreSQL to 17.10](gitlab-org/security/omnibus-gitlab@af55365f2f1458fc33943eddab6bbd0f31e22fb6)
+
+### Security (1 change)
+
+- [Uninstall the default net-imap gem shipped with Ruby](gitlab-org/security/omnibus-gitlab@090a92c907f8b2d6b57bbe7a5d2c7c38d222a169)
+
+### fided (1 change)
+
+- [Merge branch 'ramereth/9940-selinux-fcontext-equivalence-el10' into 'master'](gitlab-org/security/omnibus-gitlab@e046ee3efec6a31c671ee3d487bfa3537ae20801)
 
 ## 19.0.4 (2026-07-07)
 
