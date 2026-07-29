@@ -81,6 +81,21 @@ No changes.
 - [Update dependency gitlab-exporter to v16.8.0](gitlab-org/omnibus-gitlab@9a6db0449a815454ff3bcda61c0b8815015260cf) ([merge request](gitlab-org/omnibus-gitlab!9388))
 - [Update dependency redis/redis to v7.2.13](gitlab-org/omnibus-gitlab@e3a190bfadb2f56b59b241e166f091cb5753e419) ([merge request](gitlab-org/omnibus-gitlab!9351))
 
+## 19.0.5 (2026-07-29)
+
+### Changed (2 changes)
+
+- [Bump gitlab-omnibus-builder version to 5.64.0](gitlab-org/security/omnibus-gitlab@46e5425b798c258ac8dff705f957735b44ae248f)
+- [Bump PostgreSQL to 17.10](gitlab-org/security/omnibus-gitlab@af55365f2f1458fc33943eddab6bbd0f31e22fb6)
+
+### Security (1 change)
+
+- [Uninstall the default net-imap gem shipped with Ruby](gitlab-org/security/omnibus-gitlab@090a92c907f8b2d6b57bbe7a5d2c7c38d222a169)
+
+### fided (1 change)
+
+- [Merge branch 'ramereth/9940-selinux-fcontext-equivalence-el10' into 'master'](gitlab-org/security/omnibus-gitlab@e046ee3efec6a31c671ee3d487bfa3537ae20801)
+
 ## 19.0.4 (2026-07-07)
 
 ### Fixed (1 change)
