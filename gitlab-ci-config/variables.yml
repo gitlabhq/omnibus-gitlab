@@ -49,11 +49,4 @@ variables:
   DISABLE_RPI_BUILDS: 'true'
   PUBLIC_IMAGE_ARCHIVE_REGISTRY: registry.gitlab.com
   PUBLIC_IMAGE_ARCHIVE_REGISTRY_PATH: gitlab-org/public-image-archive
-  # Authenticate clones/fetches of gitlab-org/gitlab so they use the higher
-  # authenticated Gitaly rate limit. The auth config (credential helper +
-  # path-scoped proactiveAuth) is written to this file in before_script rather
-  # than set via GIT_CONFIG_* here, because GitLab expands ${CI_JOB_TOKEN} when
-  # resolving the variables block -- before the job token exists -- baking in an
-  # empty password. Pointing GIT_CONFIG_GLOBAL at the file makes every git
-  # invocation read it, including those omnibus spawns.
-  GIT_CONFIG_GLOBAL: '/tmp/.gitconfig'
+  GIT_CONFIG_GLOBAL: "/tmp/.gitconfig"
