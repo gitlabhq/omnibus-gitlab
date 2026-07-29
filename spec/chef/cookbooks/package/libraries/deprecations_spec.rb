@@ -291,4 +291,42 @@ RSpec.describe Gitlab::Deprecations do
       expect_logged_deprecation(/Accessing config\['prometheus'\] is deprecated/)
     end
   end
+
+  describe 'mattermost deprecation entries' do
+    before do
+      allow(Gitlab::Deprecations).to receive(:list).and_call_original
+    end
+
+    it 'reports active Mattermost config as removed in 19.0' do
+      config = { 'mattermost' => { 'enable' => true } }
+      messages = described_class.check_config('19.0', config, :removal)
+      expect(messages).to include(a_string_matching(/mattermost has been deprecated since 19\.0 and was removed in 19\.0/))
+    end
+
+    it 'does not report stale secrets-only Mattermost cached state as removed in 19.0' do
+      config = {
+        'mattermost' => {
+          'email_invite_salt' => 'abc',
+          'file_public_link_salt' => 'def',
+          'sql_at_rest_encrypt_key' => 'ghi',
+          'register_as_oauth_app' => false
+        }
+      }
+
+      messages = described_class.check_config('19.0', config, :removal)
+      expect(messages).not_to include(a_string_matching(/mattermost has been deprecated since 19\.0 and was removed in 19\.0/))
+    end
+
+    it 'warns when mattermost_external_url is set in 19.0' do
+      config = { 'gitlab' => { 'mattermost_external_url' => 'http://mattermost.example.com' } }
+      messages = described_class.check_config('19.0', config, :deprecation)
+      expect(messages).to include(a_string_matching(/mattermost_external_url has been deprecated since 19\.0 and will be removed in 20\.0/))
+    end
+
+    it 'does not flag mattermost_external_url as removed before 20.0' do
+      config = { 'gitlab' => { 'mattermost_external_url' => 'http://mattermost.example.com' } }
+      messages = described_class.check_config('19.0', config, :removal)
+      expect(messages).not_to include(a_string_matching(/mattermost_external_url/))
+    end
+  end
 end
