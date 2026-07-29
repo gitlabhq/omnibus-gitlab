@@ -28,6 +28,21 @@ No changes.
 
 - [Uninstall the default net-imap gem shipped with Ruby](gitlab-org/omnibus-gitlab@814da0ffe03af81d77d692464f0986e26325ef02) ([merge request](gitlab-org/omnibus-gitlab!9523))
 
+## 19.1.3 (2026-07-29)
+
+### Fixed (1 change)
+
+- [Merge branch 'ramereth/9940-selinux-fcontext-equivalence-el10' into 'master'](gitlab-org/security/omnibus-gitlab@b31b7eaec294a7ba9f276afc691e2c88b10d3217)
+
+### Changed (2 changes)
+
+- [Bump gitlab-omnibus-builder version to 5.64.0](gitlab-org/security/omnibus-gitlab@081fa9fa0242722d99f89967f1e2cc024064b0de)
+- [Bump PostgreSQL to 17.10](gitlab-org/security/omnibus-gitlab@9a1c24cf02fd4036995a3006d7c3787e5f437955)
+
+### Security (1 change)
+
+- [Uninstall the default net-imap gem shipped with Ruby](gitlab-org/security/omnibus-gitlab@0ebf6f8749be716e3061a19b40342d2f2bb20802)
+
 ## 19.1.2 (2026-07-07)
 
 ### Fixed (1 change)
