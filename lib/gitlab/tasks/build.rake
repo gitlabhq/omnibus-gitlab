@@ -24,6 +24,7 @@ namespace :build do
     Rake::Task["build:package:move_to_platform_dir"].invoke
     Rake::Task["build:package:generate_checksums"].invoke
     Rake::Task["build:package:generate_sizefile"].invoke
+    Rake::Task["build:health_check:glibc"].invoke
   end
 
   namespace :docker do
