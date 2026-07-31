@@ -723,6 +723,26 @@ redis-valkey-sentinel-test:
     - job: Docker-branch
       artifacts: false
 
+upgrade-check-test:
+  extends: .docker_job
+  stage: qa
+  script:
+    - apt-get update -qq && apt-get install -y -qq bats
+    - echo "${CI_REGISTRY_PASSWORD}" | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+    - bundle exec rake qa:test_upgrade_check
+  rules:
+    # Emergency off-switch to disable the test if required
+    - if: '$SKIP_UPGRADE_CHECK_TEST == "true"'
+      when: never
+    - if: '$TOP_UPSTREAM_SOURCE_PROJECT == "gitlab-org/gitlab"'
+      when: never
+    - if: '$PIPELINE_TYPE == "TRIGGERED_EE_PIPELINE"'
+  needs:
+    - job: generate-facts
+      artifacts: true
+    - job: Docker-branch
+      artifacts: false
+
 # Keep this list in sync with the *-branch package jobs in
 # gitlab-ci-config/dev-gitlab-org.yml. All entries are optional so qa-full
 # only waits for the package jobs actually present in a given pipeline.

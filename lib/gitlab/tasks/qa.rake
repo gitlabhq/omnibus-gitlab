@@ -154,4 +154,15 @@ namespace :qa do
       end
     end
   end
+
+  desc "Run upgrade check-config smoke test"
+  task :test_upgrade_check do
+    Gitlab::Util.section('qa:test_upgrade_check') do
+      Gitlab::Util.set_env_if_missing('CI_REGISTRY_IMAGE', 'registry.gitlab.com/gitlab-org/build/omnibus-gitlab-mirror')
+      image_address = Build::GitlabImage.gitlab_registry_image_address(tag: Build::Info::Docker.tag)
+      Dir.chdir('upgrade-check-test') do
+        sh({ 'IMAGE' => image_address }, './test')
+      end
+    end
+  end
 end

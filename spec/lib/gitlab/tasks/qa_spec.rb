@@ -93,6 +93,24 @@ RSpec.describe 'qa', type: :rake do
     end
   end
 
+  describe 'qa:test_upgrade_check' do
+    let(:image_address) { 'registry.example.com/gitlab-org/omnibus-gitlab/gitlab-ee:19.2.1-0' }
+
+    before do
+      Rake::Task['qa:test_upgrade_check'].reenable
+
+      allow(Build::GitlabImage).to receive(:gitlab_registry_image_address).and_return(image_address)
+      allow(Dir).to receive(:chdir).with('upgrade-check-test').and_yield
+    end
+
+    it 'runs the upgrade-check test script with the built image address' do
+      # The task body runs in the top-level `main` context, so `sh` resolves there.
+      expect(TOPLEVEL_BINDING.receiver).to receive(:sh).with({ 'IMAGE' => image_address }, './test')
+
+      Rake::Task['qa:test_upgrade_check'].invoke
+    end
+  end
+
   describe 'qa:push' do
     before do
       Rake::Task['qa:push:stable'].reenable

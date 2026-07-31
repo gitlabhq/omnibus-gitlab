@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+# Upgrade check-config smoke test: a default Omnibus GitLab deployment must
+# always upgrade cleanly, so `gitlab-ctl check-config` against a future release
+# must report no deprecation/removal warnings. The target release is computed
+# from the running container's version by next_version.sh (see it for the
+# cadence). The assertions live in upgrade-check.bats.
+#
+# Local usage (requires bats: `apt-get install bats` / `brew install bats-core`):
+#   IMAGE=gitlab/gitlab-ee:19.2.0-ee.0 ./test    # PASS: 19.2 -> checks 19.3, default config is clean
+#   IMAGE=gitlab/gitlab-ee:18.11.7-ee.0 ./test   # FAIL: 18.11 -> checks 19.0, bundled Mattermost was removed in 19.0
+#   IMAGE=... CHECK_VERSION=19.0 ./test          # force the target version explicitly
+#   IMAGE=... VERSION_OFFSET=2 ./test            # look two releases ahead instead of one
+#   CLEANUP=0 IMAGE=... ./test                   # leave the container up for debugging
+
+set -euo pipefail
+
+IMAGE="${IMAGE:-gitlab/gitlab-ee:latest}"
+CLEANUP="${CLEANUP:-1}"
+CONTAINER="upgrade-check-test-$$"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Passed through to upgrade-check.bats.
+export CONTAINER
+export VERSION_OFFSET="${VERSION_OFFSET:-1}"
+export CHECK_VERSION="${CHECK_VERSION:-}"
+
+echo "==> Running upgrade check-config smoke test against ${IMAGE}"
+
+# Version-cadence unit tests first: pure bash, no container, so a broken
+# minor/major increment fails in milliseconds before the multi-minute boot.
+echo "==> Running version-cadence unit tests (next_version.bats)..."
+bats "${SCRIPT_DIR}/next_version.bats"
+
+cleanup() {
+  local exitcode=$?
+  if [ "$CLEANUP" != "1" ]; then
+    echo "skipping cleanup; container left running: ${CONTAINER}"
+    exit "$exitcode"
+  fi
+  docker rm -f "${CONTAINER}" >/dev/null 2>&1 || true
+  exit "$exitcode"
+}
+trap cleanup EXIT
+
+# Start the process supervisor without the image's auto-reconfigure entrypoint;
+# upgrade-check.bats runs `gitlab-ctl reconfigure` synchronously in setup_file so
+# the check runs against a fully reconfigured node.
+echo "==> Booting ${IMAGE} for the integration check (upgrade-check.bats)..."
+docker run -d --name "${CONTAINER}" --entrypoint="" "${IMAGE}" \
+  bash -c "touch /etc/sysctl.conf && /opt/gitlab/embedded/bin/runsvdir-start"
+
+bats "${SCRIPT_DIR}/upgrade-check.bats"
