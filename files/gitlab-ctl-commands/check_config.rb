@@ -45,10 +45,9 @@ add_command 'check-config', 'Check if there are any configuration in gitlab.rb t
   unless node_json.key?("normal")
     log "Malformed configuration JSON file found at #{node_json_file}."
     log "This usually happens when your last run of `gitlab-ctl reconfigure` didn't complete successfully."
-    log "This file is used to check if any of the unsupported configurations are enabled,"
-    log "and hence require a working reconfigure before upgrading."
-    log "Please run `sudo gitlab-ctl reconfigure` to fix it and try again."
-    Kernel.exit 1
+    log "This file is regenerated on the next reconfigure, so the configuration check is being skipped."
+    log "Please run `sudo gitlab-ctl reconfigure` after the upgrade to complete the configuration."
+    Kernel.exit 0
   end
   existing_config = node_json['normal']
 
