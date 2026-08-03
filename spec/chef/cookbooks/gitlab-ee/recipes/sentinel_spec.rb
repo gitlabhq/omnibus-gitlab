@@ -53,6 +53,29 @@ RSpec.describe 'gitlab::redis' do
         )
       end
 
+      context 'when sentinel.conf already exists with a post-failover master IP' do
+        let(:live_master_ip) { '9.9.9.9' }
+        cached(:chef_run) { sentinel_chef_run }
+
+        before do
+          allow(File).to receive(:exist?).and_call_original
+          allow(File).to receive(:exist?)
+            .with('/var/opt/gitlab/sentinel/sentinel.conf').and_return(true)
+          allow(File).to receive(:readlines)
+            .with('/var/opt/gitlab/sentinel/sentinel.conf').and_return(
+              ["sentinel monitor gitlab-redis #{live_master_ip} 6379 1\n"]
+            )
+        end
+
+        it 'renders the monitor line with the live master IP, not the gitlab.rb value' do
+          expect(chef_run).to render_file('/var/opt/gitlab/sentinel/sentinel.conf')
+            .with_content { |content|
+              expect(content).to match(%r{sentinel monitor gitlab-redis 9\.9\.9\.9 6379 1})
+              expect(content).not_to match(%r{sentinel monitor gitlab-redis #{Regexp.escape(redis_master_ip)}})
+            }
+        end
+      end
+
       context 'with no overrides' do
         cached(:chef_run) { sentinel_chef_run }
 

@@ -26,6 +26,41 @@ class SentinelHelper
     'no'
   end
 
+  # Return the current master IP by reading sentinel.conf if it already exists.
+  # Sentinel rewrites that file on every failover, so the static redis['master_ip']
+  # from gitlab.rb may point at a replica after a failover. Preserving the
+  # Sentinel-managed value prevents reconfigure from triggering false failovers.
+  # Falls back to redis['master_ip'] on a fresh install where the file does not exist yet.
+  def live_master_ip
+    conf_path = File.join(sentinel['dir'], 'sentinel.conf')
+    return redis['master_ip'] unless File.exist?(conf_path)
+
+    master_name = Regexp.escape(redis['master_name'])
+    line = File.readlines(conf_path).find { |l| l.match?(/\Asentinel monitor #{master_name}\s/) }
+    return redis['master_ip'] unless line
+
+    # Line format: sentinel monitor <name> <ip> <port> <quorum> (6 fields)
+    fields = line.split
+    return redis['master_ip'] if fields.length < 6
+
+    ip = fields[3]
+    return redis['master_ip'] if ip.nil? || ip.empty?
+
+    if ip != redis['master_ip']
+      Chef::Log.warn(
+        "SentinelHelper#live_master_ip: sentinel.conf reports master as #{ip}, " \
+        "which differs from redis['master_ip'] (#{redis['master_ip']}) in gitlab.rb. " \
+        "Using #{ip} from sentinel.conf. To deliberately change the primary, " \
+        "run: redis-cli -p 26379 SENTINEL failover #{redis['master_name']}"
+      )
+    end
+
+    ip
+  rescue StandardError => e
+    Chef::Log.warn("SentinelHelper#live_master_ip: failed to read #{conf_path} (#{e.class}: #{e.message}); falling back to redis['master_ip']")
+    redis['master_ip']
+  end
+
   def running_version
     return unless OmnibusHelper.new(@node).service_up?('sentinel')
 
