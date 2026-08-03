@@ -83,7 +83,7 @@ RSpec.describe GitlabCtl::Geo::Promote, '#execute' do
 
             expect(command)
               .not_to receive(:run_command)
-              .with("#{base_path}/bin/gitlab-rake geo:set_secondary_as_primary", live: true, env: {})
+              .with("#{base_path}/bin/gitlab-rake gitlab:geo:set_secondary_as_primary", live: true, env: {})
 
             command.execute
           end
@@ -100,7 +100,7 @@ RSpec.describe GitlabCtl::Geo::Promote, '#execute' do
 
             expect(command)
               .to receive(:run_command)
-              .with("#{base_path}/bin/gitlab-rake geo:set_secondary_as_primary", { live: true, env: an_instance_of(Hash) })
+              .with("#{base_path}/bin/gitlab-rake gitlab:geo:set_secondary_as_primary", { live: true, env: an_instance_of(Hash) })
               .once
               .and_return(double(error?: false))
 
@@ -115,7 +115,7 @@ RSpec.describe GitlabCtl::Geo::Promote, '#execute' do
 
               expect(command)
                 .to receive(:run_command)
-                .with("#{base_path}/bin/gitlab-rake geo:set_secondary_as_primary", { live: true, env: a_hash_including(ENABLE_SILENT_MODE: 'true') })
+                .with("#{base_path}/bin/gitlab-rake gitlab:geo:set_secondary_as_primary", { live: true, env: a_hash_including(ENABLE_SILENT_MODE: 'true') })
                 .once
                 .and_return(double(error?: false))
 
@@ -493,21 +493,21 @@ RSpec.describe GitlabCtl::Geo::Promote, '#execute' do
     def stub_primary_node
       allow(command)
         .to receive(:run_command)
-        .with("#{base_path}/bin/gitlab-rake geo:site:role", live: true, env: {})
+        .with("#{base_path}/bin/gitlab-rake gitlab:geo:site:role", live: true, env: {})
         .and_return(double(error?: false, stdout: 'primary'))
     end
 
     def stub_secondary_node
       allow(command)
         .to receive(:run_command)
-        .with("#{base_path}/bin/gitlab-rake geo:site:role", live: true, env: {})
+        .with("#{base_path}/bin/gitlab-rake gitlab:geo:site:role", live: true, env: {})
         .and_return(double(error?: false, stdout: 'secondary'))
     end
 
     def stub_misconfigured_node
       allow(command)
         .to receive(:run_command)
-        .with("#{base_path}/bin/gitlab-rake geo:site:role", live: true, env: {})
+        .with("#{base_path}/bin/gitlab-rake gitlab:geo:site:role", live: true, env: {})
         .and_return(double(error?: true, stdout: 'misconfigured'))
     end
 

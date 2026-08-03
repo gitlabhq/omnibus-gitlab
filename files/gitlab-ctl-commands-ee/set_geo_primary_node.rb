@@ -26,7 +26,7 @@ add_command_under_category 'set-geo-primary-node', 'gitlab-geo', 'Make this node
     Kernel.exit 1
   end
 
-  command = "gitlab-rake geo:set_primary_node"
+  command = "gitlab-rake gitlab:geo:set_primary_node"
 
   run_command(command)
 end

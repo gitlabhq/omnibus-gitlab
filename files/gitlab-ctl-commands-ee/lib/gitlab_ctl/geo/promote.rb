@@ -165,7 +165,7 @@ module GitlabCtl
         log('Detected an application node.')
 
         unless progress_message('Promoting secondary site to primary site') do
-          !run_task('geo:set_secondary_as_primary', env: { ENABLE_SILENT_MODE: options[:enable_silent_mode].to_s }).error?
+          !run_task('gitlab:geo:set_secondary_as_primary', env: { ENABLE_SILENT_MODE: options[:enable_silent_mode].to_s }).error?
         end
           die("Unable to promote secondary site to primary site.")
         end
@@ -202,7 +202,7 @@ module GitlabCtl
         return @node_role if defined?(@node_role)
 
         unless progress_message('Attempting to detect the role of this Geo node') do
-          task = run_task('geo:site:role')
+          task = run_task('gitlab:geo:site:role')
           next false if task.error?
 
           @node_role = task.stdout.strip.to_sym

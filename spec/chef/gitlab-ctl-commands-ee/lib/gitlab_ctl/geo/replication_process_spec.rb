@@ -25,7 +25,7 @@ RSpec.describe GitlabCtl::Geo::ReplicationProcess do
 
   describe '#pause' do
     it 'logs a message if the rake task throws an error' do
-      expect(GitlabCtl::Util).to receive(:run_command).with(/gitlab-rake geo:replication:pause/).and_return(bad_status)
+      expect(GitlabCtl::Util).to receive(:run_command).with(/gitlab-rake gitlab:geo:replication:pause/).and_return(bad_status)
       expect(GitlabCtl::Util).to receive(:run_command).with(pause_cmd).and_return(good_status)
 
       expect do
@@ -34,7 +34,7 @@ RSpec.describe GitlabCtl::Geo::ReplicationProcess do
     end
 
     it 'raises an exception if unable to pause replication' do
-      expect(GitlabCtl::Util).to receive(:run_command).with(/gitlab-rake geo:replication:pause/).and_return(good_status)
+      expect(GitlabCtl::Util).to receive(:run_command).with(/gitlab-rake gitlab:geo:replication:pause/).and_return(good_status)
       expect(GitlabCtl::Util).to receive(:run_command).with(pause_cmd).and_return(bad_status_psql)
 
       expect do
@@ -43,7 +43,7 @@ RSpec.describe GitlabCtl::Geo::ReplicationProcess do
     end
 
     it 'provides the requested database from the options' do
-      expect(GitlabCtl::Util).to receive(:run_command).with(/gitlab-rake geo:replication:pause/).and_return(good_status)
+      expect(GitlabCtl::Util).to receive(:run_command).with(/gitlab-rake gitlab:geo:replication:pause/).and_return(good_status)
       expect(GitlabCtl::Util).to receive(:run_command).with(/gitlab-psql -d #{db_name}/).and_return(good_status)
 
       subject.pause
@@ -60,7 +60,7 @@ RSpec.describe GitlabCtl::Geo::ReplicationProcess do
     end
 
     it 'raises an error if rake task to resume fails' do
-      expect(GitlabCtl::Util).to receive(:run_command).with(/gitlab-rake geo:replication:resume/).and_return(bad_status)
+      expect(GitlabCtl::Util).to receive(:run_command).with(/gitlab-rake gitlab:geo:replication:resume/).and_return(bad_status)
       expect(GitlabCtl::Util).to receive(:run_command).with(resume_cmd).and_return(good_status)
 
       expect do
@@ -69,7 +69,7 @@ RSpec.describe GitlabCtl::Geo::ReplicationProcess do
     end
 
     it 'provides the requested database from the options' do
-      expect(GitlabCtl::Util).to receive(:run_command).with(/gitlab-rake geo:replication:resume/).and_return(good_status)
+      expect(GitlabCtl::Util).to receive(:run_command).with(/gitlab-rake gitlab:geo:replication:resume/).and_return(good_status)
       expect(GitlabCtl::Util).to receive(:run_command).with(/gitlab-psql -d #{db_name}/).and_return(good_status)
 
       subject.resume

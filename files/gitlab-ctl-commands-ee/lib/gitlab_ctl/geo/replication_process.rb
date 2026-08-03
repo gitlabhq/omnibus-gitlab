@@ -15,7 +15,7 @@ module GitlabCtl
       def pause
         puts '* Pausing replication'.color(:green)
 
-        task = run_task('geo:replication:pause')
+        task = run_task('gitlab:geo:replication:pause')
         # This isn't an error because theoretically if the primary is down you
         # may want to use this to pause the WAL anyway.
         puts task.stdout.strip.color(:red) if task.error?
@@ -32,7 +32,7 @@ module GitlabCtl
         query = run_query('SELECT pg_wal_replay_resume();')
         raise PsqlError, "Unable to resume postgres replication #{query.stderr.strip}" if query.error?
 
-        task = run_task('geo:replication:resume')
+        task = run_task('gitlab:geo:replication:resume')
         raise RakeError, "Unable to resume replication from primary #{task.stdout.strip}" if task.error?
 
         puts '* Replication resumed'.color(:green)
