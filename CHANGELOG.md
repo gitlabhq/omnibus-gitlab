@@ -156,6 +156,12 @@ No changes.
 - [Remove Spamcheck from Omnibus-GitLab for 19.0](gitlab-org/omnibus-gitlab@ca64c4627e2b95a2dec19e44e3f76561ebf4afb2) ([merge request](gitlab-org/omnibus-gitlab!9366))
 - [Remove Mattermost for SLES-12.5](gitlab-org/omnibus-gitlab@580302851cb4486434e0db203d4a1062b9abc4e0) ([merge request](gitlab-org/omnibus-gitlab!9274))
 
+## 18.11.8 (2026-08-03)
+
+### Fixed (1 change)
+
+- [Merge branch 'bocarbonell-master-patch-81812' into 'master'](gitlab-org/omnibus-gitlab@e240dfbcaf4623d9e33247dc0688e4e761d4ecfe) ([merge request](gitlab-org/omnibus-gitlab!9623))
+
 ## 18.11.7 (2026-07-07)
 
 ### Security (1 change)
