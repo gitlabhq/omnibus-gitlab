@@ -110,6 +110,125 @@ RSpec.describe SentinelHelper do
     end
   end
 
+  context '#live_master_ip' do
+    let(:sentinel_conf) { '/var/opt/gitlab/sentinel/sentinel.conf' }
+    let(:configured_master_ip) { '1.1.1.1' }
+    let(:live_master_ip) { '2.2.2.2' }
+
+    before do
+      stub_gitlab_rb(
+        redis: {
+          master_ip: configured_master_ip,
+          master_name: 'gitlab-redis'
+        }
+      )
+    end
+
+    context 'when sentinel.conf does not exist' do
+      before do
+        allow(File).to receive(:exist?).and_call_original
+        allow(File).to receive(:exist?).with(sentinel_conf).and_return(false)
+      end
+
+      it 'returns redis master_ip from gitlab.rb' do
+        expect(subject.live_master_ip).to eq(configured_master_ip)
+      end
+    end
+
+    context 'when sentinel.conf exists with the configured master' do
+      before do
+        allow(File).to receive(:exist?).and_call_original
+        allow(File).to receive(:exist?).with(sentinel_conf).and_return(true)
+        allow(File).to receive(:readlines).with(sentinel_conf).and_return(
+          ["sentinel monitor gitlab-redis #{configured_master_ip} 6379 1\n"]
+        )
+      end
+
+      it 'returns the IP from the file' do
+        expect(subject.live_master_ip).to eq(configured_master_ip)
+      end
+    end
+
+    context 'when sentinel.conf exists with a post-failover master IP' do
+      before do
+        allow(File).to receive(:exist?).and_call_original
+        allow(File).to receive(:exist?).with(sentinel_conf).and_return(true)
+        allow(File).to receive(:readlines).with(sentinel_conf).and_return(
+          [
+            "# This file is managed by gitlab-ctl\n",
+            "bind 0.0.0.0\n",
+            "sentinel monitor gitlab-redis #{live_master_ip} 6379 1\n",
+            "sentinel down-after-milliseconds gitlab-redis 10000\n"
+          ]
+        )
+      end
+
+      it 'returns the live master IP from the file, not the gitlab.rb value' do
+        expect(subject.live_master_ip).to eq(live_master_ip)
+      end
+
+      it 'logs a warning that the master IP differs from gitlab.rb' do
+        expect(Chef::Log).to receive(:warn).with(/#{Regexp.escape(live_master_ip)}.*differs from.*#{Regexp.escape(configured_master_ip)}/)
+        subject.live_master_ip
+      end
+    end
+
+    context 'when sentinel.conf exists with the same master IP as gitlab.rb' do
+      before do
+        allow(File).to receive(:exist?).and_call_original
+        allow(File).to receive(:exist?).with(sentinel_conf).and_return(true)
+        allow(File).to receive(:readlines).with(sentinel_conf).and_return(
+          ["sentinel monitor gitlab-redis #{configured_master_ip} 6379 1\n"]
+        )
+      end
+
+      it 'does not log a warning' do
+        expect(Chef::Log).not_to receive(:warn)
+        subject.live_master_ip
+      end
+    end
+
+    context 'when sentinel.conf exists with a malformed monitor line missing the IP field' do
+      before do
+        allow(File).to receive(:exist?).and_call_original
+        allow(File).to receive(:exist?).with(sentinel_conf).and_return(true)
+        allow(File).to receive(:readlines).with(sentinel_conf).and_return(
+          ["sentinel monitor gitlab-redis 6379 1\n"]
+        )
+      end
+
+      it 'falls back to redis master_ip from gitlab.rb' do
+        expect(subject.live_master_ip).to eq(configured_master_ip)
+      end
+    end
+
+    context 'when sentinel.conf exists but has no monitor line for this master' do
+      before do
+        allow(File).to receive(:exist?).and_call_original
+        allow(File).to receive(:exist?).with(sentinel_conf).and_return(true)
+        allow(File).to receive(:readlines).with(sentinel_conf).and_return(
+          ["sentinel monitor other-master 3.3.3.3 6379 1\n"]
+        )
+      end
+
+      it 'falls back to redis master_ip from gitlab.rb' do
+        expect(subject.live_master_ip).to eq(configured_master_ip)
+      end
+    end
+
+    context 'when reading sentinel.conf raises an error' do
+      before do
+        allow(File).to receive(:exist?).and_call_original
+        allow(File).to receive(:exist?).with(sentinel_conf).and_return(true)
+        allow(File).to receive(:readlines).with(sentinel_conf).and_raise(Errno::EACCES, 'permission denied')
+      end
+
+      it 'falls back to redis master_ip from gitlab.rb' do
+        expect(subject.live_master_ip).to eq(configured_master_ip)
+      end
+    end
+  end
+
   context '#myid' do
     context 'when retrieving from config' do
       it 'fails when myid is not 40 hex-characters long' do

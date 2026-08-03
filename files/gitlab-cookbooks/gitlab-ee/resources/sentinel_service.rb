@@ -72,7 +72,7 @@ action :enable do
     mode '0644'
     variables(
       {
-        redis: new_resource.redis_configuration.to_hash,
+        redis: new_resource.redis_configuration.to_hash.merge('master_ip' => sentinel_helper.live_master_ip),
         sentinel: new_resource.sentinel_configuration.to_hash
       }
     )
