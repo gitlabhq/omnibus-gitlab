@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.11.8 (2026-08-03)
+
+### Fixed (1 change)
+
+- [Merge branch 'bocarbonell-master-patch-81812' into 'master'](gitlab-org/omnibus-gitlab@e240dfbcaf4623d9e33247dc0688e4e761d4ecfe) ([merge request](gitlab-org/omnibus-gitlab!9623))
+
 ## 18.11.7 (2026-07-07)
 
 ### Security (1 change)
