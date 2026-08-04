@@ -96,6 +96,7 @@ class SecretsHelper
         'signed_cookie_salt' => Gitlab['gitlab_rails']['signed_cookie_salt'],
         'authenticated_encrypted_cookie_salt' => Gitlab['gitlab_rails']['authenticated_encrypted_cookie_salt'],
         'gitaly_token' => Gitlab['gitlab_rails']['gitaly_token'],
+        'orbit_secret' => Gitlab['gitlab_rails']['orbit_secret'],
       },
       'gitlab_pages' => {
         'gitlab_secret' => Gitlab['gitlab_pages']['gitlab_secret'],
