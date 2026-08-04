@@ -14,6 +14,11 @@ title: Configure SSL for a Linux package installation
 
 The Linux package supports several common use cases for SSL configuration.
 
+> [!note]
+> These configuration instructions are for GitLab 19.2 and later. If you are configuring GitLab 19.1 and earlier, replace
+> `gitlab_rails['nginx']` with a top-level `nginx` key. For example, replace `gitlab_rails['nginx']['redirect_http_to_https']`
+> with `nginx['redirect_http_to_https']`. Using a top-level `nginx` key works but is deprecated.
+
 By default, HTTPS is not enabled. To enable HTTPS, you can:
 
 - Use Let's Encrypt for free, automated HTTPS.
@@ -297,7 +302,7 @@ To enable HTTPS:
    to `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   nginx['ssl_password_file'] = '/etc/gitlab/ssl/key_file_password.txt'
+   gitlab_rails['nginx']['ssl_password_file'] = '/etc/gitlab/ssl/key_file_password.txt'
    ```
 
 1. Reconfigure GitLab:
@@ -333,7 +338,7 @@ traffic to HTTPS:
 1. Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   nginx['redirect_http_to_https'] = true
+   gitlab_rails['nginx']['redirect_http_to_https'] = true
    ```
 
 1. Reconfigure GitLab:
@@ -387,8 +392,8 @@ To set a different location of the SSL certificates:
 1. Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   nginx['ssl_certificate'] = "/mnt/gitlab/ssl/gitlab.crt"
-   nginx['ssl_certificate_key'] = "/mnt/gitlab/ssl/gitlab.key"
+   gitlab_rails['nginx']['ssl_certificate'] = "/mnt/gitlab/ssl/gitlab.crt"
+   gitlab_rails['nginx']['ssl_certificate_key'] = "/mnt/gitlab/ssl/gitlab.key"
    ```
 
 1. Reconfigure GitLab:
@@ -422,8 +427,8 @@ To prevent the bundled NGINX from handling SSL termination:
 1. Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   nginx['listen_port'] = 80
-   nginx['listen_https'] = false
+   gitlab_rails['nginx']['listen_port'] = 80
+   gitlab_rails['nginx']['listen_https'] = false
    ```
 
 1. Reconfigure GitLab:
@@ -440,8 +445,8 @@ recommended to leverage a
 
 Other bundled components, like the Container Registry or GitLab Pages,
 use a similar strategy for proxied SSL. Set the particular component's `*_external_url` with `https://` and
-prefix the `nginx[...]` configuration with the component name. For example, the
-GitLab Container Registry configuration is prefixed with `registry_`:
+configure the `nginx` settings under that component's configuration key. For example, the
+GitLab Container Registry uses `registry['nginx']`:
 
 1. Edit `/etc/gitlab/gitlab.rb`:
 
@@ -481,7 +486,7 @@ To change the SSL ciphers:
 1. Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   nginx['ssl_ciphers'] = "CIPHER:CIPHER1"
+   gitlab_rails['nginx']['ssl_ciphers'] = "CIPHER:CIPHER1"
    ```
 
 1. Reconfigure GitLab:
@@ -501,7 +506,7 @@ To enable the `ssl_dhparam` directive:
 1. Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   nginx['ssl_dhparam'] = "/etc/gitlab/ssl/dhparams.pem"
+   gitlab_rails['nginx']['ssl_dhparam'] = "/etc/gitlab/ssl/dhparams.pem"
    ```
 
 1. Reconfigure GitLab:
@@ -535,7 +540,7 @@ If changing the ciphers is not an option, you can disable the HTTP/2 support:
 1. Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   nginx['http2_enabled'] = false
+   gitlab_rails['nginx']['http2_enabled'] = false
    ```
 
 1. Reconfigure GitLab:
@@ -556,8 +561,8 @@ enable 2-way SSL:
 1. Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   nginx['ssl_verify_client'] = "on"
-   nginx['ssl_client_certificate'] = "/etc/pki/tls/certs/root-certs.pem"
+   gitlab_rails['nginx']['ssl_verify_client'] = "on"
+   gitlab_rails['nginx']['ssl_client_certificate'] = "/etc/pki/tls/certs/root-certs.pem"
    ```
 
 1. Optional. You can configure how deeply in the certificate chain NGINX should verify
@@ -565,7 +570,7 @@ enable 2-way SSL:
    Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   nginx['ssl_verify_depth'] = "2"
+   gitlab_rails['nginx']['ssl_verify_depth'] = "2"
    ```
 
 1. Reconfigure GitLab:
@@ -594,8 +599,8 @@ To change the max age value:
 1. Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   nginx['hsts_max_age'] = 63072000
-   nginx['hsts_include_subdomains'] = false
+   gitlab_rails['nginx']['hsts_max_age'] = 63072000
+   gitlab_rails['nginx']['hsts_include_subdomains'] = false
    ```
 
    Setting `max_age` to `0` disables HSTS.
