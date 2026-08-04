@@ -17,7 +17,7 @@ It includes essential instructions for optimizing performance and security speci
 
 ## Migrate rails-specific settings to the `gitlab_rails` subkey
 
-Rails-specific NGINX settings live under `gitlab_rails['nginx'][*]`.
+In GitLab 19.2 and later, rails-specific NGINX settings live under `gitlab_rails['nginx'][*]`.
 The bundled NGINX daemon's own process-level settings (worker
 count, keepalive, server tokens, `gzip` master switch, cache path)
 remain under `nginx[*]` and configure the daemon itself via the
@@ -41,8 +41,8 @@ gitlab_rails['nginx']['ssl_certificate'] = '/etc/gitlab/ssl/example.crt'
 gitlab_rails['nginx']['listen_https'] = true
 ```
 
-A translation shim carries the legacy keys forward silently for
-upgrades: setting `nginx['ssl_certificate']` continues to flow
+A translation shim carries the legacy keys forward for
+upgrades and logs a deprecation warning: setting `nginx['ssl_certificate']` continues to flow
 into `gitlab_rails['nginx']['ssl_certificate']` at parse time when
 the new key is not set. The shim is one-way and gated on the
 target being nil, so an explicit `gitlab_rails['nginx'][key]`
@@ -56,7 +56,7 @@ To configure NGINX settings for different services, edit the `gitlab.rb` file.
 > Incorrect or incompatible configuration
 > might cause the service to become unavailable.
 
-Use `nginx['<setting>']` keys to configure settings for the GitLab Rails application.
+Use `gitlab_rails['nginx']['<setting>']` keys to configure settings for the GitLab Rails application.
 GitLab provides similar keys for other services like
 `gitlab_pages['nginx']`, `registry['nginx']`, and `gitlab_kas['nginx']`.
 Configurations for `nginx` are also available for these `<service>['nginx']` settings, and
@@ -71,7 +71,7 @@ redirection for GitLab and Registry, add the following settings
 to `gitlab.rb`:
 
 ```ruby
-nginx['redirect_http_to_https'] = true
+gitlab_rails['nginx']['redirect_http_to_https'] = true
 registry['nginx']['redirect_http_to_https'] = true
 ```
 
@@ -109,7 +109,7 @@ To override the default headers:
 1. Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   nginx['proxy_set_headers'] = {
+   gitlab_rails['nginx']['proxy_set_headers'] = {
      "X-Forwarded-Proto" => "http",
      "CUSTOM_HEADER" => "VALUE"
    }
@@ -132,10 +132,10 @@ proxy to the `real_ip_trusted_addresses` list:
 
 ```ruby
 # Each address is added to the NGINX config as 'set_real_ip_from <address>;'
-nginx['real_ip_trusted_addresses'] = [ '192.168.1.0/24', '192.168.2.1', '2001:0db8::/32' ]
+gitlab_rails['nginx']['real_ip_trusted_addresses'] = [ '192.168.1.0/24', '192.168.2.1', '2001:0db8::/32' ]
 # Other real_ip config options
-nginx['real_ip_header'] = 'X-Forwarded-For'
-nginx['real_ip_recursive'] = 'on'
+gitlab_rails['nginx']['real_ip_header'] = 'X-Forwarded-For'
+gitlab_rails['nginx']['real_ip_recursive'] = 'on'
 ```
 
 For a description of these options, see the
@@ -157,9 +157,9 @@ To use a proxy like HAProxy in front of GitLab with the
 
    ```ruby
    # Enable termination of ProxyProtocol by NGINX
-   nginx['proxy_protocol'] = true
+   gitlab_rails['nginx']['proxy_protocol'] = true
    # Configure trusted upstream proxies. Required if `proxy_protocol` is enabled.
-   nginx['real_ip_trusted_addresses'] = [ "127.0.0.0/8", "IP_OF_THE_PROXY/32"]
+   gitlab_rails['nginx']['real_ip_trusted_addresses'] = [ "127.0.0.0/8", "IP_OF_THE_PROXY/32"]
    ```
 
 1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
@@ -269,7 +269,7 @@ To change the list of addresses:
 
    ```ruby
    # Listen on all IPv4 and IPv6 addresses
-   nginx['listen_addresses'] = ["0.0.0.0", "[::]"]
+   gitlab_rails['nginx']['listen_addresses'] = ["0.0.0.0", "[::]"]
    registry['nginx']['listen_addresses'] = ['*', '[::]']
    gitlab_pages['nginx']['listen_addresses'] = ['*', '[::]']
    ```
@@ -289,7 +289,7 @@ To change the listen port:
    For example, to use port 8081:
 
    ```ruby
-   nginx['listen_port'] = 8081
+   gitlab_rails['nginx']['listen_port'] = 8081
    ```
 
 1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
@@ -304,7 +304,7 @@ To change the log level:
 1. Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   nginx['error_log_level'] = "debug"
+   gitlab_rails['nginx']['error_log_level'] = "debug"
    ```
 
 1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
@@ -325,13 +325,13 @@ To change this header:
 1. Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   nginx['referrer_policy'] = 'same-origin'
+   gitlab_rails['nginx']['referrer_policy'] = 'same-origin'
    ```
 
    To disable this header and use the client's default setting:
 
    ```ruby
-   nginx['referrer_policy'] = false
+   gitlab_rails['nginx']['referrer_policy'] = false
    ```
 
 1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
@@ -350,7 +350,7 @@ If you configure a `Cross-Origin-Resource-Policy` (CORP) header with the `same-s
 For example:
 
 ```ruby
-nginx['custom_gitlab_server_config'] = "add_header Cross-Origin-Resource-Policy same-site;"
+gitlab_rails['nginx']['custom_gitlab_server_config'] = "add_header Cross-Origin-Resource-Policy same-site;"
 ```
 
 The Mermaid sandboxed iframe intentionally omits the `allow-same-origin` sandbox attribute.
@@ -361,7 +361,7 @@ policy.
 To allow Mermaid diagrams to render, use `cross-origin`:
 
 ```ruby
-nginx['custom_gitlab_server_config'] = "add_header Cross-Origin-Resource-Policy cross-origin;"
+gitlab_rails['nginx']['custom_gitlab_server_config'] = "add_header Cross-Origin-Resource-Policy cross-origin;"
 ```
 
 > [!warning]
@@ -391,7 +391,7 @@ To disable request buffering for specific locations:
 1. Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   nginx['request_buffering_off_path_regex'] = "/api/v\\d/jobs/\\d+/artifacts$|/import/gitlab_project$|\\.git/git-receive-pack$|\\.git/ssh-receive-pack$|\\.git/ssh-upload-pack$|\\.git/gitlab-lfs/objects|\\.git/info/lfs/objects/batch$"
+   gitlab_rails['nginx']['request_buffering_off_path_regex'] = "/api/v\\d/jobs/\\d+/artifacts$|/import/gitlab_project$|\\.git/git-receive-pack$|\\.git/ssh-receive-pack$|\\.git/ssh-upload-pack$|\\.git/gitlab-lfs/objects|\\.git/info/lfs/objects/batch$"
    ```
 
 1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
@@ -413,7 +413,7 @@ To configure a custom [`robots.txt`](https://www.robotstxt.org/robotstxt.html) f
 1. Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   nginx['custom_gitlab_server_config'] = "\nlocation =/robots.txt { alias /path/to/custom/robots.txt; }\n"
+   gitlab_rails['nginx']['custom_gitlab_server_config'] = "\nlocation =/robots.txt { alias /path/to/custom/robots.txt; }\n"
    ```
 
    Replace `/path/to/custom/robots.txt` with the actual path to your custom `robots.txt` file.
@@ -432,7 +432,7 @@ To add custom settings to the NGINX `server` block for GitLab:
 
    ```ruby
    # Example: block raw file downloads from a specific repository
-   nginx['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
+   gitlab_rails['nginx']['custom_gitlab_server_config'] = "location ^~ /foo-namespace/bar-project/raw/ {\n deny all;\n}\n"
    ```
 
 1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
@@ -450,13 +450,13 @@ By default, the bundled NGINX includes `default_server` in the `listen` directiv
 This configuration causes NGINX to use this server block as
 the default for any requests that do not match other server blocks.
 
-If you need to add your own custom server block with `default_server` (for example, when using `nginx['custom_gitlab_server_config']`),
+If you need to add your own custom server block with `default_server` (for example, when using `gitlab_rails['nginx']['custom_gitlab_server_config']`),
 you must disable the default server in the GitLab configuration:
 
 1. Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   nginx['default_server_enabled'] = false
+   gitlab_rails['nginx']['default_server_enabled'] = false
    ```
 
 1. Save the file and [reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#linux-package-installations)
@@ -532,7 +532,7 @@ To modify text on the default GitLab error pages:
 1. Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   nginx['custom_error_pages'] = {
+   gitlab_rails['nginx']['custom_error_pages'] = {
     '404' => {
       'title' => 'Example title',
       'header' => 'Example header',
@@ -810,7 +810,7 @@ To enable advanced latency metrics:
 1. Add the following configuration to `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   nginx['custom_gitlab_server_config'] = "vhost_traffic_status_histogram_buckets 0.005 0.01 0.05 0.1 0.25 0.5 1 2.5 5 10;"
+   gitlab_rails['nginx']['custom_gitlab_server_config'] = "vhost_traffic_status_histogram_buckets 0.005 0.01 0.05 0.1 0.25 0.5 1 2.5 5 10;"
    ```
 
    Or, create a custom NGINX configuration file:
