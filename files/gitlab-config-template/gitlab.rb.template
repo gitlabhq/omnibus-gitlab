@@ -2482,6 +2482,26 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_kas['nginx']['https'] = false
 
 ################################################################################
+## Orbit / Knowledge Graph
+##! Docs: https://docs.gitlab.com/orbit/
+################################################################################
+
+##! Settings used by the GitLab application
+# gitlab_rails['orbit_enabled'] = true
+# gitlab_rails['orbit_grpc_endpoint'] = 'localhost:50054'
+
+##! Shared secret used to sign JWTs for authenticating to the Orbit gRPC service.
+##! Generated when orbit_enabled is true and no value is set here. Base64 encoded and exactly
+##! 32 bytes long. When the service runs in a separate Kubernetes cluster, copy the generated
+##! file (/var/opt/gitlab/gitlab-rails/etc/gitlab_knowledge_graph_secret) into the cluster's
+##! secret store.
+##! On multi-node installations every Rails node must use the same value. Either set it here on
+##! every node, or generate it on one node and sync /etc/gitlab/gitlab-secrets.json to the other
+##! nodes before their first reconfigure. Changing it later requires a coordinated rotation
+##! across every Rails node and Orbit. Docs: https://docs.gitlab.com/orbit/
+# gitlab_rails['orbit_secret'] = nil
+
+################################################################################
 ## Registry NGINX
 ################################################################################
 
