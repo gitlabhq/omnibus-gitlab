@@ -303,6 +303,16 @@ RSpec.describe Gitlab::Deprecations do
       expect(messages).to include(a_string_matching(/mattermost has been deprecated since 19\.0 and was removed in 19\.0/))
     end
 
+    it 'does not auto-vivify mattermost.enable on a live node attribute Mash when mattermost is unset' do
+      node = Chef::Node.new
+      existing_config = node.normal
+
+      described_class.check_config('18.11', existing_config, :removal)
+      described_class.check_config('18.11', existing_config, :deprecation)
+
+      expect(existing_config.dig('mattermost', 'enable')).to be_falsey
+    end
+
     it 'does not report stale secrets-only Mattermost cached state as removed in 19.0' do
       config = {
         'mattermost' => {
