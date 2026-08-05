@@ -104,8 +104,23 @@ default:
 
 before_script:
   - |
-    # Write the gitlab.com auth config to the file GIT_CONFIG_GLOBAL points at,
-    # so every git invocation -- including those omnibus spawns -- honours it.
+    # Write git config to the file GIT_CONFIG_GLOBAL points at, so every git
+    # invocation -- including those omnibus spawns -- honors it. The [user]
+    # identity is a fallback for omnibus' git cache, which only writes a --local
+    # identity when first created, and is needed on every server.
+    mkdir -p "$(dirname "${GIT_CONFIG_GLOBAL}")"
+    cat > "${GIT_CONFIG_GLOBAL}" <<'GITCFG'
+    [user]
+        name = GitLab Distribution Team
+        email = distribution-be@gitlab.com
+    GITCFG
+    # Authenticate gitlab.com clones with the job token so they use the higher
+    # authenticated Gitaly rate limit. Only do this on gitlab.com: CI_JOB_TOKEN
+    # is issued by (and only valid on) the server running the pipeline, so on
+    # dev.gitlab.org sending it to gitlab.com is rejected with HTTP 401. Guarding
+    # on CI_SERVER_HOST keeps dev.gitlab.org (and other mirrors) cloning
+    # gitlab.com anonymously, as they did before.
+    #
     # This must run in before_script (not `variables:`): GitLab expands
     # ${CI_JOB_TOKEN} when resolving variables, before the job token exists, so
     # the credential helper must be written here where the token is available.
@@ -113,18 +128,15 @@ before_script:
     # helper's shell expands it at clone time -- the token never lands in the
     # file on disk. proactiveAuth is path-scoped to gitlab-org/gitlab (the only
     # project the CI job token is allowlisted for) so other gitlab.com mirrors
-    # keep cloning anonymously. The [user] identity is a fallback for omnibus'
-    # git cache, which only writes a --local identity when first created.
-    mkdir -p "$(dirname "${GIT_CONFIG_GLOBAL}")"
-    cat > "${GIT_CONFIG_GLOBAL}" <<'GITCFG'
+    # keep cloning anonymously.
+    if [ "${CI_SERVER_HOST}" = "gitlab.com" ]; then
+      cat >> "${GIT_CONFIG_GLOBAL}" <<'GITCFG'
     [credential "https://gitlab.com"]
         helper = "!f() { echo username=gitlab-ci-token; echo \"password=${CI_JOB_TOKEN}\"; }; f"
     [http "https://gitlab.com/gitlab-org/gitlab.git"]
         proactiveAuth = basic
-    [user]
-        name = GitLab Distribution Team
-        email = distribution-be@gitlab.com
     GITCFG
+    fi
     chmod 600 "${GIT_CONFIG_GLOBAL}"
   - echo "PIPELINE_TYPE detected as ${PIPELINE_TYPE}"
   # Exit early if building on an OS for which we don't provide the specified
