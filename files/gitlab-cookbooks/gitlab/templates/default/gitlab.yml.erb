@@ -185,6 +185,18 @@ production: &base
     # Defaults to "https://graph.microsoft.com".
     graph_endpoint: <%= @microsoft_graph_mailer_graph_endpoint %>
 
+  # Allows delivery of emails using the Amazon SES API.
+  # To authenticate via an IAM role, provide the role_arn. Credentials are obtained via STS.
+  # To authenticate via static keys, provide the access_key_id and secret_access_key.
+  # When all of them are omitted, it falls back to Aws::CredentialProviderChain which checks credentials
+  # listed in https://docs.aws.amazon.com/sdk-for-ruby/v3/developer-guide/credential-providers.html#credchain
+  amazon_ses_mailer:
+    enabled: <%= @amazon_ses_mailer_enabled %>
+    region: <%= quote(@amazon_ses_mailer_region) %>
+    role_arn: <%= quote(@amazon_ses_mailer_role_arn) %>
+    access_key_id: <%= quote(@amazon_ses_mailer_access_key_id) %>
+    secret_access_key: <%= quote(@amazon_ses_mailer_secret_access_key) %>
+
   ## Reply by email
   # Allow users to comment on issues and merge requests by replying to notification emails.
   # For documentation on how to set this up, see https://docs.gitlab.com/ee/administration/reply_by_email.html
