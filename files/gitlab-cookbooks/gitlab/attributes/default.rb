@@ -338,6 +338,12 @@ default['gitlab']['gitlab_rails']['microsoft_graph_mailer_client_secret'] = nil
 default['gitlab']['gitlab_rails']['microsoft_graph_mailer_azure_ad_endpoint'] = nil
 default['gitlab']['gitlab_rails']['microsoft_graph_mailer_graph_endpoint'] = nil
 
+default['gitlab']['gitlab_rails']['amazon_ses_mailer_enabled'] = false
+default['gitlab']['gitlab_rails']['amazon_ses_mailer_region'] = nil
+default['gitlab']['gitlab_rails']['amazon_ses_mailer_role_arn'] = nil
+default['gitlab']['gitlab_rails']['amazon_ses_mailer_access_key_id'] = nil
+default['gitlab']['gitlab_rails']['amazon_ses_mailer_secret_access_key'] = nil
+
 default['gitlab']['gitlab_rails']['kerberos_enabled'] = nil
 default['gitlab']['gitlab_rails']['kerberos_keytab'] = nil
 default['gitlab']['gitlab_rails']['kerberos_service_principal_name'] = nil

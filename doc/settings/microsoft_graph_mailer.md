@@ -30,6 +30,10 @@ If you would rather send application emails using [Microsoft Graph API](https://
 with [OAuth 2.0 client credentials flow](https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-client-creds-grant-flow),
 add the following configuration information to `/etc/gitlab/gitlab.rb` and run `gitlab-ctl reconfigure`.
 
+> [!warning]
+> If you enabled SMTP, set `gitlab_rails['smtp_enable']` to `false`. When SMTP is enabled,
+> it overrides the Microsoft Graph mailer, and GitLab sends email through SMTP.
+
 ```ruby
 # The originating email address for outgoing mail
 gitlab_rails['gitlab_email_from'] = '<YOUR_ACCOUNT_EMAIL>'

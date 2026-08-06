@@ -309,6 +309,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['microsoft_graph_mailer_azure_ad_endpoint'] = "https://login.microsoftonline.com"
 # gitlab_rails['microsoft_graph_mailer_graph_endpoint'] = "https://graph.microsoft.com"
 
+### Amazon SES Mailer
+###! Allows delivery of emails using the Amazon SES API.
+###! Docs: https://docs.gitlab.com/omnibus/settings/amazon_ses_mailer.html
+# gitlab_rails['amazon_ses_mailer_enabled'] = false
+# gitlab_rails['amazon_ses_mailer_region'] = "YOUR-AWS-REGION"
+# gitlab_rails['amazon_ses_mailer_role_arn'] = "arn:aws:iam::123456789012:role/your-role"
+# gitlab_rails['amazon_ses_mailer_access_key_id'] = "YOUR-AWS-ACCESS-KEY-ID"
+# gitlab_rails['amazon_ses_mailer_secret_access_key'] = "YOUR-AWS-SECRET-ACCESS-KEY"
+
 ################################################################
 ## Reply by email
 ################################################################
