@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.11.9 (2026-08-06)
+
+### Fixed (1 change)
+
+- [Do not enable Mattermost by accident](gitlab-org/omnibus-gitlab@eb4afadb4605547bd65788f39f0b396e99ebb622) ([merge request](gitlab-org/omnibus-gitlab!9650))
+
 ## 18.11.8 (2026-08-03)
 
 ### Fixed (1 change)
