@@ -31,7 +31,11 @@ if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
   source Build::UBT.source_args("icu4c", "#{display_version}-3ubt", "5e844e49a4735f6cbd0262eaab3dbc94d34a55d04e549b95a0117d51c3c4c105", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
-  source git: version.remote
+  # libicu is pinned to an exact release tag and derives its version from the
+  # source tree (not `git describe`), so a shallow fetch is safe here. This
+  # avoids cloning the mirror's large historical blobs on every build.
+  # Requires an omnibus gem that supports the `depth` source option.
+  source git: version.remote, depth: 1
 
   build do
     env = with_standard_compiler_flags(with_embedded_path)
