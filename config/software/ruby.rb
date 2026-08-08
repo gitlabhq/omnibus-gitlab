@@ -24,11 +24,17 @@ skip_transitive_dependency_licensing true
 
 # Follow the Ruby upgrade guide when changing the ruby version
 # link: https://docs.gitlab.com/ee/development/ruby_upgrade.html
-current_ruby_version = Gitlab::Util.get_env('RUBY_VERSION') || '3.3.11'
+#
+# The pinned versions and their sha256 checksums live in
+# config/software_versions.yml and are read through Gitlab::Version. Update
+# them with `rake "software_versions:update[ruby,<version>]"`.
+ruby_versions = Gitlab::Version.new('ruby')
+
+current_ruby_version = Gitlab::Util.get_env('RUBY_VERSION') || ruby_versions.fetch('current')
 
 # NOTE: When this value is updated, flip `USE_NEXT_RUBY_VERSION_IN_*` variable
 # to false to avoid surprises.
-next_ruby_version = Gitlab::Util.get_env('NEXT_RUBY_VERSION') || '3.4.9'
+next_ruby_version = Gitlab::Util.get_env('NEXT_RUBY_VERSION') || ruby_versions.fetch('next')
 
 # MRs targeting stable branches should use current Ruby version and ignore next
 # Ruby version. Also, we provide `USE_SPECIFIED_RUBY_VERSION` variable to force
@@ -66,24 +72,11 @@ dependency 'libyaml'
 dependency 'libiconv'
 dependency 'jemalloc'
 
-version('3.1.5') { source sha256: '3685c51eeee1352c31ea039706d71976f53d00ab6d77312de6aa1abaf5cda2c5' }
-version('3.2.3') { source sha256: 'af7f1757d9ddb630345988139211f1fd570ff5ba830def1cc7c468ae9b65c9ba' }
-version('3.2.4') { source sha256: 'c72b3c5c30482dca18b0f868c9075f3f47d8168eaf626d4e682ce5b59c858692' }
-version('3.2.5') { source sha256: 'ef0610b498f60fb5cfd77b51adb3c10f4ca8ed9a17cb87c61e5bea314ac34a16' }
-version('3.2.6') { source sha256: 'd9cb65ecdf3f18669639f2638b63379ed6fbb17d93ae4e726d4eb2bf68a48370' }
-version('3.2.8') { source sha256: '77acdd8cfbbe1f8e573b5e6536e03c5103df989dc05fa68c70f011833c356075' }
-version('3.2.9') { source sha256: 'abbad98db9aeb152773b0d35868e50003b8c467f3d06152577c4dfed9d88ed2a' }
-version('3.3.6') { source sha256: '8dc48fffaf270f86f1019053f28e51e4da4cce32a36760a0603a9aee67d7fd8d' }
-version('3.3.7') { source sha256: '9c37c3b12288c7aec20ca121ce76845be5bb5d77662a24919651aaf1d12c8628' }
-version('3.3.8') { source sha256: '5ae28a87a59a3e4ad66bc2931d232dbab953d0aa8f6baf3bc4f8f80977c89cab' }
-version('3.3.9') { source sha256: 'd1991690a4e17233ec6b3c7844c1e1245c0adce3e00d713551d0458467b727b1' }
-version('3.3.10') { source sha256: 'b555baa467a306cfc8e6c6ed24d0d27b27e9a1bed1d91d95509859eac6b0e928' }
-version('3.3.11') { source sha256: '59f0fafb1a59a05dc3765117af3fa68e153eb48254708549f321c1e9e078d7a0' }
-version('3.4.2') { source sha256: '41328ac21f2bfdd7de6b3565ef4f0dd7543354d37e96f157a1552a6bd0eb364b' }
-version('3.4.5') { source sha256: '1d88d8a27b442fdde4aa06dc99e86b0bbf0b288963d8433112dd5fac798fd5ee' }
-version('3.4.7') { source sha256: '23815a6d095696f7919090fdc3e2f9459b2c83d57224b2e446ce1f5f7333ef36' }
-version('3.4.8') { source sha256: '53c4ddad41fbb6189f1f5ee0db57a51d54bd1f87f8755b3d68604156a35b045b' }
-version('3.4.9') { source sha256: '7bb4d4f5e807cc27251d14d9d6086d182c5b25875191e44ab15b709cd7a7dd9c' }
+# Declare only the versions this build could actually select (current and
+# next). Checksums come from config/software_versions.yml.
+[current_ruby_version, next_ruby_version].uniq.each do |pinned_version|
+  version(pinned_version) { source sha256: ruby_versions.source_sha256(pinned_version) }
+end
 
 source url: "https://cache.ruby-lang.org/pub/ruby/#{version.match(/^(\d+\.\d+)/)[0]}/ruby-#{version}.tar.gz"
 

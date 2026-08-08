@@ -17,7 +17,9 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/ohai_helper.rb"
 
 name 'libffi'
 
-default_version '3.2.1'
+# Pinned version and checksums live in config/software_versions.yml.
+libffi_version = Gitlab::Version.new('libffi')
+default_version libffi_version.upstream_version
 
 license 'MIT'
 license_file 'LICENSE'
@@ -28,10 +30,10 @@ skip_transitive_dependency_licensing true
 dependency 'libtool'
 
 if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
-  source Build::UBT.source_args(name, "#{default_version}-3ubt", "d001ed3b88bfcc54548a51d79d8836c6880e86575ffb9125f76ff17db43a072f", OhaiHelper.arch)
+  source Build::UBT.source_args(name, libffi_version.ubt_version, libffi_version.ubt_sha256, OhaiHelper.arch)
   build(&Build::UBT.install)
 else
-  version('3.2.1') { source sha256: 'd06ebb8e1d9a22d19e38d63fdb83954253f39bedc5d46232a05645685722ca37' }
+  version(libffi_version.upstream_version) { source sha256: libffi_version.source_sha256 }
 
   source url: "https://sourceware.org/pub/libffi/libffi-#{version}.tar.gz"
 

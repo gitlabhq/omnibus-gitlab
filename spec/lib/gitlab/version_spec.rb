@@ -365,6 +365,143 @@ RSpec.describe Gitlab::Version do
     end
   end
 
+  describe '.load_versions_file' do
+    it 'reads every scalar as a String, without coercing versions to floats' do
+      require 'tempfile'
+
+      file = Tempfile.new(['versions', '.yml'])
+      file.write(<<~YAML)
+        go:
+          version: 1.20
+          patch: 3.4.9
+      YAML
+      file.close
+
+      data = described_class.load_versions_file(file.path)
+
+      expect(data.dig('go', 'version')).to eq('1.20')
+      expect(data.dig('go', 'version')).to be_a(String)
+      expect(data.dig('go', 'patch')).to eq('3.4.9')
+    ensure
+      file&.unlink
+    end
+  end
+
+  describe 'software_versions.yml accessors' do
+    let(:software_versions) do
+      {
+        'ruby' => {
+          'current' => '3.3.11',
+          'next' => '3.4.9',
+          'checksums' => {
+            '3.3.11' => 'aaa',
+            '3.4.9' => 'bbb'
+          }
+        },
+        'libffi' => {
+          'version' => '3.2.1',
+          'sha256' => 'ccc',
+          'ubt' => { 'revision' => '3ubt', 'sha256' => 'ddd' }
+        },
+        'libyaml' => {
+          'version' => '0.2.5',
+          'sha256' => 'eee',
+          'env_var' => 'LIBYAML_VERSION'
+        }
+      }
+    end
+
+    before do
+      allow(described_class).to receive(:software_versions).and_return(software_versions)
+    end
+
+    describe '#[]' do
+      it 'reads raw values for components with bespoke policy' do
+        subject = described_class.new('ruby')
+
+        expect(subject['current']).to eq('3.3.11')
+        expect(subject['next']).to eq('3.4.9')
+      end
+
+      it 'returns nil for an absent key' do
+        expect(described_class.new('ruby')['nope']).to be_nil
+      end
+    end
+
+    describe '#fetch' do
+      it 'reads a required value' do
+        expect(described_class.new('ruby').fetch('next')).to eq('3.4.9')
+      end
+
+      it 'raises a descriptive error when a required key is missing' do
+        expect { described_class.new('libffi').fetch('next') }
+          .to raise_error(KeyError, /'libffi' is missing required key 'next'/)
+      end
+    end
+
+    describe '#upstream_version' do
+      it 'returns the pinned version' do
+        expect(described_class.new('libffi').upstream_version).to eq('3.2.1')
+      end
+
+      it 'raises a helpful error for a checksums-map component' do
+        expect { described_class.new('ruby').upstream_version }
+          .to raise_error(KeyError, /'ruby' uses a checksums map.*read its 'current'\/'next' pins via #\[\]/)
+      end
+
+      it 'lets an env var override the pin' do
+        stub_env_var('LIBYAML_VERSION', '0.2.6')
+
+        expect(described_class.new('libyaml').upstream_version).to eq('0.2.6')
+      end
+
+      it 'ignores the env var when unset' do
+        stub_env_var('LIBYAML_VERSION', nil)
+
+        expect(described_class.new('libyaml').upstream_version).to eq('0.2.5')
+      end
+    end
+
+    describe '#source_sha256' do
+      it 'returns the sha256 for a single-version component' do
+        expect(described_class.new('libffi').source_sha256).to eq('ccc')
+      end
+
+      it 'looks up the sha256 in a checksums map' do
+        subject = described_class.new('ruby')
+
+        expect(subject.source_sha256('3.3.11')).to eq('aaa')
+        expect(subject.source_sha256('3.4.9')).to eq('bbb')
+      end
+
+      it 'raises a helpful error for an unknown version' do
+        expect { described_class.new('ruby').source_sha256('9.9.9') }
+          .to raise_error(KeyError, /No sha256 for ruby 9.9.9/)
+      end
+    end
+
+    describe '#ubt_version and #ubt_sha256' do
+      subject { described_class.new('libffi') }
+
+      it 'returns the pre-built bundle version and checksum' do
+        expect(subject.ubt_version).to eq('3.2.1-3ubt')
+        expect(subject.ubt_sha256).to eq('ddd')
+      end
+
+      it 'raises when the component has no ubt entry' do
+        expect { described_class.new('ruby').ubt_version }
+          .to raise_error(KeyError, /No 'ubt' entry for 'ruby'/)
+      end
+    end
+
+    describe '#software_data' do
+      it 'raises a helpful error for an unknown component' do
+        expect { described_class.new('nope').software_data }
+          .to raise_error(KeyError, /No entry for 'nope'/)
+      end
+    end
+  end
+
   def mock_sources_channel(channel = 'remote')
     allow(::Gitlab::Version).to receive(:sources_channel).and_return(channel)
   end
