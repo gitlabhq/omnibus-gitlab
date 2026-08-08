@@ -27,7 +27,12 @@ gitlab_bundle_gemfile = Gitlab::Util.get_env('GITLAB_BUNDLE_GEMFILE') || 'Gemfil
 name 'gitlab-rails'
 
 default_version version.print
-source git: version.remote
+# Shallow-fetch the pinned revision instead of cloning the full history of
+# the GitLab repo, which is one of the largest sources of git egress. The
+# fetcher resolves the version to a SHA and fetches it at this depth, so this
+# works for tag, branch, and SHA pins. Requires an omnibus gem with the
+# `depth` source option (>= 9.0.19.6).
+source git: version.remote, depth: 1
 
 combined_licenses_file = "#{install_dir}/embedded/lib/ruby/gems/gitlab-gem-licenses"
 
