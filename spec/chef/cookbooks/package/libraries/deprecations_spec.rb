@@ -353,6 +353,16 @@ RSpec.describe Gitlab::Deprecations do
       expect(messages).to include(a_string_matching(/mattermost has been deprecated since 19\.0 and was removed in 19\.0/))
     end
 
+    it 'does not auto-vivify mattermost.enable on a live node attribute Mash when mattermost is unset' do
+      node = Chef::Node.new
+      existing_config = node.normal
+
+      described_class.check_config('18.11', existing_config, :removal)
+      described_class.check_config('18.11', existing_config, :deprecation)
+
+      expect(existing_config.dig('mattermost', 'enable')).to be_falsey
+    end
+
     it 'does not report stale secrets-only Mattermost cached state as removed in 19.0' do
       config = {
         'mattermost' => {
@@ -395,6 +405,66 @@ RSpec.describe Gitlab::Deprecations do
     it 'is silent when no spamcheck config is present' do
       messages = described_class.check_config('19.0', {}, :removal)
       expect(messages).not_to include(a_string_matching(/spamcheck/))
+    end
+  end
+
+  describe 'does not mutate the underlying node attributes (auto-vivification regression)' do
+    # Regression test for a bug where `[]` reads on a live Chef::Node::VividMash
+    # (as opposed to `dig`) silently created missing keys (eg. mattermost['enable'] => {}).
+    # Because `Gitlab[:node] = node` in `package::config` makes that VividMash the actual
+    # live attributes of the node being converged, such a "read" is really a write: it can
+    # win against Chef attribute-precedence defaults and silently turn on features nobody
+    # configured. See omnibus-gitlab!9650.
+    before do
+      allow(Gitlab::Deprecations).to receive(:list).and_call_original
+    end
+
+    it 'leaves an empty node totally untouched after checking all known deprecations' do
+      node = Chef::Node.new
+      existing_config = node.normal
+
+      before_snapshot = Chef::JSONCompat.to_json(node.normal)
+
+      described_class.check_config('99.0', existing_config, :removal)
+      described_class.check_config('99.0', existing_config, :deprecation)
+
+      after_snapshot = Chef::JSONCompat.to_json(node.normal)
+
+      expect(after_snapshot).to eq(before_snapshot)
+    end
+
+    it 'does not vivify any of the individual config_keys paths checked by check_config' do
+      # `Gitlab::Deprecations.list` only covers the data-driven deprecation
+      # table. `additional_deprecations` also hardcodes config paths (eg.
+      # `remove_mattermost`'s `'mattermost'`/`'enable'`) that never appear in
+      # `.list`, so we check both sources here to avoid a blind spot.
+      hardcoded_paths = [
+        %w(mattermost),
+        %w(mattermost enable),
+        %w(registry notifications),
+        %w(gitlab git_data_dirs),
+        %w(gitaly configuration git use_bundled_binaries),
+        %w(gitaly configuration git bin_path),
+      ]
+
+      list_paths = described_class.list.flat_map do |deprecation|
+        config_keys = deprecation[:config_keys]
+        config_keys.each_index.map { |i| config_keys[0..i] }
+      end
+
+      node = Chef::Node.new
+      existing_config = node.normal
+
+      described_class.check_config('99.0', existing_config, :removal)
+      described_class.check_config('99.0', existing_config, :deprecation)
+
+      (hardcoded_paths + list_paths).uniq.each do |partial_path|
+        expect(existing_config.dig(*partial_path)).to(
+          be_falsey,
+          "expected #{partial_path.inspect} to remain unset after checking deprecations, " \
+            "but got #{existing_config.dig(*partial_path).inspect}"
+        )
+      end
     end
   end
 

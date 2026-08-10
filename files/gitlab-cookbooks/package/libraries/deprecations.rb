@@ -165,9 +165,11 @@ module Gitlab
       end
 
       def remove_mattermost(incoming_version, existing_config, type, deprecated_version, removed_version)
+        return [] unless existing_config.key?('mattermost')
+
         config = existing_config['mattermost']
         return [] unless config.is_a?(Hash)
-        return [] unless config['enable'] == true
+        return [] unless config.key?('enable') && config['enable'] == true
 
         note = "Bundled Mattermost has been removed from the Linux package in 19.0; `mattermost[...]` keys are no longer supported. Deploy Mattermost separately and point GitLab at it with `gitlab_rails['mattermost_host']`. See https://docs.gitlab.com/integration/mattermost/#running-gitlab-mattermost-on-its-own-server for setup instructions."
 
