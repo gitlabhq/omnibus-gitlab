@@ -1440,6 +1440,46 @@ RSpec.describe 'gitlab::gitlab-rails' do
     let(:gitlab_yml_file_content) { ChefSpec::Renderer.new(chef_run, gitlab_yml).content }
     let(:parsed_gitlab_yml) { YAML.safe_load(gitlab_yml_file_content, aliases: true, symbolize_names: true) }
 
+    describe 'Orbit' do
+      context 'with default values' do
+        it 'renders knowledge_graph as disabled' do
+          expect(parsed_gitlab_yml[:production][:knowledge_graph][:enabled]).to be false
+          expect(parsed_gitlab_yml[:production][:knowledge_graph][:grpc_endpoint]).to be_nil
+        end
+      end
+
+      context 'when enabled with a custom grpc endpoint' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              orbit_enabled: true,
+              orbit_grpc_endpoint: 'orbit.example.com:50054'
+            }
+          )
+        end
+
+        it 'renders the knowledge_graph settings' do
+          expect(parsed_gitlab_yml[:production][:knowledge_graph][:enabled]).to be true
+          expect(parsed_gitlab_yml[:production][:knowledge_graph][:grpc_endpoint]).to eq('orbit.example.com:50054')
+        end
+      end
+
+      context 'with an IPv6 grpc endpoint' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              orbit_enabled: true,
+              orbit_grpc_endpoint: '[2001:db8::1]:50054'
+            }
+          )
+        end
+
+        it 'renders the endpoint as a quoted string' do
+          expect(parsed_gitlab_yml[:production][:knowledge_graph][:grpc_endpoint]).to eq('[2001:db8::1]:50054')
+        end
+      end
+    end
+
     # NOTE: Test if we pass proper notifications to other resources
     describe 'rails cache management' do
       before do
@@ -2267,6 +2307,59 @@ RSpec.describe 'gitlab::gitlab-rails' do
           expect(templatesymlink).to notify('runit_service[gitlab-kas]').to(:restart).delayed
           expect(templatesymlink).to notify('runit_service[puma]').to(:restart).delayed
           expect(templatesymlink).to notify('sidekiq_service[sidekiq]').to(:restart).delayed
+        end
+      end
+    end
+
+    describe 'gitlab_knowledge_graph_secret' do
+      let(:templatesymlink) { chef_run.templatesymlink('Create a gitlab_knowledge_graph_secret and create a symlink to Rails root') }
+
+      it 'does not create the template when Orbit is disabled' do
+        expect(chef_run).not_to create_templatesymlink('Create a gitlab_knowledge_graph_secret and create a symlink to Rails root')
+      end
+
+      context 'when Orbit is enabled' do
+        cached(:chef_run) do
+          RSpec::Mocks.with_temporary_scope do
+            stub_gitlab_rb(
+              gitlab_rails: { orbit_enabled: true }
+            )
+          end
+
+          ChefSpec::SoloRunner.new.converge('gitlab::default')
+        end
+
+        it 'creates the template' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab_knowledge_graph_secret and create a symlink to Rails root').with(
+            owner: 'root',
+            group: 'root',
+            mode: '0644'
+          )
+        end
+
+        it 'template triggers notifications' do
+          expect(templatesymlink).to notify('runit_service[puma]').to(:restart).delayed
+          expect(templatesymlink).to notify('sidekiq_service[sidekiq]').to(:restart).delayed
+        end
+      end
+
+      context 'with a specific orbit_secret' do
+        let(:orbit_secret) { SecureRandom.base64(32) }
+
+        cached(:chef_run) do
+          RSpec::Mocks.with_temporary_scope do
+            stub_gitlab_rb(
+              gitlab_rails: { orbit_secret: orbit_secret }
+            )
+          end
+
+          ChefSpec::SoloRunner.new.converge('gitlab::default')
+        end
+
+        it 'renders the correct node attribute' do
+          expect(chef_run).to create_templatesymlink('Create a gitlab_knowledge_graph_secret and create a symlink to Rails root').with_variables(
+            secret_token: orbit_secret
+          )
         end
       end
     end

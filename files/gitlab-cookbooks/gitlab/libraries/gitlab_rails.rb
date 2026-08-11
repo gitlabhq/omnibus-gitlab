@@ -73,7 +73,7 @@ module GitlabRails
       Gitlab['gitlab_rails']['initial_root_password'] = ENV['GITLAB_ROOT_PASSWORD'] || Gitlab['gitlab_rails']['initial_root_password']
     end
 
-    def parse_secrets
+    def parse_secrets # rubocop:disable Metrics/AbcSize
       transform_secrets
 
       # Note: If you add another secret to generate here make sure it gets written to disk in SecretsHelper.write_to_gitlab_secrets
@@ -82,6 +82,7 @@ module GitlabRails
       Gitlab['gitlab_rails']['otp_key_base'] ||= SecretsHelper.generate_hex(64)
       Gitlab['gitlab_rails']['encrypted_settings_key_base'] ||= SecretsHelper.generate_hex(64)
       Gitlab['gitlab_rails']['openid_connect_signing_key'] ||= SecretsHelper.generate_rsa(4096).to_pem
+      parse_orbit_secret
 
       # 1. We set the following two keys as an array to support keys rotation.
       #    The last key in the array is always used to encrypt data:
@@ -108,6 +109,12 @@ module GitlabRails
       Gitlab['gitlab_rails']['store_initial_root_password'] = true if Gitlab['gitlab_rails']['store_initial_root_password'].nil?
     end
 
+    def parse_orbit_secret
+      return unless Gitlab['gitlab_rails']['orbit_enabled']
+
+      Gitlab['gitlab_rails']['orbit_secret'] ||= SecretsHelper.generate_base64(32)
+    end
+
     def validate_secrets
       transform_secrets
 
@@ -126,6 +133,20 @@ module GitlabRails
       end
 
       raise 'initial_root_password: Length is too short, minimum is 8 characters' if Gitlab['gitlab_rails']['initial_root_password'] && Gitlab['gitlab_rails']['initial_root_password'].length < 8
+
+      validate_orbit_secret
+    end
+
+    def validate_orbit_secret
+      return unless Gitlab['gitlab_rails']['orbit_secret']
+
+      begin
+        orbit_secret = Base64.strict_decode64(Gitlab['gitlab_rails']['orbit_secret'])
+      rescue ArgumentError
+        raise "gitlab_rails['orbit_secret'] must be a valid base64-encoded string of exactly 32 bytes"
+      end
+
+      raise "gitlab_rails['orbit_secret'] should be exactly 32 bytes" if orbit_secret.length != 32
     end
 
     def parse_external_url # rubocop:disable Metrics/AbcSize

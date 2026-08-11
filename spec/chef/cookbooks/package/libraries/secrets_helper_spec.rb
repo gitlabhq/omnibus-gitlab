@@ -113,6 +113,11 @@ RSpec.describe 'secrets' do
         kas_shared_secret = new_secrets['gitlab_kas']['api_secret_key']
         expect(Base64.strict_decode64(kas_shared_secret).length).to eq(32)
       end
+
+      it 'does not generate a secret for Orbit when it is disabled' do
+        expect(new_secrets['gitlab_rails']).to have_key('orbit_secret')
+        expect(new_secrets['gitlab_rails']['orbit_secret']).to be_nil
+      end
     end
 
     context 'gitlab.rb provided gitlab_pages.api_secret_key' do
@@ -155,6 +160,46 @@ RSpec.describe 'secrets' do
       end
     end
 
+    context 'when Orbit is enabled' do
+      before do
+        allow(Gitlab).to receive(:[]).and_call_original
+      end
+
+      it 'generates an appropriate secret for Orbit' do
+        stub_gitlab_rb(gitlab_rails: { orbit_enabled: true })
+
+        chef_run
+
+        expect(Base64.strict_decode64(new_secrets['gitlab_rails']['orbit_secret']).length).to eq(32)
+      end
+    end
+
+    context 'gitlab.rb provided gitlab_rails.orbit_secret' do
+      before do
+        allow(Gitlab).to receive(:[]).and_call_original
+      end
+
+      it 'fails when provided gitlab_rails.orbit_secret is not 32 bytes' do
+        stub_gitlab_rb(gitlab_rails: { orbit_secret: SecureRandom.base64(16) })
+
+        expect { chef_run }.to raise_error(RuntimeError, /gitlab_rails\['orbit_secret'\] should be exactly 32 bytes/)
+      end
+
+      it 'accepts provided gitlab_rails.orbit_secret when it is 32 bytes' do
+        orbit_secret = SecureRandom.base64(32)
+        stub_gitlab_rb(gitlab_rails: { orbit_secret: orbit_secret })
+
+        expect { chef_run }.not_to raise_error
+        expect(new_secrets['gitlab_rails']['orbit_secret']).to eq(orbit_secret)
+      end
+
+      it 'fails with a descriptive error when orbit_secret is not valid base64' do
+        stub_gitlab_rb(gitlab_rails: { orbit_secret: 'not-valid-base64!!!' })
+
+        expect { chef_run }.to raise_error(RuntimeError, /must be a valid base64-encoded string/)
+      end
+    end
+
     context 'when there are existing secrets in /etc/gitlab/gitlab-secrets.json' do
       before do
         allow(SecretsHelper).to receive(:system)
@@ -175,6 +220,19 @@ RSpec.describe 'secrets' do
 
         it 'falls back further to generating new secrets' do
           expect(new_secrets['gitlab_rails']['otp_key_base']).to match(HEX_KEY)
+        end
+      end
+
+      context 'when an Orbit secret exists but Orbit is disabled' do
+        let(:orbit_secret) { Base64.strict_encode64('x' * 32) }
+
+        before do
+          stub_gitlab_secrets_json(gitlab_rails: { orbit_secret: orbit_secret })
+          chef_run
+        end
+
+        it 'keeps the existing secret' do
+          expect(new_secrets['gitlab_rails']['orbit_secret']).to eq(orbit_secret)
         end
       end
 
