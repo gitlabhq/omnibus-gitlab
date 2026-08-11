@@ -32,7 +32,7 @@ if Build::Check.use_ubt?
   source Build::UBT.source_args(name, "#{display_version}-2ubt", "73ef7528f3eb2dd3a7507ce43ebcbd1a6843cd19bff575ff8e42e4ef74f61244", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
-  source git: version.remote
+  source git: version.remote, depth: 1
 
   # From https://www.nginx.com/resources/admin-guide/installing-nginx-open-source/
   # Runtime dependencies

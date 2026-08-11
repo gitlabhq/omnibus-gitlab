@@ -24,7 +24,7 @@ default_version version.print(false)
 license 'BSL-Hashicorp'
 license_file 'LICENSE'
 
-source git: version.remote
+source git: version.remote, depth: 1
 
 skip_transitive_dependency_licensing true
 

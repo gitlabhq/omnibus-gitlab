@@ -38,7 +38,7 @@ if Build::Check.use_ubt?
   source Build::UBT.source_args(name, ubt_version, "2c35b88e61227f5d6054670e1e091d67e8e537003ef56b72f1aff1434b9d9ab9", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
-  source git: version.remote
+  source git: version.remote, depth: 1
   build do
     env = with_standard_compiler_flags(with_embedded_path)
 
