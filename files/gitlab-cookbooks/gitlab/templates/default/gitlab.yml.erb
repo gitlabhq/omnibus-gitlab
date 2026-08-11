@@ -465,6 +465,11 @@ production: &base
     external_url: <%= @gitlab_kas_external_url %>
     external_k8s_proxy_url: <%= @gitlab_kas_external_k8s_proxy_url %>
 
+  ## Orbit / Knowledge Graph
+  knowledge_graph:
+    enabled: <%= @orbit_enabled %>
+    grpc_endpoint: <%= quote(@orbit_grpc_endpoint) %>
+
   ## Error Reporting and Logging with Sentry
   sentry:
     enabled: <%= @sentry_enabled %>

@@ -756,6 +756,13 @@ default['gitlab']['gitlab_rails']['gitlab_kas_internal_url'] = nil
 default['gitlab']['gitlab_rails']['gitlab_kas_external_k8s_proxy_url'] = nil
 
 ###
+# Orbit / Knowledge Graph
+###
+default['gitlab']['gitlab_rails']['orbit_enabled'] = false
+default['gitlab']['gitlab_rails']['orbit_grpc_endpoint'] = nil
+default['gitlab']['gitlab_rails']['orbit_secret'] = nil
+
+###
 # OpenBao
 ###
 default['gitlab']['gitlab_rails']['openbao'] = {}
