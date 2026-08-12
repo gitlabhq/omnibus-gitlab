@@ -3,6 +3,16 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.2.2 (2026-08-12)
+
+### Fixed (1 change)
+
+- [Add Knowledge Graph secret generation in Omnibus](gitlab-org/security/omnibus-gitlab@4e50a96c00156cb5e94ffedfd169f02ca596be36)
+
+### Changed (1 change)
+
+- [Revert "Update dependency jemalloc/jemalloc to v5.3.1"](gitlab-org/security/omnibus-gitlab@06a9e92f0dfa5287033ca7927e4f703ca851be71)
+
 ## 19.2.1 (2026-07-29)
 
 No changes.
