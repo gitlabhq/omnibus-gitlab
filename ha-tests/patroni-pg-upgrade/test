@@ -114,10 +114,15 @@ assert_patroni_api() {
 run_pg_upgrade() {
   local service="$1"
   local role_flag="$2"
-  # Run silently on success; re-run to surface output if it fails
-  if ! docker compose exec -T "$service" \
-    gitlab-ctl pg-upgrade "$role_flag" --no-wait --target-version=$TO_MAJOR > /dev/null 2>&1; then
-    docker compose exec -T "$service" gitlab-ctl pg-upgrade "$role_flag" --no-wait --target-version=$TO_MAJOR 2>&1 | sed "s/^/[$service] /" || true
+
+  # Capture output from a single run so a failure surfaces the real error.
+  # Re-running pg-upgrade would short-circuit on the partially-created
+  # data.<target> directory left behind by the failed attempt, hiding the
+  # true cause behind a misleading "directory is not empty" message.
+  local output
+  if ! output=$(docker compose exec -T "$service" \
+    gitlab-ctl pg-upgrade "$role_flag" --no-wait --target-version=$TO_MAJOR 2>&1); then
+    echo "$output" | sed "s/^/[$service] /"
     fail "$service: pg-upgrade to PG${TO_MAJOR} failed"
   fi
 }
