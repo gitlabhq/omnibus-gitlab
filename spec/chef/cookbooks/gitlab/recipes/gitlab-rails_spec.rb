@@ -1480,6 +1480,88 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
+    describe 'NATS' do
+      context 'with default values' do
+        it 'does not render the nats block' do
+          expect(parsed_gitlab_yml[:production][:nats]).to be_nil
+        end
+      end
+
+      context 'when configured with servers' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              nats: {
+                'servers' => ['tls://nats.example.com:4222'],
+                'connect_timeout' => 2,
+                'stream_replicas' => 3,
+                'tls' => {
+                  'ca_file' => '/path/to/ca.crt',
+                  'cert' => '/path/to/tls.crt',
+                  'key' => '/path/to/tls.key'
+                }
+              }
+            }
+          )
+        end
+
+        it 'renders the nats settings' do
+          nats = parsed_gitlab_yml[:production][:nats]
+
+          expect(nats[:servers]).to eq(['tls://nats.example.com:4222'])
+          expect(nats[:connect_timeout]).to eq(2)
+          expect(nats[:stream_replicas]).to eq(3)
+          expect(nats[:tls][:ca_file]).to eq('/path/to/ca.crt')
+          expect(nats[:tls][:cert]).to eq('/path/to/tls.crt')
+          expect(nats[:tls][:key]).to eq('/path/to/tls.key')
+        end
+      end
+
+      context 'when configured with servers only' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              nats: {
+                'servers' => ['tls://nats.example.com:4222']
+              }
+            }
+          )
+        end
+
+        it 'omits optional keys that are not set' do
+          nats = parsed_gitlab_yml[:production][:nats]
+
+          expect(nats[:servers]).to eq(['tls://nats.example.com:4222'])
+          expect(nats).not_to have_key(:connect_timeout)
+          expect(nats).not_to have_key(:stream_replicas)
+          expect(nats).not_to have_key(:tls)
+        end
+      end
+
+      context 'when configured with a partial tls sub-block' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              nats: {
+                'servers' => ['tls://nats.example.com:4222'],
+                'tls' => {
+                  'ca_file' => '/path/to/ca.crt'
+                }
+              }
+            }
+          )
+        end
+
+        it 'renders only the tls keys that are set' do
+          nats = parsed_gitlab_yml[:production][:nats]
+
+          expect(nats[:tls][:ca_file]).to eq('/path/to/ca.crt')
+          expect(nats[:tls]).not_to have_key(:cert)
+          expect(nats[:tls]).not_to have_key(:key)
+        end
+      end
+    end
+
     # NOTE: Test if we pass proper notifications to other resources
     describe 'rails cache management' do
       before do

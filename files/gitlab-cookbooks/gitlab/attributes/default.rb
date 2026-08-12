@@ -691,6 +691,13 @@ default['gitlab']['gitlab_rails']['cell'] = {
   }
 }
 
+default['gitlab']['gitlab_rails']['nats'] = {
+  'servers' => [],
+  'connect_timeout' => nil,
+  'stream_replicas' => nil,
+  'tls' => {}
+}
+
 default['gitlab']['gitlab_rails']['session_store_session_cookie_token_prefix'] = ''
 
 default['gitlab']['gitlab_rails']['redis_yml_override'] = nil

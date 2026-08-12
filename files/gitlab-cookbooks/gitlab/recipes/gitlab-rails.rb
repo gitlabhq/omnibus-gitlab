@@ -462,7 +462,8 @@ templatesymlink "Create a gitlab.yml and create a symlink to Rails root" do
       mailroom_internal_api_url: mailroom_helper.internal_api_url,
       has_jh_cookbook: has_jh_cookbook,
       gitaly_max_attempts: gitaly_client_max_attempts,
-      gitaly_max_backoff: gitaly_client_max_backoff
+      gitaly_max_backoff: gitaly_client_max_backoff,
+      nats_settings: GitlabRails.nats_settings
     )
   )
   dependent_services.each { |svc| notifies :restart, svc }
