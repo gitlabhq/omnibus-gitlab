@@ -131,19 +131,30 @@ wait_for_patroni_endpoint() {
   local service="$1"
   local endpoint="$2"
   local max_attempts="${3:-120}"
+  # Require several consecutive 200s before declaring success. Right after an
+  # upgrade Patroni restarts/reinitialises the node, so the endpoint can flap
+  # 200 -> 503 within a second. A single 200 is not enough to prove the node
+  # has settled into a stable running state.
+  local required_streak="${4:-3}"
   local attempt=0
+  local streak=0
 
   log "Waiting for $service Patroni API $endpoint..."
   while true; do
     local http_code
     http_code=$(docker compose exec -T "$service" \
       curl -s -o /dev/null -w "%{http_code}" "http://localhost:8008${endpoint}" 2>/dev/null || echo "000")  # "000" on curl failure keeps the variable set for the comparison below
-    [ "$http_code" = "200" ] && break
+    if [ "$http_code" = "200" ]; then
+      streak=$((streak + 1))
+      [ $streak -ge $required_streak ] && break
+    else
+      streak=0
+    fi
     attempt=$((attempt + 1))
-    [ $attempt -ge $max_attempts ] && fail "$service $endpoint did not return 200 after ${max_attempts}s"
+    [ $attempt -ge $max_attempts ] && fail "$service $endpoint did not return 200 for ${required_streak} consecutive checks after ${max_attempts}s"
     sleep 1
   done
-  pass "$service: Patroni API $endpoint returned 200"
+  pass "$service: Patroni API $endpoint returned 200 (${required_streak} consecutive checks)"
 }
 
 main() {
