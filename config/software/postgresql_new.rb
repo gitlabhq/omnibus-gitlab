@@ -15,8 +15,8 @@
 # limitations under the License.
 #
 
-name 'postgresql'
-default_version '17.10'
+name 'postgresql_new'
+default_version '18.4'
 major_version = default_version.split('.')[0]
 
 license 'PostgreSQL'
@@ -34,11 +34,11 @@ dependency 'config_guess'
 
 if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
   # TODO: We're using OhaiHelper to detect current platform, however since components are pre-compiled by UBT we *may* run ARM build on X86 nodes
-  source Build::UBT.source_args("postgresql-all", "#{default_version}-6ubt", "36ee5870f1f4b05b482055e4f097f2b37d0f85de7b84002ea462bfaaae7aab7e", OhaiHelper.arch)
+  source Build::UBT.source_args("postgresql-all", "#{default_version}-6ubt", "1c6bb4400d5829b79417a8a37b75d54af734ec3c17b69e6c35276c40a871ea40", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
   version default_version do
-    source sha256: '078a03516dcdbdb705fecaf415ea3d13a956c589e46f09fed68a06fb00598c90'
+    source sha256: '81a81ec695fb0c7901407defaa1d2f7973617154cf27ba74e3a7ab8e64436094'
   end
 
   source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
@@ -66,16 +66,8 @@ end
 
 build do
   prefix = "#{install_dir}/embedded/postgresql/#{major_version}"
-
-  # NOTE: There are several dependencies which require these files in these
-  # locations and have dependency on `postgresql_new`. So when this block is
-  # changed to be in the `postgresql` software definition for default PG
-  # version changes, change those dependencies to `postgresql`.
-  block 'link bin files' do
-    Dir.glob("#{prefix}/bin/*").each do |bin_file|
-      link bin_file, "#{install_dir}/embedded/bin/#{File.basename(bin_file)}"
-    end
-  end
+  libpq = 'libpq.so.5'
+  link "#{prefix}/lib/#{libpq}", "#{install_dir}/embedded/lib/#{libpq}"
 end
 
 # exclude headers and static libraries from package

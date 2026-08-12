@@ -27,10 +27,10 @@ skip_transitive_dependency_licensing true
 source git: version.remote
 
 dependency 'python3'
-dependency 'postgresql'
+dependency 'postgresql_new'
 dependency 'python-setuptools'
 
-pg_major_version = '17'
+pg_major_version = '18'
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
