@@ -3,6 +3,16 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.2.2 (2026-08-12)
+
+### Fixed (1 change)
+
+- [Add Knowledge Graph secret generation in Omnibus](gitlab-org/security/omnibus-gitlab@4e50a96c00156cb5e94ffedfd169f02ca596be36)
+
+### Changed (1 change)
+
+- [Revert "Update dependency jemalloc/jemalloc to v5.3.1"](gitlab-org/security/omnibus-gitlab@06a9e92f0dfa5287033ca7927e4f703ca851be71)
+
 ## 19.2.1 (2026-07-29)
 
 No changes.
@@ -27,6 +37,12 @@ No changes.
 ### Security (1 change)
 
 - [Uninstall the default net-imap gem shipped with Ruby](gitlab-org/omnibus-gitlab@814da0ffe03af81d77d692464f0986e26325ef02) ([merge request](gitlab-org/omnibus-gitlab!9523))
+
+## 19.1.4 (2026-08-12)
+
+### Changed (1 change)
+
+- [Revert "Update dependency jemalloc/jemalloc to v5.3.1"](gitlab-org/security/omnibus-gitlab@6458cf5870962c6d58db5ddd9bc620fad910483b)
 
 ## 19.1.3 (2026-07-29)
 
@@ -80,6 +96,10 @@ No changes.
 - [Update gitlabsos digest to fb66af8](gitlab-org/omnibus-gitlab@38c041e357eda6217f03e6ddcc227d4a0dd769e8) ([merge request](gitlab-org/omnibus-gitlab!9429))
 - [Update dependency gitlab-exporter to v16.8.0](gitlab-org/omnibus-gitlab@9a6db0449a815454ff3bcda61c0b8815015260cf) ([merge request](gitlab-org/omnibus-gitlab!9388))
 - [Update dependency redis/redis to v7.2.13](gitlab-org/omnibus-gitlab@e3a190bfadb2f56b59b241e166f091cb5753e419) ([merge request](gitlab-org/omnibus-gitlab!9351))
+
+## 19.0.6 (2026-08-12)
+
+No changes.
 
 ## 19.0.5 (2026-07-29)
 
