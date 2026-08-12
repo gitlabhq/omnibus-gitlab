@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.1.4 (2026-08-12)
+
+### Changed (1 change)
+
+- [Revert "Update dependency jemalloc/jemalloc to v5.3.1"](gitlab-org/security/omnibus-gitlab@6458cf5870962c6d58db5ddd9bc620fad910483b)
+
 ## 19.1.3 (2026-07-29)
 
 ### Fixed (1 change)
