@@ -567,13 +567,32 @@ def create_temp_data_dir
   end
 end
 
+# pg_upgrade requires the new cluster's data checksum setting to match the old
+# cluster's. Omnibus historically initialized clusters without checksums, but
+# PostgreSQL 18 enables them by default, so mirror whatever the old cluster uses.
+#
+# --no-data-checksums only exists in PostgreSQL 18+, and older versions default
+# to checksums disabled, so we only need to pass it when targeting PG18+.
+# The leading space lets callers concatenate this directly without leaving a
+# trailing space when no flag is needed.
+def initdb_checksum_flag
+  if @db_worker.data_checksums_enabled?
+    ' --data-checksums'
+  elsif @db_worker.target_version.major.to_i >= 18
+    ' --no-data-checksums'
+  else
+    ''
+  end
+end
+
 def initialize_new_db(encoding)
   unless GitlabCtl::Util.progress_message('Initializing the new database') do
     begin
       @db_worker.run_pg_command(
         "#{@db_worker.target_version_path}/bin/initdb " \
         "-D #{@db_worker.tmp_data_dir}.#{@db_worker.target_version.major} " \
-        "--encoding #{encoding} "
+        "--encoding #{encoding}" \
+        "#{initdb_checksum_flag}"
       )
     rescue GitlabCtl::Errors::ExecutionError => e
       log "Error initializing database for #{@db_worker.target_version}"

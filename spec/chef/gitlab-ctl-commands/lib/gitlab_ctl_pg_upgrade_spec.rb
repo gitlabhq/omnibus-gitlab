@@ -179,6 +179,41 @@ RSpec.describe GitlabCtl::PgUpgrade do
     end
   end
 
+  describe '#data_checksums_enabled?' do
+    subject(:dbw) { GitlabCtl::PgUpgrade.new(ctl, 'fakenewversion', nil, 123) }
+
+    before { stub_postgresql_json_attributes }
+
+    it 'returns true when pg_controldata reports a non-zero checksum version' do
+      allow(dbw).to receive(:run_pg_command).and_return("Data page checksum version:            1\n")
+
+      expect(dbw.data_checksums_enabled?).to be(true)
+    end
+
+    it 'returns false when pg_controldata reports checksum version 0' do
+      allow(dbw).to receive(:run_pg_command).and_return("Data page checksum version:            0\n")
+
+      expect(dbw.data_checksums_enabled?).to be(false)
+    end
+
+    it 'runs pg_controldata against the old data directory' do
+      allow(dbw).to receive(:initial_version_path).and_return('/opt/gitlab/embedded/postgresql/17')
+      allow(dbw).to receive(:data_dir).and_return('/var/opt/gitlab/postgresql/data')
+
+      expect(dbw).to receive(:run_pg_command).with(
+        '/opt/gitlab/embedded/postgresql/17/bin/pg_controldata -D /var/opt/gitlab/postgresql/data'
+      ).and_return("Data page checksum version:            0\n")
+
+      dbw.data_checksums_enabled?
+    end
+
+    it 'raises when the checksum line cannot be parsed instead of defaulting to false' do
+      allow(dbw).to receive(:run_pg_command).and_return("unexpected pg_controldata output\n")
+
+      expect { dbw.data_checksums_enabled? }.to raise_error(/Unable to determine data checksum status/)
+    end
+  end
+
   describe '#geo_primary_role?' do
     subject(:dbw) { GitlabCtl::PgUpgrade.new(ctl, 'fakenewversion', nil, 123) }
 

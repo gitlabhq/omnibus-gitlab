@@ -136,6 +136,30 @@ module GitlabCtl
       !Dir.empty?(path)
     end
 
+    # Return whether the current (old) data directory was initialized with data
+    # page checksums enabled.
+    #
+    # pg_upgrade requires the old and new clusters to have matching data
+    # checksum settings. Omnibus historically created clusters without
+    # checksums, but PostgreSQL 18 changed the initdb default to enable them, so
+    # we must detect the old cluster's setting and mirror it when initializing
+    # the new cluster.
+    #
+    # @return [Boolean]
+    def data_checksums_enabled?
+      output = run_pg_command(
+        "#{initial_version_path}/bin/pg_controldata -D #{data_dir}"
+      )
+      match = output.match(/Data page checksum version:\s+(\d+)/)
+
+      # Fail loudly rather than defaulting to a checksum setting: a false
+      # negative here would silently initialize the new cluster with the wrong
+      # setting and only surface later as a confusing pg_upgrade mismatch.
+      raise "Unable to determine data checksum status from pg_controldata output: #{output.inspect}" if match.nil?
+
+      match[1].to_i != 0
+    end
+
     def log(message)
       $stderr.puts message
     end

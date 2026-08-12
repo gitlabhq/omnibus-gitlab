@@ -118,4 +118,35 @@ RSpec.describe 'gitlab-ctl pg-upgrade' do
       end
     end
   end
+
+  describe '#initdb_checksum_flag' do
+    let(:db_worker) { instance_double(GitlabCtl::PgUpgrade) }
+
+    before do
+      ctl.instance_variable_set(:@db_worker, db_worker)
+      allow(db_worker).to receive(:target_version).and_return(PGVersion.parse('18.4'))
+    end
+
+    context 'when the old cluster has data checksums enabled' do
+      before { allow(db_worker).to receive(:data_checksums_enabled?).and_return(true) }
+
+      it 'enables checksums on the new cluster' do
+        expect(ctl.initdb_checksum_flag).to eq(' --data-checksums')
+      end
+    end
+
+    context 'when the old cluster has data checksums disabled' do
+      before { allow(db_worker).to receive(:data_checksums_enabled?).and_return(false) }
+
+      it 'disables checksums when targeting PG18+' do
+        allow(db_worker).to receive(:target_version).and_return(PGVersion.parse('18.4'))
+        expect(ctl.initdb_checksum_flag).to eq(' --no-data-checksums')
+      end
+
+      it 'passes no flag when targeting versions older than PG18' do
+        allow(db_worker).to receive(:target_version).and_return(PGVersion.parse('17.10'))
+        expect(ctl.initdb_checksum_flag).to eq('')
+      end
+    end
+  end
 end
