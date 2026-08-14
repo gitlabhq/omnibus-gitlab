@@ -23,15 +23,15 @@ This test plan verifies the ncurses library upgrade and its integration with dep
 
   ```shell
   IMAGE='registry.gitlab.com/gitlab-org/omnibus-gitlab/gitlab-ee:<MR_BRANCH_OR_TAG>'
-  
+
   docker run -it --rm --platform="linux/amd64" $IMAGE bash -c "
     set -e
     echo '=== Checking ncurses libraries exist ==='
     ls -1 /opt/gitlab/embedded/lib/libncurses*.so* /opt/gitlab/embedded/lib/libtinfo*.so*
-    
+
     echo -e '\n=== Verifying libedit links to ncurses/tinfo ==='
     ldd /opt/gitlab/embedded/lib/libedit.so | grep -E 'libtinfo|libncurses'
-    
+
     echo -e '\n✓ ncurses libraries present and linked'
   "
   ```
@@ -48,23 +48,23 @@ This test plan verifies the ncurses library upgrade and its integration with dep
     gitlab-ctl reconfigure > /dev/null 2>&1
     gitlab-ctl start postgresql
     sleep 5
-    
+
     echo '=== Testing basic psql command execution ==='
     gitlab-psql -d gitlabhq_production -c 'SELECT version();' | head -5
-    
+
     echo -e '\n=== Testing UTF-8 character support ==='
     gitlab-psql -d gitlabhq_production -c \"SELECT 'ncurses UTF-8 test: 世界 🌍' AS test_output;\"
-    
+
     echo -e '\n=== Testing multi-line query ==='
     gitlab-psql -d gitlabhq_production <<EOF
-SELECT 
-  schemaname, 
-  tablename 
-FROM pg_tables 
-WHERE schemaname = 'public' 
+SELECT
+  schemaname,
+  tablename
+FROM pg_tables
+WHERE schemaname = 'public'
 LIMIT 3;
 EOF
-    
+
     echo -e '\n✓ gitlab-psql works correctly with ncurses'
   "
   ```
@@ -80,7 +80,7 @@ EOF
     set -e
     echo '=== Testing Python UTF-8 output ==='
     /opt/gitlab/embedded/bin/python3 -c 'print(\"Python ncurses test: 世界 🌍\")'
-    
+
     echo -e '\n=== Testing Python readline module ==='
     /opt/gitlab/embedded/bin/python3 -c 'import readline; print(\"✓ readline module available\")'
   "
@@ -97,10 +97,10 @@ EOF
     set -e
     echo '=== Checking PostgreSQL binaries ==='
     ldd /opt/gitlab/embedded/postgresql/*/bin/psql | grep -E 'not found' && exit 1 || echo '✓ psql links correctly'
-    
+
     echo -e '\n=== Checking Python binaries ==='
     ldd /opt/gitlab/embedded/bin/python3.* | grep -E 'not found' && exit 1 || echo '✓ python links correctly'
-    
+
     echo -e '\n=== Checking for missing ncurses/tinfo dependencies (including widec variants) ==='
     MISSING=0
     for lib in libncurses libncursesw libtinfo libtinfow; do
@@ -109,7 +109,7 @@ EOF
       done < <(find /opt/gitlab/embedded/bin /opt/gitlab/embedded/postgresql -type f -executable 2>/dev/null)
     done
     [ \$MISSING -eq 1 ] && exit 1
-    
+
     echo -e '\n✓ No missing ncurses dependencies detected'
   "
   ```
