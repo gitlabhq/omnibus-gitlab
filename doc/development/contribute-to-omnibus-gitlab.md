@@ -9,6 +9,7 @@ title: Get started with Linux package development
 
 - [Adding and removing configuration options](add-remove-configuration-options.md)
 - [Adding a new service](new-services.md)
+- [Integrating a component with OAK](oak_component_integration.md)
 - [Adding deprecation messages](adding-deprecation-messages.md)
 - [Adding an attribute to `public_attributes.json`](public-attributes.md)
 - [Adding a `gitlab-ctl` command](gitlab-ctl-commands.md)
