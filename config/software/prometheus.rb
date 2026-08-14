@@ -29,7 +29,7 @@ license_file 'NOTICE'
 
 skip_transitive_dependency_licensing true
 
-source git: version.remote
+source git: version.remote, depth: 1
 
 relative_path 'src/github.com/prometheus/prometheus'
 

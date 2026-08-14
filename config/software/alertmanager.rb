@@ -34,7 +34,7 @@ if Build::Check.use_ubt?
   source Build::UBT.source_args(name, "#{ubt_version}-1ubt", "e24b0cee204c13138708b7db34e00d8e9c859112b250d742a7634c8e76421de9", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
-  source git: version.remote
+  source git: version.remote, depth: 1
 
   go_source = 'github.com/prometheus/alertmanager'
   relative_path "src/#{go_source}"

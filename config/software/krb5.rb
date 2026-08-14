@@ -35,7 +35,7 @@ if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
   source Build::UBT.source_args(name, "1.22.1", "f30a3182082de1e7114b1f226f8c1006a4747b32af9070857ef5ab674e95929d", OhaiHelper.arch)
   build(&Build::UBT.install)
 else
-  source git: version.remote
+  source git: version.remote, depth: 1
 
   build do
     env = with_standard_compiler_flags(with_embedded_path)
