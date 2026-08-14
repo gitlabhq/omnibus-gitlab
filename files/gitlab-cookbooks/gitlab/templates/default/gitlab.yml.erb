@@ -470,6 +470,11 @@ production: &base
       private_key_file: <%= quote(@cell['topology_service_client']['private_key_file']) %>
 
   <%- end -%>
+  <%- unless @nats_settings.empty? -%>
+  ## NATS (audit event streaming)
+  nats: <%= @nats_settings.to_json %>
+
+  <%- end -%>
   ## Kubernetes Agent Server
   gitlab_kas:
     enabled: <%= @gitlab_kas_enabled %>
