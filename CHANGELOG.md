@@ -105,6 +105,10 @@ No changes.
 - [Update dependency gitlab-exporter to v16.8.0](gitlab-org/omnibus-gitlab@9a6db0449a815454ff3bcda61c0b8815015260cf) ([merge request](gitlab-org/omnibus-gitlab!9388))
 - [Update dependency redis/redis to v7.2.13](gitlab-org/omnibus-gitlab@e3a190bfadb2f56b59b241e166f091cb5753e419) ([merge request](gitlab-org/omnibus-gitlab!9351))
 
+## 19.0.8 (2026-08-14)
+
+No changes.
+
 ## 19.0.7 (2026-08-13)
 
 No changes.
