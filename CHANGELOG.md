@@ -42,6 +42,10 @@ No changes.
 
 - [Uninstall the default net-imap gem shipped with Ruby](gitlab-org/omnibus-gitlab@814da0ffe03af81d77d692464f0986e26325ef02) ([merge request](gitlab-org/omnibus-gitlab!9523))
 
+## 19.1.6 (2026-08-14)
+
+No changes.
+
 ## 19.1.5 (2026-08-13)
 
 No changes.
