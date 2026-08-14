@@ -28,7 +28,7 @@ dependency 'openssl' unless Build::Check.use_system_ssl?
 version = Gitlab::Version.new('redis', '7.2.15')
 default_version version.print(false)
 
-source git: version.remote
+source git: version.remote, depth: 1
 
 # libatomic is a runtime_dependency of redis for armhf/aarch64 platforms
 if OhaiHelper.arm?

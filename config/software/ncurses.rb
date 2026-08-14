@@ -16,12 +16,7 @@
 
 name 'ncurses'
 
-version = Gitlab::Version.new('ncurses', '6315e1a380ecdb706d4f6518d2e8c7eb0db8fbe2')
-
-default_version version.print(false)
-display_version '6.4-20230225'
-
-source git: version.remote
+default_version '6.5'
 
 license 'MIT'
 license_file 'COPYING'
@@ -45,6 +40,11 @@ dependency 'config_guess'
 #
 ########################################################################
 
+source url: "https://ftpmirror.gnu.org/gnu/ncurses/ncurses-#{version}.tar.gz",
+       sha256: '136d91bc269a9a5785e5f9e980bc76ab57428f604ce3e5a5a90cebc767971cc6'
+
+relative_path "ncurses-#{version}"
+
 build do
   env = with_standard_compiler_flags(with_embedded_path)
   env.delete('CPPFLAGS')
@@ -66,21 +66,18 @@ build do
     '--enable-pc-files'
   ]
 
-  command configure_command.join(' '), env: env
-
-  make "-j #{workers}", env: env
-  make "-j #{workers} install", env: env
-
-  # Build non-wide-character libraries
-  make 'distclean', env: env
-  configure_command << '--enable-widec'
-
-  command configure_command.join(' '), env: env
+  # Build non-wide-character libraries.
+  command (configure_command + ['--disable-widec']).join(' '), env: env
   make "-j #{workers}", env: env
 
   # Installing the non-wide libraries will also install the non-wide
   # binaries, which doesn't happen to be a problem since we don't
   # utilize the ncurses binaries in private-chef (or oss chef)
+  make "-j #{workers} install", env: env
+  make 'distclean', env: env
+
+  command configure_command.join(' '), env: env
+  make "-j #{workers}", env: env
   make "-j #{workers} install", env: env
 
   # some software tries to find if ncurses is installed by
@@ -102,6 +99,7 @@ build do
     'menu.h',
     'form.h'
   ]
+
   %w[ncurses ncursesw].each do |target_dir|
     mkdir "#{prefix}/include/#{target_dir}"
     ncurses_headers.each do |header|

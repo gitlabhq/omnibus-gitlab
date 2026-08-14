@@ -30,7 +30,7 @@ default_version version.print(false)
 display_version version.print(false).delete_prefix('OpenSSL_').tr('_', '.')
 vendor 'openssl'
 
-source git: version.remote
+source git: version.remote, depth: 1
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)

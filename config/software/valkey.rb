@@ -12,7 +12,7 @@ dependency 'openssl' unless Build::Check.use_system_ssl?
 
 version = Gitlab::Version.new('valkey', '7.2.11')
 default_version version.print(false)
-source git: version.remote
+source git: version.remote, depth: 1
 
 # libatomic is a runtime_dependency of valkey for armhf/aarch64 platforms
 if OhaiHelper.arm?

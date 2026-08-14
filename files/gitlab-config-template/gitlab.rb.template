@@ -922,6 +922,20 @@ external_url 'GENERATED_EXTERNAL_URL'
 #   }
 # }
 
+#### NATS (audit event streaming)
+####! When 'servers' is empty or absent, GitLab falls back to the Sidekiq
+####! delivery path. 'stream_replicas' defaults to 1; set to 3 when clustered.
+# gitlab_rails['nats'] = {
+#   'servers' => ['tls://nats.example.com:4222'],
+#   'connect_timeout' => 2,
+#   'stream_replicas' => 3,
+#   'tls' => {
+#     'ca_file' => '/path/to/ca.crt',
+#     'cert' => '/path/to/tls.crt',
+#     'key' => '/path/to/tls.key'
+#   }
+# }
+
 #### OpenBao (GitLab Secret Manager)
 #### Beta: these attributes are subject to change without
 ####       a breaking change announcement.

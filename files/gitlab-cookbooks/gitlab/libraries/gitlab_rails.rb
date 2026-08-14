@@ -511,6 +511,25 @@ gitlab_rails['gitlab_shell_ssh_port'] = 2222
       }
     end
 
+    # Returns the NATS settings hash for the gitlab.yml template, with
+    # unset optional keys removed so that only explicitly configured values
+    # are rendered. When `servers` is empty the block is omitted entirely
+    # and Rails falls back to the Sidekiq delivery path.
+    def nats_settings
+      config = Gitlab['node']['gitlab']['gitlab_rails']['nats'].to_h
+      servers = Array(config['servers'])
+      return {} if servers.empty?
+
+      settings = { 'servers' => servers }
+      settings['connect_timeout'] = config['connect_timeout'] unless config['connect_timeout'].nil?
+      settings['stream_replicas'] = config['stream_replicas'] unless config['stream_replicas'].nil?
+
+      tls = config['tls'].to_h.compact
+      settings['tls'] = tls unless tls.empty?
+
+      settings
+    end
+
     def public_path
       "#{Gitlab['node']['package']['install-dir']}/embedded/service/gitlab-rails/public"
     end
