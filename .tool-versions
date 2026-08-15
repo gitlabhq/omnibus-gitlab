@@ -1,4 +1,4 @@
-ruby 3.3.11
+ruby 3.3.12
 
 # For linting documentation
 markdownlint-cli2 0.22.1
