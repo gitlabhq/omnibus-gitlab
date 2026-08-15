@@ -37,8 +37,8 @@
 #
 ---
 ruby:
-  current: 3.3.11
-  next: 3.4.9
+  current: 3.3.12
+  next: 3.4.10
   checksums:
     3.3.10: b555baa467a306cfc8e6c6ed24d0d27b27e9a1bed1d91d95509859eac6b0e928
     3.3.11: 59f0fafb1a59a05dc3765117af3fa68e153eb48254708549f321c1e9e078d7a0
