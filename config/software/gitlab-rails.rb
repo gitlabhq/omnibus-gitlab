@@ -343,6 +343,7 @@ build do
     .claude
     .git
     .gitignore
+    .tool-versions
     app/assets
     ee/app/assets
     ee/spec
@@ -351,6 +352,7 @@ build do
     gems/*/spec
     gems/config
     gems/README.md
+    mise.toml
     qa
     rubocop
     spec
