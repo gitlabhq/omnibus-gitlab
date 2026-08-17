@@ -42,6 +42,12 @@ RSpec.describe 'postgresql::managed_databases' do
       expect(chef_run).to create_postgresql_database('gate')
       expect(chef_run).to enable_postgresql_extension('pg_trgm')
     end
+
+    it 'wires least-privilege enforcement for the component database' do
+      expect(chef_run).to enforce_postgresql_database_access('gate').with(
+        connect_users: %w[gate]
+      )
+    end
   end
 
   context 'when the node is a Patroni replica' do

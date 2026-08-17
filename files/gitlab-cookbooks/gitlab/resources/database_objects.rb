@@ -44,6 +44,11 @@ action :create do
     action :create
   end
 
+  # pgbouncer needs cross-database CONNECT to run its auth_query. It is in use on
+  # this node whenever the pgbouncer role password is configured. When unset,
+  # pgbouncer does not pool these databases and must not defer the REVOKE.
+  rails_pgbouncer_user = node['postgresql']['pgbouncer_user_password'].nil? ? nil : node['postgresql']['pgbouncer_user']
+
   databases.each do |_, settings|
     database_name = settings['db_database']
 
@@ -70,6 +75,13 @@ action :create do
     postgresql_extension 'btree_gist' do
       database database_name
       action :enable
+    end
+
+    postgresql_database_access database_name do
+      connect_users [gitlab_sql_user]
+      pgbouncer_user rails_pgbouncer_user
+      pg_helper new_resource.pg_helper
+      action :enforce
     end
   end
 end

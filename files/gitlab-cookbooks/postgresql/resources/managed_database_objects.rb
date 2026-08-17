@@ -58,4 +58,23 @@ action :create do
       action :enable
     end
   end
+
+  # pgbouncer only needs CONNECT to a component database when it actually pools
+  # it: pgbouncer active (its password is set) AND pool_component_databases on.
+  # `pool_component_databases` defaults to true in
+  # files/gitlab-cookbooks/pgbouncer/attributes/default.rb (shipped with the
+  # component-database framework) and is the same gate pgbouncer::enable uses to
+  # add component databases to the pool, so this mirrors real pooling behavior.
+  pgbouncer_pools = !node['postgresql']['pgbouncer_user_password'].nil? && node.dig('pgbouncer', 'pool_component_databases')
+  pgbouncer_user = pgbouncer_pools ? node['postgresql']['pgbouncer_user'] : nil
+
+  connect_users = [username]
+  connect_users << owner if owner != username
+
+  postgresql_database_access new_resource.database_name do
+    connect_users connect_users
+    pgbouncer_user pgbouncer_user
+    pg_helper new_resource.pg_helper
+    action :enforce
+  end
 end

@@ -411,6 +411,54 @@ To enable WAL Archiving:
 
 1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#reconfigure-a-linux-package-installation) for the changes to take effect. This will result in a database restart.
 
+### Restrict database access between components
+
+By default, PostgreSQL grants the implicit `PUBLIC` role `CONNECT` on every
+database. As a result, each Linux package-managed database user can connect to
+every managed database. For example, the `registry` user can connect to
+`gitlabhq_production`, and the `gitlab` user can connect to `registry`. Table
+ownership still prevents reading data, but a connected user can inspect database
+metadata.
+
+To enforce Least Privileged Access, enable access restriction:
+
+```ruby
+postgresql['restrict_database_access'] = true
+```
+
+When enabled, `gitlab-ctl reconfigure` does the following for each managed
+database:
+
+- Creates a `NOLOGIN` connect role named `<database>_connect`.
+- Grants that role `CONNECT` on the database and `USAGE` on the `public` schema.
+- Grants the connect role to the database users that need access.
+- Grants the connect role to `pgbouncer`, the one user that must reach every
+  pooled database to run its authentication query.
+- Revokes the implicit `PUBLIC` `CONNECT` privilege.
+
+The grants and the revoke run in a single transaction, so a legitimate user is
+never locked out during reconfigure. The revoke is deferred to a later
+reconfigure until every required role, including `pgbouncer`, exists.
+
+This setting defaults to `false`, so upgrades see no privilege change. Enable it
+only after confirming that no external tooling connects as one component user to
+another component database. This setting applies to all Omnibus-managed
+databases.
+
+The container registry backup and restore users are exceptions to the
+connect-role model. The backup user keeps a direct `CONNECT` grant, and the
+restore user is a `SUPERUSER`, so both bypass the per-database connect role. When
+you audit `datacl`, expect to see these direct grants in addition to the
+`<database>_connect` role.
+
+Enforcement runs on the PostgreSQL primary only. In a Patroni cluster, the
+changes replicate to standbys through the write-ahead log. WAL replication,
+Patroni, and Consul are not affected, because replication uses a separate
+connection type and cluster control runs as a superuser.
+
+For more information, see
+[issue 9763](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/9763).
+
 ### Store PostgreSQL data in a different directory
 
 By default, everything is stored under `/var/opt/gitlab/postgresql`, controlled

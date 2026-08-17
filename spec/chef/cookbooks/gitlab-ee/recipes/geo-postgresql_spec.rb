@@ -68,6 +68,38 @@ RSpec.describe 'geo postgresql' do
       expect(chef_run).to create_postgresql_database('gitlabhq_geo_production').with(params)
     end
 
+    context 'when restrict_database_access is enabled' do
+      before do
+        stub_gitlab_rb(
+          geo_postgresql: { enable: true },
+          postgresql: { restrict_database_access: true }
+        )
+      end
+
+      it 'wires least-privilege enforcement for the Geo tracking database without a pgbouncer user by default' do
+        expect(chef_run).to enforce_postgresql_database_access('gitlabhq_geo_production').with(
+          connect_users: %w[gitlab_geo],
+          pgbouncer_user: nil
+        )
+      end
+
+      context 'when geo_postgresql pgbouncer_user_password is set' do
+        before do
+          stub_gitlab_rb(
+            geo_postgresql: { enable: true, pgbouncer_user_password: 'secret' },
+            postgresql: { restrict_database_access: true }
+          )
+        end
+
+        it 'passes the Geo-specific pgbouncer user (not the main postgresql pgbouncer_user)' do
+          expect(chef_run).to enforce_postgresql_database_access('gitlabhq_geo_production').with(
+            connect_users: %w[gitlab_geo],
+            pgbouncer_user: 'pgbouncer'
+          )
+        end
+      end
+    end
+
     context 'with default settings' do
       it_behaves_like 'enabled runit service', 'geo-postgresql', 'root', 'root'
 

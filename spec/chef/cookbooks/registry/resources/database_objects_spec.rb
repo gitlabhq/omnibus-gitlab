@@ -323,4 +323,36 @@ RSpec.describe 'registry_database_objects' do
       expect(chef_run).to create_postgresql_database('registry')
     end
   end
+
+  context 'when restrict_database_access is enabled' do
+    before do
+      stub_gitlab_rb(postgresql: { restrict_database_access: true })
+    end
+
+    # The backup user receives a direct GRANT CONNECT before postgresql_database_access
+    # runs, so it is intentionally excluded from connect_users. The restore user is a
+    # SUPERUSER and bypasses CONNECT checks entirely. Neither should appear in
+    # connect_users, which would grant them the connect role instead of the direct grant.
+    it 'wires least-privilege enforcement for the registry database with only the registry user in connect_users' do
+      expect(chef_run).to enforce_postgresql_database_access('registry').with(
+        connect_users: %w[registry],
+        pgbouncer_user: nil
+      )
+    end
+
+    context 'when pgbouncer_user_password is set' do
+      before do
+        stub_gitlab_rb(postgresql: { restrict_database_access: true })
+        chef_runner.node.normal['postgresql']['pgbouncer_user_password'] = 'secret'
+        chef_runner.node.normal['postgresql']['pgbouncer_user'] = 'pgbouncer'
+      end
+
+      it 'passes the pgbouncer user to the access enforcement' do
+        expect(chef_run).to enforce_postgresql_database_access('registry').with(
+          connect_users: %w[registry],
+          pgbouncer_user: 'pgbouncer'
+        )
+      end
+    end
+  end
 end

@@ -16,6 +16,12 @@ default['postgresql']['home'] = nil
 default['postgresql']['user_path'] = "#{node['package']['install-dir']}/embedded/bin:#{node['package']['install-dir']}/bin:$PATH"
 default['postgresql']['sql_user'] = "gitlab"
 default['postgresql']['sql_user_password'] = nil
+# Enforce Least Privileged Access on Omnibus-managed databases by revoking the
+# implicit PUBLIC CONNECT privilege and granting CONNECT only to the roles that
+# need it (the database's own users, plus pgbouncer as the sole cross-database
+# exception). Defaults to false so upgrades see no privilege change; opt in
+# explicitly. See gitlab-org/omnibus-gitlab#9763.
+default['postgresql']['restrict_database_access'] = false
 default['postgresql']['sql_superuser_password'] = nil
 default['postgresql']['port'] = 5432
 default['postgresql']['connect_port'] = nil

@@ -1,4 +1,5 @@
 # This is a base class to be inherited by PG Helpers
+require 'shellwords'
 require_relative '../../../package/libraries/helpers/base_helper'
 require_relative '../pg_version'
 
@@ -76,6 +77,17 @@ class BasePgHelper < BaseHelper
     psql_cmd(["-d 'template1'",
               "-c 'select usename from pg_user' -A",
               "|grep -x #{db_user}"])
+  end
+
+  # Unlike user_exists?, this matches roles regardless of the LOGIN
+  # attribute. pg_user only lists roles that can log in, so NOLOGIN
+  # permission roles must be looked up in pg_roles. The role name is
+  # shell-escaped (and -F keeps grep from treating it as a regexp) so
+  # names with unusual characters are matched literally and safely.
+  def role_exists?(role)
+    psql_cmd(["-d 'template1'",
+              "-c 'select rolname from pg_roles' -A",
+              "|grep -xF -- #{Shellwords.escape(role)}"])
   end
 
   def user_options(db_user)
