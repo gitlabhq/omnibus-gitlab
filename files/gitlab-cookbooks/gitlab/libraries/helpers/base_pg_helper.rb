@@ -244,6 +244,40 @@ class BasePgHelper < BaseHelper
     )
   end
 
+  def pending_restart_settings
+    # pg_settings.setting is the active value, still in effect until PostgreSQL
+    # restarts. pg_file_settings.setting is the pending value the operator wrote
+    # to a configuration file. Surface both so the operator can see what changes.
+    #
+    # LEFT JOIN so a parameter that is pending_restart with no config-file row
+    # (for example after ALTER SYSTEM RESET) is still reported; its pending value
+    # comes back empty and means "resets to default".
+    #
+    # pg_file_settings can list a parameter more than once. PostgreSQL applies
+    # the row with the highest seqno, so DISTINCT ON keeps that row. NULLS LAST
+    # keeps a real file row over the LEFT JOIN's NULL row when both would sort.
+    query = <<~SQL.tr("\n", ' ').strip
+      SELECT DISTINCT ON (s.name) s.name, s.setting AS active, f.setting AS pending
+      FROM pg_settings s LEFT JOIN pg_file_settings f USING (name)
+      WHERE s.pending_restart ORDER BY s.name, f.seqno DESC NULLS LAST;
+    SQL
+    result = psql_query_raw('template1', query)
+
+    return [] unless result.exitstatus&.zero?
+
+    result.stdout.lines.filter_map do |line|
+      name, active, pending_value = line.chomp.split('|', 3)
+      next if name.to_s.empty?
+
+      # split('|', 3) yields nil for the pending field on a "name|active|" line
+      # (empty pg_file_settings.setting), so normalise nil to an empty string.
+      [name, active, pending_value.to_s]
+    end
+  rescue StandardError => e
+    Chef::Log.debug("Unable to query PostgreSQL pending restart settings: #{e.message}")
+    []
+  end
+
   def version
     PGVersion.parse(VersionHelper.version('/opt/gitlab/embedded/bin/psql --version').split.last)
   end

@@ -38,6 +38,132 @@ RSpec.describe 'postgresql' do
     expect(chef_run).not_to run_ruby_block('warn pending postgresql restart')
   end
 
+  describe 'pending PostgreSQL settings warning' do
+    # The warning is registered through a Chef event handler so a repeat
+    # reconfigure adds no resources. ChefSpec stubs Chef.event_handler, so
+    # capture the registered :converge_complete and :converge_failed callbacks
+    # and drive them directly.
+    let(:event_callbacks) { {} }
+
+    before do
+      allow(LoggingHelper).to receive(:warning)
+
+      recorder = Object.new
+      callbacks = event_callbacks
+      recorder.define_singleton_method(:on) do |event, &block|
+        callbacks[event] = block
+      end
+      allow(Chef).to receive(:event_handler) do |&block|
+        recorder.instance_eval(&block)
+      end
+
+      allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(true)
+    end
+
+    it 'registers a handler for both converge completion and failure' do
+      chef_run
+
+      expect(event_callbacks.keys).to contain_exactly(:converge_complete, :converge_failed)
+    end
+
+    it 'warns with the active and pending value of every pending setting on a successful converge' do
+      allow_any_instance_of(PgHelper).to receive(:pending_restart_settings).and_return([
+                                                                                         %w(max_connections 400 250),
+                                                                                         %w(max_wal_senders 0 16)
+                                                                                       ])
+
+      chef_run
+      event_callbacks[:converge_complete].call
+
+      expect(LoggingHelper).to have_received(:warning).with(a_string_including(
+                                                              "max_connections = '400' (active), '250' (pending)",
+                                                              "max_wal_senders = '0' (active), '16' (pending)",
+                                                              'require a restart before their values become active',
+                                                              'restart may fail if pending settings conflict with the current configuration',
+                                                              'restart PostgreSQL at a controlled time',
+                                                              'To restart, run: sudo gitlab-ctl restart postgresql'
+                                                            ))
+    end
+
+    it 'renders a pending setting with no config-file row as resetting to default' do
+      allow_any_instance_of(PgHelper).to receive(:pending_restart_settings).and_return([
+                                                                                         ['max_prepared_transactions', '5', '']
+                                                                                       ])
+
+      chef_run
+      event_callbacks[:converge_complete].call
+
+      expect(LoggingHelper).to have_received(:warning).with(a_string_including(
+                                                              "max_prepared_transactions = '5' (active), resets to default (pending)"
+                                                            ))
+    end
+
+    it 'renders an empty pending value as resetting to default, whatever the active value' do
+      allow_any_instance_of(PgHelper).to receive(:pending_restart_settings).and_return([
+                                                                                         ['listen_addresses', '*', '']
+                                                                                       ])
+
+      chef_run
+      event_callbacks[:converge_complete].call
+
+      expect(LoggingHelper).to have_received(:warning).with(a_string_including(
+                                                              "listen_addresses = '*' (active), resets to default (pending)"
+                                                            ))
+    end
+
+    it 'warns when the converge fails so the message still reaches the operator' do
+      allow_any_instance_of(PgHelper).to receive(:pending_restart_settings).and_return([
+                                                                                         %w(listen_addresses * 127.0.0.1)
+                                                                                       ])
+
+      chef_run
+      event_callbacks[:converge_failed].call
+
+      expect(LoggingHelper).to have_received(:warning).with(a_string_including(
+                                                              "listen_addresses = '*' (active), '127.0.0.1' (pending)"
+                                                            ))
+    end
+
+    it 'does not warn when no settings are pending' do
+      allow_any_instance_of(PgHelper).to receive(:pending_restart_settings).and_return([])
+
+      chef_run
+      event_callbacks[:converge_complete].call
+
+      expect(LoggingHelper).not_to have_received(:warning)
+    end
+
+    it 'does not fail or warn when the pending settings query raises' do
+      allow_any_instance_of(PgHelper).to receive(:psql_query_raw).and_raise(Errno::ECONNREFUSED)
+
+      chef_run
+
+      expect { event_callbacks[:converge_complete].call }.not_to raise_error
+      expect(LoggingHelper).not_to have_received(:warning)
+    end
+
+    it 'does not warn when PostgreSQL is unavailable' do
+      allow_any_instance_of(PgHelper).to receive(:is_running?).and_return(false)
+      expect_any_instance_of(PgHelper).not_to receive(:pending_restart_settings)
+
+      chef_run
+      event_callbacks[:converge_complete].call
+
+      expect(LoggingHelper).not_to have_received(:warning)
+    end
+
+    it 'does not propagate or warn when the running-state check itself raises' do
+      # Chef's event dispatcher has no rescue and would let this replace the
+      # original converge exception, so the handler must swallow it. Converge
+      # first, then make only the handler-time is_running? call raise.
+      chef_run
+      allow_any_instance_of(PgHelper).to receive(:is_running?).and_raise(Mixlib::ShellOut::CommandTimeout)
+
+      expect { event_callbacks[:converge_failed].call }.not_to raise_error
+      expect(LoggingHelper).not_to have_received(:warning)
+    end
+  end
+
   it 'includes runtime.conf in postgresql.conf' do
     expect(chef_run).to render_file(postgresql_conf)
       .with_content(/include 'runtime.conf'/)
