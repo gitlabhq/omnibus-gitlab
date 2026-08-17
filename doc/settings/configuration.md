@@ -651,7 +651,7 @@ To enable the Rails metrics again:
 ## Configure a failed authentication ban
 
 You can configure a
-[failed authentication ban](https://docs.gitlab.com/security/rate_limits/#failed-authentication-ban-for-git-and-container-registry)
+[failed authentication ban](https://docs.gitlab.com/rate_limits/abuse_bans/#failed-authentication-ban-for-git-and-container-registry)
 for Git and the container registry. When a client is banned, a 403 error code
 is returned.
 
