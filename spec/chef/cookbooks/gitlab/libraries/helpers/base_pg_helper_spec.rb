@@ -183,6 +183,54 @@ RSpec.describe BasePgHelper do
     end
   end
 
+  describe '#pending_restart_settings' do
+    let(:query) do
+      'SELECT DISTINCT ON (s.name) s.name, s.setting AS active, f.setting AS pending ' \
+        'FROM pg_settings s LEFT JOIN pg_file_settings f USING (name) ' \
+        'WHERE s.pending_restart ORDER BY s.name, f.seqno DESC NULLS LAST;'
+    end
+    let(:result) { instance_double(Mixlib::ShellOut, exitstatus: 0, stdout: "max_connections|400|250\nmax_wal_senders|0|10\n") }
+
+    it 'returns each pending setting with its active and pending value in query order' do
+      expect(subject).to receive(:psql_query_raw).with('template1', query).and_return(result)
+
+      expect(subject.pending_restart_settings).to eq([%w(max_connections 400 250), %w(max_wal_senders 0 10)])
+    end
+
+    it 'deduplicates and orders by seqno in SQL, keeping the highest-seqno pending value' do
+      # DISTINCT ON (s.name) ... ORDER BY s.name, f.seqno DESC NULLS LAST makes the
+      # database return exactly one row per setting: the applied (highest seqno) value.
+      deduplicated = instance_double(Mixlib::ShellOut, exitstatus: 0, stdout: "max_connections|100|250\n")
+      expect(subject).to receive(:psql_query_raw).with('template1', query).and_return(deduplicated)
+
+      expect(subject.pending_restart_settings).to eq([%w(max_connections 100 250)])
+    end
+
+    it 'reports a pending setting that has no config-file row with an empty pending value' do
+      # LEFT JOIN keeps a pending_restart setting whose pg_file_settings row was
+      # removed (for example after ALTER SYSTEM RESET). psql renders NULL as an
+      # empty field, and split('|', 3) yields nil, normalised to an empty string.
+      reset = instance_double(Mixlib::ShellOut, exitstatus: 0, stdout: "max_prepared_transactions|5|\n")
+      allow(subject).to receive(:psql_query_raw).and_return(reset)
+
+      expect(subject.pending_restart_settings).to eq([['max_prepared_transactions', '5', '']])
+    end
+
+    it 'returns no settings when the query fails' do
+      failed_result = instance_double(Mixlib::ShellOut, exitstatus: 2, stdout: '')
+      allow(subject).to receive(:psql_query_raw).and_return(failed_result)
+
+      expect(subject.pending_restart_settings).to be_empty
+    end
+
+    it 'returns no settings when the query cannot run' do
+      allow(subject).to receive(:psql_query_raw).and_raise(Errno::ECONNREFUSED)
+
+      expect { subject.pending_restart_settings }.not_to raise_error
+      expect(subject.pending_restart_settings).to be_empty
+    end
+  end
+
   describe '#user_options_set?' do
     let(:default_options) do
       {

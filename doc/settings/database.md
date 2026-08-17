@@ -45,6 +45,13 @@ SELECT name,setting FROM pg_settings WHERE context = 'postmaster' AND name = '<s
 If changing the setting will require a restart, the query will return the name of the setting and the current value
 of that setting in the running PostgreSQL instance.
 
+When you reconfigure GitLab (`gitlab-ctl reconfigure`), if any PostgreSQL settings are pending a restart, the command
+prints a warning that lists each pending setting with its active and pending value.
+
+> [!note]
+> The pending settings check only applies to PostgreSQL managed by the Linux package. It does not cover Patroni-managed
+> nodes in a Patroni or HA cluster.
+
 #### Automatic restart when the PostgreSQL version changes
 
 By default, Linux package installations automatically restart PostgreSQL when the underlying
