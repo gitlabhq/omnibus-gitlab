@@ -73,6 +73,44 @@ ruby_block 'warn pending postgresql restart' do
   not_if { node['postgresql']['auto_restart_on_version_change'] }
 end
 
+# An event handler adds no resources, so a repeat reconfigure still reports zero
+# changes. Register both events because only one of them fires per run: the
+# warning still reaches the operator whether reconfigure succeeds or fails.
+warn_pending_postgresql_settings = lambda do
+  # Chef's event dispatcher has no rescue and runs converge_failed(e) before
+  # re-raising, so an escaping error would mask the original converge exception
+  # (or fail a green run on converge_complete). Contain everything here.
+
+  # The guard is evaluated when the handler runs, at the end of the converge.
+  next unless pg_helper.is_running?
+
+  pending_settings = pg_helper.pending_restart_settings
+  next if pending_settings.empty?
+
+  formatted_settings = pending_settings.map do |name, active, pending|
+    pending_text = pending.to_s.empty? ? 'resets to default' : "'#{pending}'"
+    "  - #{name} = '#{active}' (active), #{pending_text} (pending)"
+  end.join("\n")
+
+  message = <<~MESSAGE
+    PostgreSQL has settings that require a restart before their values become active:
+    #{formatted_settings}
+
+    The next PostgreSQL restart may fail if pending settings conflict with the current configuration.
+    Review the pending values and restart PostgreSQL at a controlled time.
+
+    To restart, run: sudo gitlab-ctl restart postgresql
+  MESSAGE
+  LoggingHelper.warning(message)
+rescue StandardError => e
+  Chef::Log.debug("Unable to warn about pending PostgreSQL restart settings: #{e.message}")
+end
+
+Chef.event_handler do
+  on(:converge_complete) { warn_pending_postgresql_settings.call }
+  on(:converge_failed) { warn_pending_postgresql_settings.call }
+end
+
 execute 'reload postgresql' do
   command %(/opt/gitlab/bin/gitlab-ctl hup postgresql)
   retries 20
