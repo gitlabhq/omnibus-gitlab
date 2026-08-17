@@ -1668,6 +1668,11 @@ external_url 'GENERATED_EXTERNAL_URL'
 # postgresql['home'] = "/var/opt/gitlab/postgresql"
 # postgresql['user_path'] = "/opt/gitlab/embedded/bin:/opt/gitlab/bin:$PATH"
 # postgresql['sql_user'] = "gitlab"
+##! Enforce Least Privileged Access by revoking the implicit PUBLIC CONNECT
+##! privilege on managed databases and granting CONNECT only to the roles that
+##! need it (plus pgbouncer). Defaults to false so upgrades are unaffected.
+##! See https://docs.gitlab.com/omnibus/settings/database.html
+# postgresql['restrict_database_access'] = false
 # postgresql['max_connections'] = 400
 # postgresql['md5_auth_cidr_addresses'] = []
 # postgresql['trust_auth_cidr_addresses'] = []

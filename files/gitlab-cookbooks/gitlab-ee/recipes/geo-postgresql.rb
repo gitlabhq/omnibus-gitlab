@@ -158,6 +158,17 @@ if node['gitlab']['geo_postgresql']['enable']
     action :enable
   end
 
+  # Isolate the Geo tracking database: revoke the implicit PUBLIC CONNECT and
+  # grant it only to the Geo user (plus the Geo pgbouncer user when configured).
+  geo_pgbouncer_user = node['gitlab']['geo_postgresql']['pgbouncer_user_password'].nil? ? nil : node['gitlab']['geo_postgresql']['pgbouncer_user']
+
+  postgresql_database_access geo_database_name do
+    connect_users [geo_pg_user]
+    pgbouncer_user geo_pgbouncer_user
+    pg_helper geo_pg_helper
+    action :enforce
+  end
+
   version_file 'Create version file for PostgreSQL' do
     version_file_path File.join(node['gitlab']['geo_postgresql']['dir'], 'VERSION')
     version_check_cmd "/opt/gitlab/embedded/bin/postgres --version"

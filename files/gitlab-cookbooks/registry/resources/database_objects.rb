@@ -96,4 +96,18 @@ action :create do
       action :create
     end
   end
+
+  # Isolate the registry database: revoke the implicit PUBLIC CONNECT and grant
+  # it only to the registry user (plus pgbouncer). This runs last, after the
+  # backup user's direct GRANT CONNECT is already committed, so there is no
+  # window in which the backup user could be locked out. The restore user is a
+  # SUPERUSER and bypasses CONNECT checks entirely.
+  registry_pgbouncer_user = node['postgresql']['pgbouncer_user_password'].nil? ? nil : node['postgresql']['pgbouncer_user']
+
+  postgresql_database_access database_name do
+    connect_users [username]
+    pgbouncer_user registry_pgbouncer_user
+    pg_helper new_resource.pg_helper
+    action :enforce
+  end
 end
