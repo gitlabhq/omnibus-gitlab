@@ -3,6 +3,14 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.2.4 (2026-08-14)
+
+No changes.
+
+## 19.2.3 (2026-08-13)
+
+No changes.
+
 ## 19.2.2 (2026-08-12)
 
 ### Fixed (1 change)
@@ -37,6 +45,14 @@ No changes.
 ### Security (1 change)
 
 - [Uninstall the default net-imap gem shipped with Ruby](gitlab-org/omnibus-gitlab@814da0ffe03af81d77d692464f0986e26325ef02) ([merge request](gitlab-org/omnibus-gitlab!9523))
+
+## 19.1.6 (2026-08-14)
+
+No changes.
+
+## 19.1.5 (2026-08-13)
+
+No changes.
 
 ## 19.1.4 (2026-08-12)
 
@@ -96,6 +112,14 @@ No changes.
 - [Update gitlabsos digest to fb66af8](gitlab-org/omnibus-gitlab@38c041e357eda6217f03e6ddcc227d4a0dd769e8) ([merge request](gitlab-org/omnibus-gitlab!9429))
 - [Update dependency gitlab-exporter to v16.8.0](gitlab-org/omnibus-gitlab@9a6db0449a815454ff3bcda61c0b8815015260cf) ([merge request](gitlab-org/omnibus-gitlab!9388))
 - [Update dependency redis/redis to v7.2.13](gitlab-org/omnibus-gitlab@e3a190bfadb2f56b59b241e166f091cb5753e419) ([merge request](gitlab-org/omnibus-gitlab!9351))
+
+## 19.0.8 (2026-08-14)
+
+No changes.
+
+## 19.0.7 (2026-08-13)
+
+No changes.
 
 ## 19.0.6 (2026-08-12)
 
@@ -175,6 +199,14 @@ No changes.
 
 - [Remove Spamcheck from Omnibus-GitLab for 19.0](gitlab-org/omnibus-gitlab@ca64c4627e2b95a2dec19e44e3f76561ebf4afb2) ([merge request](gitlab-org/omnibus-gitlab!9366))
 - [Remove Mattermost for SLES-12.5](gitlab-org/omnibus-gitlab@580302851cb4486434e0db203d4a1062b9abc4e0) ([merge request](gitlab-org/omnibus-gitlab!9274))
+
+## 18.11.11 (2026-08-14)
+
+No changes.
+
+## 18.11.10 (2026-08-13)
+
+No changes.
 
 ## 18.11.9 (2026-08-06)
 
