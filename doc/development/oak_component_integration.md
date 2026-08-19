@@ -25,7 +25,7 @@ In multi-node deployments, the settings must be present on every node that
 runs a consuming service, and the Rails node is the authoritative source for
 Helm values generation. Network configuration and service exposure are the
 customer's responsibility. Omnibus only automates its own host; it does
-**not** orchestrate the Kubernetes cluster or the component's Helm
+not orchestrate the Kubernetes cluster or the component's Helm
 deployment.
 
 ## Worked example: OpenBao
