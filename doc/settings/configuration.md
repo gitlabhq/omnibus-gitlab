@@ -877,6 +877,58 @@ To change the prefix of the generated web session cookie values:
 
 The default value is an empty string `""`.
 
+## Managed settings
+
+A managed setting overrides the value stored in the database. Administrators cannot change the setting from
+the **Admin** area or the REST API.
+
+> [!note]
+> In multi-node and cloud-native hybrid deployments, apply the same managed settings configuration to
+> `gitlab.rb` on every node that runs Puma or Sidekiq. This keeps the setting consistent across nodes.
+
+You can manage these settings:
+
+| Setting                     | Description |
+|-----------------------------|-------------|
+| `sidekiq_timezone_override` | Time zone used to evaluate cron schedules for Sidekiq jobs. |
+
+To manage the Sidekiq time zone:
+
+1. Edit `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   gitlab_rails['managed_settings']['settings'] = {
+     'sidekiq_timezone_override' => 'Europe/London'
+   }
+   ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+Reconfigure writes the settings to `/var/opt/gitlab/gitlab-rails/etc/managed_settings.yml` and
+restarts Puma and Sidekiq. If you remove every managed setting, reconfigure deletes the file.
+
+### Change the managed-by name
+
+In the **Admin** area, managed settings display the name of the party that manages the setting. The default name is `GitLab Omnibus`.
+
+To use a different name:
+
+1. Edit `/etc/gitlab/gitlab.rb`:
+
+   ```ruby
+   gitlab_rails['managed_settings']['installation']['managed_by'] = 'ACME Corp'
+   ```
+
+1. Reconfigure GitLab:
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
 ## Provide sensitive configuration to components without plain text storage
 
 Some components expose an `extra_config_command` option in `gitlab.rb`. This allows an external script to provide secrets

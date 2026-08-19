@@ -885,6 +885,15 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['clickhouse_databases']['main']['username'] = 'gitlab'
 # gitlab_rails['clickhouse_databases']['main']['password'] = 'password'
 
+### GitLab Managed Settings
+###! Settings listed here override the value stored in the database.
+###! They cannot be changed from the Admin UI or API.
+###! Docs: https://docs.gitlab.com/omnibus/settings/configuration.html#managed-settings
+# gitlab_rails['managed_settings']['installation']['managed_by'] = 'GitLab Omnibus'
+# gitlab_rails['managed_settings']['settings'] = {
+#   'sidekiq_timezone_override' => 'Europe/London'
+# }
+
 ### GitLab Redis settings
 ###! Connect to your own Redis instance
 ###! Docs: https://docs.gitlab.com/omnibus/settings/redis.html

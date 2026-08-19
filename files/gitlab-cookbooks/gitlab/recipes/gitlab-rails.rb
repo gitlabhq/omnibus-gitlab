@@ -198,6 +198,18 @@ templatesymlink "Create a clickhouse.yml and create a symlink to Rails root" do
   sensitive true
 end
 
+templatesymlink "Create a managed_settings.yml and create a symlink to Rails root" do
+  link_from File.join(gitlab_rails_source_dir, "config/managed_settings.yml")
+  link_to File.join(gitlab_rails_etc_dir, "managed_settings.yml")
+  source "managed_settings.yml.erb"
+  owner "root"
+  group gitlab_group
+  mode "0640"
+  variables(managed_settings: node['gitlab']['gitlab_rails']['managed_settings'].to_hash)
+  dependent_services.each { |svc| notifies :restart, svc }
+  action :delete if node['gitlab']['gitlab_rails']['managed_settings']['settings'].to_h.empty?
+end
+
 redis_url = redis_helper.redis_params[:url]
 redis_sentinels = node['gitlab']['gitlab_rails']['redis_sentinels']
 redis_sentinels_password = node['gitlab']['gitlab_rails']['redis_sentinels_password']
