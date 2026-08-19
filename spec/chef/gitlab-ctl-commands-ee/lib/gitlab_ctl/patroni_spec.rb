@@ -37,8 +37,8 @@ RSpec.describe 'Patroni' do
     'members' => 'list',
     'pause' => 'pause -w',
     'resume' => 'resume -w',
-    'failover' => 'failover --force --master MASTER --candidate CANDIDATE',
-    'switchover' => 'switchover --force --master MASTER --candidate CANDIDATE --scheduled SCHEDULED',
+    'failover' => 'failover --force --leader MASTER --candidate CANDIDATE',
+    'switchover' => 'switchover --force --leader MASTER --candidate CANDIDATE --scheduled SCHEDULED',
     'restart' => 'restart --force fake-scope fake-node',
     'reload' => 'reload --force fake-scope fake-node'
   }
