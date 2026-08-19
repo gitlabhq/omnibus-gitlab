@@ -470,6 +470,12 @@ default['gitlab']['gitlab_rails']['db_extra_config_command'] = nil
 default['gitlab']['gitlab_rails']['databases'] = {}
 default['gitlab']['gitlab_rails']['clickhouse_databases'] = {}
 
+# GitLab Managed Settings
+default['gitlab']['gitlab_rails']['managed_settings'] = {
+  'installation' => { 'managed_by' => 'GitLab Omnibus' },
+  'settings' => {}
+}
+
 # Automatic Database Reindexing
 # See https://docs.gitlab.com/omnibus/settings/database.html#automatic-database-reindexing
 default['gitlab']['gitlab_rails']['database_reindexing']['enable'] = false

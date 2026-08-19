@@ -2445,6 +2445,44 @@ RSpec.describe 'gitlab::gitlab-rails' do
         end
       end
     end
+
+    describe 'managed_settings.yml' do
+      let(:templatesymlink) { chef_run.templatesymlink('Create a managed_settings.yml and create a symlink to Rails root') }
+
+      it 'does not create the template when no setting is managed' do
+        expect(chef_run).not_to create_templatesymlink('Create a managed_settings.yml and create a symlink to Rails root')
+        expect(chef_run).to delete_templatesymlink('Create a managed_settings.yml and create a symlink to Rails root')
+      end
+
+      context 'when a setting is managed' do
+        cached(:chef_run) do
+          RSpec::Mocks.with_temporary_scope do
+            stub_gitlab_rb(
+              gitlab_rails: {
+                managed_settings: { 'settings' => { 'sidekiq_timezone_override' => 'Europe/London' } }
+              }
+            )
+          end
+
+          ChefSpec::SoloRunner.new.converge('gitlab::default')
+        end
+
+        it 'creates the template' do
+          expect(chef_run).to create_templatesymlink('Create a managed_settings.yml and create a symlink to Rails root').with(
+            owner: 'root',
+            group: 'git',
+            mode: '0640'
+          )
+        end
+
+        it 'template triggers notifications' do
+          expect(templatesymlink).to notify('runit_service[puma]').to(:restart).delayed
+          expect(templatesymlink).to notify('sidekiq_service[sidekiq]').to(:restart).delayed
+          expect(templatesymlink).not_to notify('runit_service[gitlab-workhorse]').to(:restart).delayed
+          expect(templatesymlink).not_to notify('runit_service[nginx]').to(:restart).delayed
+        end
+      end
+    end
   end
 
   describe 'GitLab Registry files' do
