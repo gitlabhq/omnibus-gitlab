@@ -140,7 +140,7 @@ GEM
       concurrent-ruby (~> 1.0)
     chef-vault (4.1.11)
     coderay (1.1.3)
-    concurrent-ruby (1.2.3)
+    concurrent-ruby (1.3.8)
     cookbook-omnifetch (0.12.2)
       mixlib-archive (>= 0.4, < 2.0)
     corefoundation (0.3.13)
@@ -466,7 +466,7 @@ CHECKSUMS
   chef-vault (4.1.11) sha256=51888dc5b9041304627947f2340ddc3a78118678f60e4da9bbfbb6f5fcb3dbc2
   chef-zero (15.0.11) sha256=791151a35d951d018e543b23b9cd74f3e1fc456b3930ec15f48ea4573954d595
   coderay (1.1.3) sha256=dc530018a4684512f8f38143cd2a096c9f02a1fc2459edcfe534787a7fc77d4b
-  concurrent-ruby (1.2.3) sha256=82fdd3f8a0816e28d513e637bb2b90a45d7b982bdf4f3a0511722d2e495801e2
+  concurrent-ruby (1.3.8) sha256=b2f1be836e968ccc78ccfce277ea79c72a88633f22306782c16ff23fb415d1e1
   cookbook-omnifetch (0.12.2) sha256=56f86d75509b4b9af869de2b6aacda3545793cd0c7b07d311ae47567ae3110bf
   corefoundation (0.3.13) sha256=29c07766cc1d7e428b116b9ebe03b16bb829ef9104f0fa8fff899a61daf02f93
   csv (3.3.2) sha256=6ff0c135e65e485d1864dde6c1703b60d34cc9e19bed8452834a0b28a519bd4e
