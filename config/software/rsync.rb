@@ -16,7 +16,7 @@
 
 name 'rsync'
 
-default_version '3.4.2'
+default_version '3.5.0'
 
 license 'GPL v3'
 license_file 'COPYING'
@@ -25,27 +25,22 @@ skip_transitive_dependency_licensing true
 
 dependency 'popt'
 
-if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
-  source Build::UBT.source_args(name, "#{default_version}-2ubt", "0dddc59ef9d4414cef25e04986db8af66277a65d526c5c0c46a7e2e0865b373f", OhaiHelper.arch)
-  build(&Build::UBT.install)
-else
-  source url: "https://rsync.samba.org/ftp/rsync/src/rsync-#{version}.tar.gz",
-         sha256: 'ff10aa2c151cd4b2dbbe6135126dbc854046113d2dfb49572a348233267eb315'
+source url: "https://rsync.samba.org/ftp/rsync/src/rsync-#{version}.tar.gz",
+       sha256: 'c7ffd1ef653e99540f661e47cb00b7f9cad1ee6b972399b16f93d672656e0d33'
 
-  relative_path "rsync-#{version}"
+relative_path "rsync-#{version}"
 
-  build do
-    env = with_standard_compiler_flags(with_embedded_path)
+build do
+  env = with_standard_compiler_flags(with_embedded_path)
 
-    command './configure' \
-            " --prefix=#{install_dir}/embedded" \
-            " --disable-iconv" \
-            " --disable-xxhash" \
-            " --disable-zstd" \
-            " --disable-lz4" \
-            , env: env
+  command './configure' \
+          " --prefix=#{install_dir}/embedded" \
+          " --disable-iconv" \
+          " --disable-xxhash" \
+          " --disable-zstd" \
+          " --disable-lz4" \
+          , env: env
 
-    make "-j #{workers}", env: env
-    make 'install', env: env
-  end
+  make "-j #{workers}", env: env
+  make 'install', env: env
 end
