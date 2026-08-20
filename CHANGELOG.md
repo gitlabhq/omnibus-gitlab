@@ -3,6 +3,42 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.3.0 (2026-08-20)
+
+### Added (6 changes)
+
+- [Warn if PostgreSQL settings pending restart](gitlab-org/omnibus-gitlab@c57ed50b1b4efea9df80728bc47c541162c48803) ([merge request](gitlab-org/omnibus-gitlab!9665))
+- [Add NATS configuration for audit event streaming](gitlab-org/omnibus-gitlab@451f0b7d4ad7b26acceb67d9a808a45424e102ad) ([merge request](gitlab-org/omnibus-gitlab!9669))
+- [Add PostgreSQL 18 as opt-in for fresh installs](gitlab-org/omnibus-gitlab@368cb0ad4ddb25ff5aa477b857871bc49fed9727) ([merge request](gitlab-org/omnibus-gitlab!9545))
+- [Add Amazon SES mailer settings](gitlab-org/omnibus-gitlab@bd948fe7d439e71dc1c773ebacde1b7ec00d58e2) ([merge request](gitlab-org/omnibus-gitlab!9598))
+- [Add Knowledge Graph secret generation in Omnibus](gitlab-org/omnibus-gitlab@15bce1b459e07c75bcd393556f1da8fdd0f21ca0) ([merge request](gitlab-org/omnibus-gitlab!9620))
+- [Support redis_sentinels_username for Workhorse Sentinel ACL auth](gitlab-org/omnibus-gitlab@df755e3eee1a3beb950859e9eb3c7f0ce6781600) by @Modjo85 ([merge request](gitlab-org/omnibus-gitlab!9579))
+
+### Fixed (1 change)
+
+- [Do not enable Mattermost by accident](gitlab-org/omnibus-gitlab@2cb69af11821c9d2322aec30be557f80b359c555) ([merge request](gitlab-org/omnibus-gitlab!9652))
+
+### Changed (9 changes)
+
+- [Update dependency redis/redis to v7.2.15](gitlab-org/omnibus-gitlab@7bf822af1db67992a6f25d3fd0606234c5228ef8) ([merge request](gitlab-org/omnibus-gitlab!9637))
+- [Revert "Update dependency jemalloc/jemalloc to v5.3.1"](gitlab-org/omnibus-gitlab@f5f0e7d31a9cdddbc93b37c0133f7f7c6940ef07) ([merge request](gitlab-org/omnibus-gitlab!9657))
+- [Update dependency container-registry to v4.41.0-gitlab](gitlab-org/omnibus-gitlab@444bd93e3c383a6d5314a1d818d3d78555cddcf3) ([merge request](gitlab-org/omnibus-gitlab!9631))
+- [Update dependency graphicsmagick to v1.3.47](gitlab-org/omnibus-gitlab@d3f1d8b3288e2a2fb267a1a60541887dcbadab9c) ([merge request](gitlab-org/omnibus-gitlab!9394))
+- [Update dependency gitlab-exporter to v17](gitlab-org/omnibus-gitlab@535e1a70f1706b5a304fcc5ecd4b65dd3d4290eb) ([merge request](gitlab-org/omnibus-gitlab!9601))
+- [Bump gitlab-omnibus-builder version to 5.64.0](gitlab-org/omnibus-gitlab@29af9598b4d8d37c7d81772defa0b45d64a0b88e) by @dmakovey ([merge request](gitlab-org/omnibus-gitlab!9600))
+- [Update gitlabsos digest to 7ba17f0](gitlab-org/omnibus-gitlab@c58016083c08a8f1eea0f7c0bb574c0a47ccc2f0) ([merge request](gitlab-org/omnibus-gitlab!9593))
+- [Update dependency rubygems to v3.7.2](gitlab-org/omnibus-gitlab@7b40c33cf5f2d6b62ddb869340bd82932c6ab9ca) ([merge request](gitlab-org/omnibus-gitlab!8723))
+- [Update dependency redis-exporter to v1.86.0](gitlab-org/omnibus-gitlab@ab11641ea65e7d2ec628cbdf0a1b91b436a5ec5e) ([merge request](gitlab-org/omnibus-gitlab!8833))
+
+### Removed (1 change)
+
+- [Drop Amazon Linux 2 package builds](gitlab-org/omnibus-gitlab@08e128f62b9376f7b7496552f096a5a52dd39d13) ([merge request](gitlab-org/omnibus-gitlab!9409))
+
+### Security (2 changes)
+
+- [Bump Ruby to 3.3.12 to fix CVE-2026-41316 (erb)](gitlab-org/omnibus-gitlab@3012cc43f9151e6ef42ebfc34919715c6b65f13a) by @dmakovey ([merge request](gitlab-org/omnibus-gitlab!9634))
+- [Bump pgbouncer-exporter from 0.11.0 to 0.12.1](gitlab-org/omnibus-gitlab@6c2684c5202459ea7ace8e0a236b38dbd2760cbf) ([merge request](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/9628))
+
 ## 19.2.4 (2026-08-14)
 
 No changes.
