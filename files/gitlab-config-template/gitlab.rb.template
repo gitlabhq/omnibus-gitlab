@@ -2777,6 +2777,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_exporter['home'] = "/var/opt/gitlab/gitlab-exporter"
 
 ##! Advanced settings. Should be changed only if absolutely needed.
+##! Deprecated: `server_name` has no effect. As of GitLab 19.3, which ships
+##! gitlab-exporter 17.0.0, the metrics server always uses WEBrick. This
+##! setting will be removed in 20.0.
 # gitlab_exporter['server_name'] = 'webrick'
 # gitlab_exporter['listen_address'] = 'localhost'
 # gitlab_exporter['listen_port'] = '9168'
