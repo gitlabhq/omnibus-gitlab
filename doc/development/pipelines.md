@@ -288,6 +288,13 @@ This job runs subset of test suite and is automatically triggered when either
 
 This job triggers a pipeline in the [GitLab QA Mirror](https://gitlab.com/gitlab-org/gitlab-qa-mirror), passing the GitLab Docker image created by `Trigger:gitlab-docker` job and the GitLab QA Docker image built by the GitLab Rails pipeline, so that a subset of test as mentioned in [this issue](https://gitlab.com/gitlab-org/distribution/team-tasks/-/issues/1303#we-should-keep) will run using these images
 
+This job also triggers the end-to-end upgrade tests in the `test-on-omnibus` pipeline. It always runs
+the `UpdateFromPrevious` scenario, which upgrades from the previous release to the image built in the
+current pipeline. On stable branches, and on merge requests that target a stable branch, it also runs
+the `UpdateToNext` scenario and the patch upgrade paths. The `MR_CODE_PATTERNS` and
+`MR_STABLE_BRANCH_CODE_PATTERNS` variables, set in `lib/gitlab/build/facts.rb`, control which upgrade
+tests run.
+
 This job is run only on [QA mirror](https://gitlab.com/gitlab-org/build/omnibus-gitlab-mirror) on triggered pipelines.
 
 ### `qa-remaining-test-manual`

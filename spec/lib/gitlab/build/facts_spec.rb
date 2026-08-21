@@ -250,6 +250,9 @@ RSpec.describe Build::Facts do
       stub_env_var('PACKAGE_URL', 'https://example.com/gitlab.deb')
       stub_env_var('FIPS_PACKAGE_URL', 'https://example.com/gitlab-fips.deb')
       stub_env_var('ee', 'true')
+
+      allow(Build::Check).to receive(:on_stable_branch?).and_return(false)
+      allow(Build::Check).to receive(:mr_targetting_stable_branch?).and_return(false)
     end
 
     it 'returns correct variables' do
@@ -259,6 +262,8 @@ RSpec.describe Build::Facts do
         QA_TESTS=
         ALLURE_JOB_NAME=gitaly-ee
         GITLAB_SEMVER_VERSION=14.6.2-rfbranch.450066356
+        MR_CODE_PATTERNS=true
+        MR_STABLE_BRANCH_CODE_PATTERNS=false
         RAT_REFERENCE_ARCHITECTURE=omnibus-gitlab-mrs
         RAT_FIPS_REFERENCE_ARCHITECTURE=omnibus-gitlab-mrs-fips-ubuntu
         RAT_PACKAGE_URL=https://example.com/gitlab.deb
@@ -267,6 +272,30 @@ RSpec.describe Build::Facts do
       ]
 
       expect(described_class.qa_trigger_vars).to eq(result)
+    end
+
+    it 'always enables UpdateFromPrevious via MR_CODE_PATTERNS' do
+      expect(described_class.qa_trigger_vars).to include('MR_CODE_PATTERNS=true')
+    end
+
+    context 'on a stable branch' do
+      before do
+        allow(Build::Check).to receive(:on_stable_branch?).and_return(true)
+      end
+
+      it 'enables stable-branch upgrade paths via MR_STABLE_BRANCH_CODE_PATTERNS' do
+        expect(described_class.qa_trigger_vars).to include('MR_STABLE_BRANCH_CODE_PATTERNS=true')
+      end
+    end
+
+    context 'on a branch targetting a stable branch' do
+      before do
+        allow(Build::Check).to receive(:mr_targetting_stable_branch?).and_return(true)
+      end
+
+      it 'enables stable-branch upgrade paths via MR_STABLE_BRANCH_CODE_PATTERNS' do
+        expect(described_class.qa_trigger_vars).to include('MR_STABLE_BRANCH_CODE_PATTERNS=true')
+      end
     end
   end
 end

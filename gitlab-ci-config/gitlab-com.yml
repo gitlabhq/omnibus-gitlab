@@ -581,6 +581,13 @@ qa-subset-test:
   variables:
     QA_OMNIBUS_MR_TESTS: "only-smoke"
     QA_RUN_TYPE: ${CI_JOB_NAME}
+    # Drive the upgrade e2e jobs in gitlab-org/gitlab test-on-omnibus.
+    # MR_CODE_PATTERNS runs UpdateFromPrevious on every pipeline;
+    # MR_STABLE_BRANCH_CODE_PATTERNS additionally runs UpdateToNext (and patch
+    # upgrade paths) only in stable-branch contexts. Both are derived in
+    # lib/gitlab/build/facts.rb and exposed via the generate-facts dotenv.
+    MR_CODE_PATTERNS: $MR_CODE_PATTERNS
+    MR_STABLE_BRANCH_CODE_PATTERNS: $MR_STABLE_BRANCH_CODE_PATTERNS
     QA_SUITES: "QA::Scenario::Test::Integration::GitalyCluster,QA::Scenario::Test::Integration::InstanceSAML,QA::Scenario::Test::Integration::LDAPNoServer,QA::Scenario::Test::Integration::LDAPNoTLS,QA::Scenario::Test::Integration::LDAPTLS,QA::Scenario::Test::Integration::Mtls,QA::Scenario::Test::Integration::ObjectStorageGcs,QA::Scenario::Test::Integration::RegistryTLS,QA::Scenario::Test::Integration::RegistryWithCDN,QA::Scenario::Test::Integration::SMTP,QA::Scenario::Test::Integration::Registry,QA::Scenario::Test::Instance::ObjectStorage,QA::Scenario::Test::Instance::RepositoryStorage,QA::Scenario::Test::Instance::GitlabPages,QA::Scenario::Test::Instance::Metrics,QA::EE::Scenario::Test::Integration::GroupSAML,QA::Scenario::Test::Instance::Smoke"
   rules:
     - if: '"$[[ inputs.skip_qa_test ]]" == "true"'
