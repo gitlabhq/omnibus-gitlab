@@ -207,7 +207,7 @@ module GitlabCtl
     def self.failover(options)
       command = %w(failover)
       command << "--force"
-      command << "--master #{options[:master]}" if options[:master]
+      command << "--leader #{options[:master]}" if options[:master]
       command << "--candidate #{options[:candidate]}" if options[:candidate]
       Utils.patronictl(command)
     end
@@ -215,7 +215,7 @@ module GitlabCtl
     def self.switchover(options)
       command = %w(switchover)
       command << "--force"
-      command << "--master #{options[:master]}" if options[:master]
+      command << "--leader #{options[:master]}" if options[:master]
       command << "--candidate #{options[:candidate]}" if options[:candidate]
       command << "--scheduled #{options[:scheduled]}" if options[:scheduled]
       Utils.patronictl(command)
