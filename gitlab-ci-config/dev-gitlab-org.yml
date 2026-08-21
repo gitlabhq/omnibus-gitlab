@@ -833,6 +833,11 @@ Ubuntu-24.04-arm64-staging:
       optional: true
     - job: Ubuntu-24.04-arm64-branch
       optional: true
+  rules:
+    - !reference [.default_rules, rules]
+    - !reference [.skip_release_jobs, rules]
+    - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
+    - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_BUILD_PIPELINE"'
 
 Ubuntu-26.04-arm64-staging:
   extends: .staging_upload_template
@@ -953,6 +958,10 @@ Ubuntu-22.04-fips-staging:
       optional: true
     - job: Ubuntu-22.04-fips-branch
       optional: true
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG|NIGHTLY)_BUILD_PIPELINE$/'
+    - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_BUILD_PIPELINE"'
 
 ### Package releases
 Ubuntu-22.04-release:
