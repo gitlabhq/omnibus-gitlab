@@ -259,8 +259,8 @@ GEM
       rake
     ffi-libarchive (1.1.13)
       ffi (~> 1.0)
-    ffi-yajl (2.4.0)
-      libyajl2 (>= 1.2)
+    ffi-yajl (2.7.11)
+      libyajl2 (>= 2.1)
     fuzzyurl (0.9.0)
     git (1.19.1)
       addressable (~> 2.8)
