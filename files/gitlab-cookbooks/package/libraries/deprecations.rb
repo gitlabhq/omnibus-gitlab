@@ -59,6 +59,12 @@ module Gitlab
             removal: '19.0',
             note: "Spamcheck has been removed from the Linux package in 19.0. If you currently use the bundled Spamcheck, you can deploy it separately using Docker. No data migration is required. See https://gitlab.com/gitlab-org/omnibus-gitlab/-/work_items/9608."
           },
+          {
+            config_keys: %w(monitoring gitlab_exporter server_name),
+            deprecation: '19.3',
+            removal: '20.0', # https://gitlab.com/gitlab-org/omnibus-gitlab/-/work_items/10007
+            note: "gitlab_exporter['server_name'] is deprecated and has no effect. As of GitLab 19.3, which ships gitlab-exporter 17.0.0, the metrics server always uses WEBrick. This setting will be removed in 20.0."
+          },
         ]
       end
 

@@ -468,6 +468,34 @@ RSpec.describe Gitlab::Deprecations do
     end
   end
 
+  describe 'gitlab_exporter server_name deprecation entry' do
+    before do
+      allow(Gitlab::Deprecations).to receive(:list).and_call_original
+    end
+
+    let(:config_with_server_name) { { 'monitoring' => { 'gitlab_exporter' => { 'server_name' => 'webrick' } } } }
+
+    it 'warns when server_name is set in 19.3' do
+      messages = described_class.check_config('19.3', config_with_server_name, :deprecation)
+      expect(messages).to include(a_string_matching(/gitlab_exporter\['server_name'\] has been deprecated since 19\.3 and will be removed in 20\.0/))
+    end
+
+    it 'does not flag server_name as removed before 20.0' do
+      messages = described_class.check_config('19.3', config_with_server_name, :removal)
+      expect(messages).not_to include(a_string_matching(/gitlab_exporter\['server_name'\]/))
+    end
+
+    it 'reports server_name as removed in 20.0' do
+      messages = described_class.check_config('20.0', config_with_server_name, :removal)
+      expect(messages).to include(a_string_matching(/gitlab_exporter\['server_name'\] has been deprecated since 19\.3 and was removed in 20\.0/))
+    end
+
+    it 'is silent when no server_name config is present' do
+      messages = described_class.check_config('19.3', {}, :deprecation)
+      expect(messages).not_to include(a_string_matching(/gitlab_exporter\['server_name'\]/))
+    end
+  end
+
   describe 'when any configuration key gets deprecated' do
     before do
       allow(Gitlab::Deprecations).to receive(:list).and_call_original
