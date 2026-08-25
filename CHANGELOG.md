@@ -92,6 +92,12 @@ No changes.
 
 - [Uninstall the default net-imap gem shipped with Ruby](gitlab-org/omnibus-gitlab@814da0ffe03af81d77d692464f0986e26325ef02) ([merge request](gitlab-org/omnibus-gitlab!9523))
 
+## 19.1.7 (2026-08-25)
+
+### Fixed (1 change)
+
+- [Merge branch 'bocarbonell-master-patch-81812' into 'master'](gitlab-org/security/omnibus-gitlab@52d7feed9626bf5f0c8945a94cf07939616cb1e2)
+
 ## 19.1.6 (2026-08-14)
 
 No changes.
