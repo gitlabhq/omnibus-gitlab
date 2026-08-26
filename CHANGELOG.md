@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.3.1 (2026-08-25)
+
+No changes.
+
 ## 19.3.0 (2026-08-20)
 
 ### Added (6 changes)
@@ -38,6 +42,12 @@ omnibus-gitlab repository.
 
 - [Bump Ruby to 3.3.12 to fix CVE-2026-41316 (erb)](gitlab-org/omnibus-gitlab@3012cc43f9151e6ef42ebfc34919715c6b65f13a) by @dmakovey ([merge request](gitlab-org/omnibus-gitlab!9634))
 - [Bump pgbouncer-exporter from 0.11.0 to 0.12.1](gitlab-org/omnibus-gitlab@6c2684c5202459ea7ace8e0a236b38dbd2760cbf) ([merge request](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/9628))
+
+## 19.2.5 (2026-08-25)
+
+### Fixed (1 change)
+
+- [Merge branch 'bocarbonell-master-patch-81812' into 'master'](gitlab-org/security/omnibus-gitlab@173f00b07350c8c31a67ba2d54a1531f98721f91)
 
 ## 19.2.4 (2026-08-14)
 
@@ -81,6 +91,12 @@ No changes.
 ### Security (1 change)
 
 - [Uninstall the default net-imap gem shipped with Ruby](gitlab-org/omnibus-gitlab@814da0ffe03af81d77d692464f0986e26325ef02) ([merge request](gitlab-org/omnibus-gitlab!9523))
+
+## 19.1.7 (2026-08-25)
+
+### Fixed (1 change)
+
+- [Merge branch 'bocarbonell-master-patch-81812' into 'master'](gitlab-org/security/omnibus-gitlab@52d7feed9626bf5f0c8945a94cf07939616cb1e2)
 
 ## 19.1.6 (2026-08-14)
 
