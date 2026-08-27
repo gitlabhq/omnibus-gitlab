@@ -37,7 +37,7 @@
   - MPL2
   - :who: Balasankar C
     :why: https://github.com/hashicorp/go-version/blob/v1.8.0/LICENSE
-    :versions: [ v1.8.0 ]
+    :versions: []
     :when: 2026-04-13 00:00:00.000000000 Z
 - - :license
   - github.com/hashicorp/consul-awsauth
@@ -398,3 +398,10 @@
   - :who: Adam Chu
     :why: https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/LICENSE
     :when: 2026-06-19 00:00:00.000000000 Z
+- - :license
+  - github.com/hashicorp/nomad/api
+  - MPL2
+  - :who: Pratik Singh
+    :why: https://github.com/hashicorp/nomad/blob/main/api/LICENSE
+    :versions: []
+    :when: 2026-08-21 00:00:00.000000000 Z
