@@ -35,6 +35,13 @@ module Gitlab
     # replaced.
     def update(component, version, sha256: nil)
       entry = data.fetch(component) { raise KeyError, "Unknown component '#{component}' in #{@path}" }
+
+      # A single checksum would silently drop the other architectures' pins.
+      if entry['sha256'].is_a?(Hash)
+        raise ArgumentError,
+              "'#{component}' pins one sha256 per architecture; update the map in #{@path} by hand"
+      end
+
       sha256 ||= fetch_sha256(component, version)
       validate_sha256!("#{component} #{version}", sha256)
 
@@ -113,11 +120,14 @@ module Gitlab
     end
 
     # Yields [label, sha256] for every checksum stored for any component: each
-    # `checksums` entry or single `sha256`, plus the `ubt` bundle checksum.
+    # `checksums` entry, each architecture of a per-architecture `sha256` map
+    # (e.g. glaz-ffi), or the single `sha256`, plus the `ubt` bundle checksum.
     def each_stored_checksum
       data.each do |component, entry|
         if entry['checksums']
           entry['checksums'].each { |version, sha| yield "#{component} #{version}", sha }
+        elsif entry['sha256'].is_a?(Hash)
+          entry['sha256'].each { |arch, sha| yield "#{component} #{entry['version']} #{arch}", sha }
         elsif entry['sha256']
           yield "#{component} #{entry['version']}", entry['sha256']
         end

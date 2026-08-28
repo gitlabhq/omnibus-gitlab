@@ -85,6 +85,20 @@ RSpec.describe Gitlab::SoftwareVersions do
         .to raise_error(ArgumentError, /Invalid sha256 for ruby 3.4.10/)
     end
 
+    it 'refuses to overwrite a per-architecture sha256 map' do
+      File.write(file.path, <<~YAML)
+        ---
+        glaz-ffi:
+          version: "1.8.1"
+          sha256:
+            x86_64: "#{sha_libffi}"
+            aarch64: "#{sha_ubt}"
+      YAML
+
+      expect { described_class.new(file.path).update('glaz-ffi', '1.8.2', sha256: 'e' * 64) }
+        .to raise_error(ArgumentError, /pins one sha256 per architecture/)
+    end
+
     it 'raises for an unknown component' do
       expect { versions.update('nope', '1.0', sha256: new_sha) }
         .to raise_error(KeyError, /Unknown component 'nope'/)
@@ -142,6 +156,21 @@ RSpec.describe Gitlab::SoftwareVersions do
       expect(described_class.new(file.path).malformed_checksums).to contain_exactly(
         "ruby 3.4.9: 'tooshort' is not a valid sha256",
         "libffi ubt: 'nothex' is not a valid sha256"
+      )
+    end
+
+    it 'validates each architecture of a per-architecture sha256 map' do
+      File.write(file.path, <<~YAML)
+        ---
+        glaz-ffi:
+          version: "1.8.1"
+          sha256:
+            x86_64: "#{sha_libffi}"
+            aarch64: "badsha"
+      YAML
+
+      expect(described_class.new(file.path).malformed_checksums).to contain_exactly(
+        "glaz-ffi 1.8.1 aarch64: 'badsha' is not a valid sha256"
       )
     end
   end
