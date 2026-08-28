@@ -1,0 +1,49 @@
+
+module gitlab-19.4.0-sshd-session 1.0;
+
+# Rules for the sshd_session_t domain introduced in OpenSSH 9.8+ (RHEL 10 /
+# AlmaLinux 10) and the sshd_auth_t domain introduced in OpenSSH 10.0 /
+# Fedora 43.  On older distributions these types do not exist, so the rules
+# are wrapped in optional blocks so that the module can be installed
+# without error on RHEL 7/8/9 as well.
+#
+# Without these rules, git-over-SSH fails on RHEL 10 with SELinux Enforcing
+# because sshd-session cannot read the gitlab_shell_t-labelled
+# /var/opt/gitlab/.ssh/authorized_keys file.
+#
+# The sock_file and var_log_t rules mirror the grants sshd_t already has
+# and are required for fast SSH key lookup (AuthorizedKeysCommand), where
+# gitlab-shell-authorized-keys-check connects to the workhorse socket and
+# appends to gitlab-shell.log from the sshd session domain.
+#
+# See: https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/10048
+
+require {
+    type gitlab_shell_t;
+    type var_log_t;
+    class dir { search getattr };
+    class file { getattr open read append };
+    class sock_file write;
+}
+
+# sshd_session_t: per-session binary introduced in OpenSSH 9.8 (RHEL 10)
+optional {
+    require {
+        type sshd_session_t;
+    }
+    allow sshd_session_t gitlab_shell_t:dir { search getattr };
+    allow sshd_session_t gitlab_shell_t:file { getattr open read };
+    allow sshd_session_t gitlab_shell_t:sock_file write;
+    allow sshd_session_t var_log_t:file append;
+}
+
+# sshd_auth_t: authentication-phase domain introduced in OpenSSH 10.0 / Fedora 43
+optional {
+    require {
+        type sshd_auth_t;
+    }
+    allow sshd_auth_t gitlab_shell_t:dir { search getattr };
+    allow sshd_auth_t gitlab_shell_t:file { getattr open read };
+    allow sshd_auth_t gitlab_shell_t:sock_file write;
+    allow sshd_auth_t var_log_t:file append;
+}

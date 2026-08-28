@@ -22,6 +22,7 @@ if SELinuxDistroHelper.selinux_supported?
   ssh_keygen_module = 'gitlab-7.2.0-ssh-keygen'
   authorized_keys_module = 'gitlab-10.5.0-ssh-authorized-keys'
   gitlab_shell_module = 'gitlab-13.5.0-gitlab-shell'
+  sshd_session_module = 'gitlab-19.4.0-sshd-session'
   gitlab_unified_module = 'gitlab'
 
   if SELinuxHelper.use_unified_policy?(node)
@@ -52,6 +53,13 @@ if SELinuxDistroHelper.selinux_supported?
       retries SELINUX_OPERATION_RETRIES
       retry_delay SELINUX_OPERATION_RETRY_DELAY
     end
+
+    execute "semodule -r #{sshd_session_module}" do
+      not_if "getenforce | grep Disabled"
+      only_if "semodule -l | grep -E '^#{sshd_session_module}([[:space:]]|$)'"
+      retries SELINUX_OPERATION_RETRIES
+      retry_delay SELINUX_OPERATION_RETRY_DELAY
+    end
   else
     execute "semodule -i /opt/gitlab/embedded/selinux/#{ssh_keygen_module}.pp" do
       not_if "getenforce | grep Disabled"
@@ -70,6 +78,13 @@ if SELinuxDistroHelper.selinux_supported?
     execute "semodule -i /opt/gitlab/embedded/selinux/#{gitlab_shell_module}.pp" do
       not_if "getenforce | grep Disabled"
       not_if "semodule -l | grep -E '^#{gitlab_shell_module}([[:space:]]|$)'"
+      retries SELINUX_OPERATION_RETRIES
+      retry_delay SELINUX_OPERATION_RETRY_DELAY
+    end
+
+    execute "semodule -i /opt/gitlab/embedded/selinux/#{sshd_session_module}.pp" do
+      not_if "getenforce | grep Disabled"
+      not_if "semodule -l | grep -E '^#{sshd_session_module}([[:space:]]|$)'"
       retries SELINUX_OPERATION_RETRIES
       retry_delay SELINUX_OPERATION_RETRY_DELAY
     end
