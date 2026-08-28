@@ -218,6 +218,9 @@ exclude 'embedded/lib/**/*.a'
 exclude 'embedded/lib/**/*.la'
 exclude 'embedded/include'
 
+# don't ship the glaz-ffi staging directory gitlab-kas links against
+exclude 'embedded/glaz-ffi'
+
 # exclude manpages and documentation
 exclude 'embedded/man'
 exclude 'embedded/share/doc'

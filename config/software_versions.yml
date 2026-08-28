@@ -22,7 +22,9 @@
 #
 # Keys per component:
 #   version   - the single pinned upstream version (simple components)
-#   sha256    - sha256 of the source tarball for `version`
+#   sha256    - sha256 of the source tarball for `version`; for components
+#               published as one artifact per architecture, a map of
+#               architecture => sha256 (e.g. glaz-ffi)
 #   checksums - map of version => sha256, for components that must keep
 #               several versions selectable (e.g. ruby current/next)
 #   current   - selected version for stable/tag builds (ruby)
@@ -55,3 +57,8 @@ libffi:
   ubt:
     revision: 3ubt
     sha256: d001ed3b88bfcc54548a51d79d8836c6880e86575ffb9125f76ff17db43a072f
+glaz-ffi:
+  version: 1.9.0
+  sha256:
+    x86_64: 0a389d3546ad1d0914e2252985e0e23342267f98b8d60e32e210eeac82c99374
+    aarch64: 321dfddbc93bd3705ed240285f4f1a8ad1bf9a751ed0252c5b104feb7775f226
