@@ -44,15 +44,52 @@ module Manifest
       @manifests_local_path = File.join(File.absolute_path(@manifests_bucket), 'gitlab-manifests')
       @current_version = Build::Info::Package.release_version.split("+")[0]
       @current_minor_version = @current_version.split(".")[0, 2].join(".")
-      @manifests_bucket_region = "eu-west-1"
+      # eu-west-1 is where the real manifest bucket lives; allow an override so
+      # a personal test bucket can be in any region.
+      @manifests_bucket_region = Gitlab::Util.get_env('LICENSE_S3_BUCKET_REGION') || 'eu-west-1'
       @json_data = nil
     end
 
     def execute
       @generator.create_manifest
-      s3_fetch
+      fetched = s3_fetch
+
+      unless overwrite?
+        # verify_no_overwrite! checks the local mirror s3_fetch produced. If the
+        # fetch failed, that mirror is empty and the check would pass against a
+        # false absence, so refuse rather than risk clobbering an existing file.
+        raise 'S3 fetch of existing manifests failed; cannot safely check for an existing manifest.' unless fetched
+
+        verify_no_overwrite!
+      end
+
       copy_manifests
       s3_upload
+    end
+
+    # Whether an existing manifest for this version may be replaced. The default
+    # (env unset) preserves historical behaviour -- the release manifest-upload
+    # job overwrites freely -- so only tooling that opts in (e.g. the manifest
+    # regeneration script/pipeline, which sets MANIFEST_OVERWRITE=false) is
+    # guarded against clobbering an already-published manifest.
+    def overwrite?
+      Gitlab::Util.get_env('MANIFEST_OVERWRITE') != 'false'
+    end
+
+    def target_manifest_path
+      File.join(@manifests_local_path, @package, @current_minor_version,
+                "#{@current_version}-#{@edition}.#{@generator.manifest_filename}")
+    end
+
+    # s3_fetch mirrors the bucket locally first, so a file present here means the
+    # manifest already exists in S3.
+    def verify_no_overwrite!
+      return unless File.exist?(target_manifest_path)
+
+      raise "Manifest for #{@current_version}-#{@edition} already exists at " \
+            "s3://#{File.join(@manifests_bucket_path, @package, @current_minor_version)}/" \
+            "#{@current_version}-#{@edition}.#{@generator.manifest_filename}. " \
+            'Set MANIFEST_OVERWRITE=true to replace it.'
     end
 
     def copy_manifests
@@ -74,9 +111,8 @@ module Manifest
       #         |-- 11.1.0-ee.version-manifest.json
       #         |-- 11.1.1.ee.version-manifest.json
       #
-      dest_dir = File.join(@manifests_local_path, @package, @current_minor_version)
-      FileUtils.mkdir_p(dest_dir)
-      FileUtils.cp(@generator.manifest_path, File.join(dest_dir, "#{@current_version}-#{@edition}.#{@generator.manifest_filename}"))
+      FileUtils.mkdir_p(File.dirname(target_manifest_path))
+      FileUtils.cp(@generator.manifest_path, target_manifest_path)
     end
   end
 end

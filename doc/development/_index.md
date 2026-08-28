@@ -26,6 +26,7 @@ title: Contribute to Linux package development
 - [Version format of packages, Docker images and other artifacts](package_version_format.md)
 - [Handling broken master pipelines](broken_master.md)
 - [Handling vulnerabilities](vulnerabilities.md)
+- [Regenerate a version manifest for a tag](regenerate-version-manifest.md)
 
 ## Operating system support
 

@@ -77,6 +77,9 @@ Cop/AvoidUsingEnv:
     - docker/**/*
     - lib/gitlab/util.rb
     - spec/lib/gitlab/util_spec.rb
+    # Standalone ops script; it is copied out and run on its own (before the
+    # bundle is installed), so it can't depend on Gitlab::Util.
+    - support/regenerate-manifest.rb
 
 Cop/SpecifyDefaultVersion:
   Enabled: true
