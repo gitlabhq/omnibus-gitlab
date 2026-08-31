@@ -43,6 +43,7 @@ module GitlabRails
       parse_smtp_settings
       validate_smtp_settings!
       validate_ssh_settings!
+      validate_mobile_push_settings!
       parse_nginx_settings
     end
 
@@ -479,6 +480,54 @@ gitlab_rails['gitlab_ssh_host'] = 'gitlab.example.com'
 gitlab_rails['gitlab_shell_ssh_port'] = 2222
       MSG
       raise msg
+    end
+
+    def validate_mobile_push_settings!
+      settings = Gitlab['gitlab_rails']
+      required = %w[mobile_push_apns_auth_key_path mobile_push_apns_key_id mobile_push_apns_team_id]
+      keys = required + %w[mobile_push_apns_topic]
+
+      # Reject non-String values outright: a coerced value would render into
+      # gitlab.yml, where the application's delivery-time rescue swallows the
+      # resulting failure on every push. Reconfigure is the last point where
+      # the misconfiguration can fail loudly with its cause named.
+      invalid = keys.reject { |key| settings[key].nil? || settings[key].is_a?(String) }
+
+      if invalid.any?
+        message = invalid.map { |key| "gitlab_rails['#{key}'] (#{settings[key].class})" }.join(', ')
+
+        raise "Mobile push notification settings must be strings. Not a string: #{message}."
+      end
+
+      # Normalize before validating: blank values collapse to a stripped
+      # String or nil, written back so gitlab.yml never renders a value the
+      # application's presence gate would silently reject (a blank topic
+      # would otherwise override the application-side default).
+      values = keys.to_h do |key|
+        value = settings[key].to_s.strip
+        settings[key] = value.empty? ? nil : value
+        [key, value]
+      end
+
+      return if values.each_value.all?(&:empty?)
+
+      missing = required.select { |key| values[key].empty? }
+
+      if missing.any?
+        message = missing.map { |key| "gitlab_rails['#{key}']" }.join(', ')
+
+        raise "Mobile push notifications require gitlab_rails['mobile_push_apns_auth_key_path'], " \
+              "gitlab_rails['mobile_push_apns_key_id'] and gitlab_rails['mobile_push_apns_team_id'] " \
+              "to all be set. Missing: #{message}."
+      end
+
+      auth_key_path = values['mobile_push_apns_auth_key_path']
+
+      return if File.file?(auth_key_path)
+
+      LoggingHelper.warning("gitlab_rails['mobile_push_apns_auth_key_path'] is set to '#{auth_key_path}', " \
+                            'but no file exists at that path. APNs delivery will fail until the key is placed ' \
+                            'there and is readable by the git user.')
     end
 
     # Returns variables hash for connection template

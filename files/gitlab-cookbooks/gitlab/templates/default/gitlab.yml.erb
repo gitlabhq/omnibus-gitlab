@@ -197,6 +197,21 @@ production: &base
     access_key_id: <%= quote(@amazon_ses_mailer_access_key_id) %>
     secret_access_key: <%= quote(@amazon_ses_mailer_secret_access_key) %>
 
+  # Mobile push notifications via the Apple Push Notification service (APNs),
+  # using Apple provider token (p8) authentication. Delivery is skipped when
+  # no key is configured.
+  mobile_push:
+    apns:
+      # Path to the APNs provider token signing key (.p8) from your Apple Developer account.
+      auth_key_path: <%= quote(@mobile_push_apns_auth_key_path) %>
+      # The 10-character identifier of the signing key.
+      key_id: <%= quote(@mobile_push_apns_key_id) %>
+      # The Apple Developer team identifier.
+      team_id: <%= quote(@mobile_push_apns_team_id) %>
+      # apns-topic sent for subscriptions that don't carry a bundle identifier.
+      # Defaults to "com.gitlab-mobile.app" when unset.
+      topic: <%= quote(@mobile_push_apns_topic) %>
+
   ## Reply by email
   # Allow users to comment on issues and merge requests by replying to notification emails.
   # For documentation on how to set this up, see https://docs.gitlab.com/ee/administration/reply_by_email.html

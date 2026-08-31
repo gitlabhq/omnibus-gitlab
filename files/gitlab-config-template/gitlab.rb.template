@@ -318,6 +318,18 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['amazon_ses_mailer_access_key_id'] = "YOUR-AWS-ACCESS-KEY-ID"
 # gitlab_rails['amazon_ses_mailer_secret_access_key'] = "YOUR-AWS-SECRET-ACCESS-KEY"
 
+### Mobile push notifications
+###! Delivery of mobile push notifications through the Apple Push Notification
+###! service (APNs), using Apple provider token (p8) authentication. Delivery
+###! is skipped when no key is configured. The auth key path, key ID, and
+###! team ID must all be set together. The topic defaults to
+###! "com.gitlab-mobile.app" when unset.
+###! Docs: https://docs.gitlab.com/omnibus/settings/mobile_push.html
+# gitlab_rails['mobile_push_apns_auth_key_path'] = "/etc/gitlab/mobile_push_apns_auth_key.p8"
+# gitlab_rails['mobile_push_apns_key_id'] = "YOUR-APNS-KEY-ID"
+# gitlab_rails['mobile_push_apns_team_id'] = "YOUR-APPLE-TEAM-ID"
+# gitlab_rails['mobile_push_apns_topic'] = "com.gitlab-mobile.app"
+
 ################################################################
 ## Reply by email
 ################################################################
