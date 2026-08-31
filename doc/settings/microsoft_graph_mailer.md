@@ -43,7 +43,7 @@ gitlab_rails['gitlab_email_reply_to'] = '<YOUR_ACCOUNT_EMAIL>'
 
 gitlab_rails['microsoft_graph_mailer_enabled'] = true
 
-# The unique identifier for the user. To use Microsoft Graph on behalf of the user.
+# The unique identifier for the user. To use Microsoft Graph on behalf of the user. In Microsoft terms, this is called mailboxid.
 gitlab_rails['microsoft_graph_mailer_user_id'] = "<YOUR_USER_ID>"
 
 # The directory tenant the application plans to operate against, in GUID or domain-name format.
@@ -52,8 +52,8 @@ gitlab_rails['microsoft_graph_mailer_tenant'] = "<YOUR_TENANT_ID>"
 # The application ID that's assigned to your app. You can find this information in the portal where you registered your app.
 gitlab_rails['microsoft_graph_mailer_client_id'] = "<YOUR_CLIENT_ID>"
 
-# The client secret that you generated for your app in the app registration portal.
-gitlab_rails['microsoft_graph_mailer_client_secret'] = "<YOUR_CLIENT_SECRET_ID>"
+# The client secret value that you generated for your app in the app registration portal.
+gitlab_rails['microsoft_graph_mailer_client_secret'] = "<YOUR_CLIENT_SECRET_VALUE>"
 
 gitlab_rails['microsoft_graph_mailer_azure_ad_endpoint'] = "https://login.microsoftonline.com"
 
