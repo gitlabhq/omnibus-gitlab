@@ -105,7 +105,10 @@ module GitlabCtl
           opts.on('-h', '--help', 'Prints this help') do
             Utils.warn_and_exit opts
           end
-          opts.on('--master [MASTER]', 'The name of the current master') do |m|
+          opts.on('--leader [LEADER]', 'The name of the current leader') do |l|
+            options[:leader] = l
+          end
+          opts.on('--master [MASTER]', 'DEPRECATED: The name of the current leader. Use --leader instead') do |m|
             options[:master] = m
           end
           opts.on('--candidate [CANDIDATE]', 'The name of the candidate') do |c|
@@ -116,7 +119,10 @@ module GitlabCtl
           opts.on('-h', '--help', 'Prints this help') do
             Utils.warn_and_exit opts
           end
-          opts.on('--master [MASTER]', 'The name of the current master') do |m|
+          opts.on('--leader [LEADER]', 'The name of the current leader') do |l|
+            options[:leader] = l
+          end
+          opts.on('--master [MASTER]', 'DEPRECATED: The name of the current leader. Use --leader instead') do |m|
             options[:master] = m
           end
           opts.on('--candidate [CANDIDATE]', 'The name of the candidate') do |c|
@@ -160,9 +166,22 @@ module GitlabCtl
 
       options[:command] = command
       commands[command].order! args
+      normalize_leader_option!(options)
       options
     end
     # rubocop:enable Metrics/AbcSize
+
+    # --master stays a working alias of --leader until its removal in
+    # GitLab 20.0.
+    def self.normalize_leader_option!(options)
+      return unless options.key?(:master)
+
+      raise OptionParser::ParseError, '--master and --leader are mutually exclusive. Use --leader.' \
+        if options.key?(:leader)
+
+      Kernel.warn 'WARNING: --master is deprecated and will be removed in GitLab 20.0. Use --leader instead.'
+      options[:leader] = options.delete(:master)
+    end
 
     def self.usage
       USAGE
@@ -207,7 +226,7 @@ module GitlabCtl
     def self.failover(options)
       command = %w(failover)
       command << "--force"
-      command << "--leader #{options[:master]}" if options[:master]
+      command << "--leader #{options[:leader]}" if options[:leader]
       command << "--candidate #{options[:candidate]}" if options[:candidate]
       Utils.patronictl(command)
     end
@@ -215,7 +234,7 @@ module GitlabCtl
     def self.switchover(options)
       command = %w(switchover)
       command << "--force"
-      command << "--leader #{options[:master]}" if options[:master]
+      command << "--leader #{options[:leader]}" if options[:leader]
       command << "--candidate #{options[:candidate]}" if options[:candidate]
       command << "--scheduled #{options[:scheduled]}" if options[:scheduled]
       Utils.patronictl(command)

@@ -14,8 +14,8 @@ RSpec.describe 'Patroni' do
     'bootstrap' => %w(--srcdir=SRCDIR --scope=SCOPE --datadir=DATADIR),
     'pause' => %w(-w),
     'resume' => %w(--wait),
-    'failover' => %w(--master MASTER --candidate CANDIDATE),
-    'switchover' => %w(--master MASTER --candidate CANDIDATE --scheduled SCHEDULED),
+    'failover' => %w(--leader LEADER --candidate CANDIDATE),
+    'switchover' => %w(--leader LEADER --candidate CANDIDATE --scheduled SCHEDULED),
     'reinitialize-replica' => %w(--wait --member MEMBER),
     'restart' => [],
     'reload' => []
@@ -25,8 +25,8 @@ RSpec.describe 'Patroni' do
     'bootstrap' => { srcdir: 'SRCDIR', scope: 'SCOPE', datadir: 'DATADIR' },
     'pause' => { wait: true },
     'resume' => { wait: true },
-    'failover' => { master: 'MASTER', candidate: 'CANDIDATE' },
-    'switchover' => { master: 'MASTER', candidate: 'CANDIDATE', scheduled: 'SCHEDULED' },
+    'failover' => { leader: 'LEADER', candidate: 'CANDIDATE' },
+    'switchover' => { leader: 'LEADER', candidate: 'CANDIDATE', scheduled: 'SCHEDULED' },
     'reinitialize-replica' => { wait: true, member: 'MEMBER' },
     'restart' => {},
     'reload' => {}
@@ -37,8 +37,8 @@ RSpec.describe 'Patroni' do
     'members' => 'list',
     'pause' => 'pause -w',
     'resume' => 'resume -w',
-    'failover' => 'failover --force --leader MASTER --candidate CANDIDATE',
-    'switchover' => 'switchover --force --leader MASTER --candidate CANDIDATE --scheduled SCHEDULED',
+    'failover' => 'failover --force --leader LEADER --candidate CANDIDATE',
+    'switchover' => 'switchover --force --leader LEADER --candidate CANDIDATE --scheduled SCHEDULED',
     'restart' => 'restart --force fake-scope fake-node',
     'reload' => 'reload --force fake-scope fake-node'
   }
@@ -74,6 +74,21 @@ RSpec.describe 'Patroni' do
           cmd_opts[:command] = cmd
 
           expect(GitlabCtl::Patroni.parse_options(%W(patroni #{cmd}) + cmd_line)).to include(cmd_opts)
+        end
+      end
+    end
+
+    context 'when the deprecated --master option is passed' do
+      %w(failover switchover).each do |cmd|
+        it "maps --master to the leader option and warns for #{cmd}" do
+          expect(GitlabCtl::Patroni.parse_options(%W(patroni #{cmd} --master LEADER))).to include(leader: 'LEADER')
+          expect(Kernel).to have_received(:warn).with(/--master is deprecated and will be removed in GitLab 20.0/)
+        end
+
+        it "throws error when both --master and --leader are passed for #{cmd}" do
+          expect { GitlabCtl::Patroni.parse_options(%W(patroni #{cmd} --leader LEADER --master MASTER)) }.to(
+            raise_error(OptionParser::ParseError, /mutually exclusive/)
+          )
         end
       end
     end
