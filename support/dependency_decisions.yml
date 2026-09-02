@@ -42,10 +42,31 @@
 - - :license
   - github.com/hashicorp/consul-awsauth
   - MPL2
-  - :who: Robert Marshall
-    :why: https://github.com/hashicorp/consul-awsauth/blob/0a5f57fe920af22d9b6f3a233119a2094f5f4d23/LICENSE
-    :versions: [ v0.0.0-20250130185352-0a5f57fe920a ]
-    :when: 2025-09-12 15:03:39.296014000 Z
+  - :who: Alec Xu
+    :why: https://github.com/hashicorp/consul-awsauth/blob/6b9b26380433c3a5b442c5ee7dd47481513939ca/LICENSE
+    :versions: [ v0.0.0-20250130185352-0a5f57fe920a, v0.0.0-20260217094118-6b9b26380433 ]
+    :when: 2026-09-02 00:00:00.000000000 Z
+- - :license
+  - github.com/hashicorp/cap
+  - MPL2
+  - :who: Alec Xu
+    :why: https://github.com/hashicorp/cap/blob/v0.10.0/LICENSE
+    :versions: [ v0.10.0 ]
+    :when: 2026-09-03 00:00:00.000000000 Z
+- - :license
+  - github.com/hashicorp/go-secure-stdlib/awsutil/v2
+  - MPL2
+  - :who: Alec Xu
+    :why: https://github.com/hashicorp/go-secure-stdlib/blob/awsutil/v2.1.2/awsutil/LICENSE
+    :versions: [ v2.1.2 ]
+    :when: 2026-09-03 00:00:00.000000000 Z
+- - :license
+  - github.com/hashicorp/serf
+  - MPL2
+  - :who: Alec Xu
+    :why: https://github.com/hashicorp/serf/blob/v0.10.2/LICENSE
+    :versions: [ v0.10.2 ]
+    :when: 2026-09-03 00:00:00.000000000 Z
 - - :license
   - gitlab.com/lupine/icu
   - BSD-2-Clause
@@ -160,10 +181,10 @@
 - - :license
   - github.com/hashicorp/golang-lru
   - MPL2
-  - :who: Robert Marshall
-    :why: https://github.com/hashicorp/golang-lru/blob/v0.6.0/LICENSE
-    :versions: [ v0.6.0 ]
-    :when: 2022-11-17 03:41:27.127000000 Z
+  - :who: Alec Xu
+    :why: https://github.com/hashicorp/golang-lru/blob/v1.0.2/LICENSE
+    :versions: [ v0.6.0, v1.0.2 ]
+    :when: 2026-09-02 00:00:00.000000000 Z
 - - :license
   - "@gitlab/fonts"
   - OFL-1.1
@@ -300,10 +321,10 @@
 - - :license
   - "github.com/hashicorp/go-discover"
   - MPL2
-  - :who: Robert Marshall
-    :why: https://github.com/hashicorp/go-discover/blob/e89ebd1b2f65c80bb2dd21570c12a2957c9aad82/LICENSE
-    :versions: [ v1.0.0 ]
-    :when: 2025-09-12 15:03:39.296014000 Z
+  - :who: Alec Xu
+    :why: https://github.com/hashicorp/go-discover/blob/v1.1.0/LICENSE
+    :versions: [ v1.0.0, v1.1.0 ]
+    :when: 2026-09-02 00:00:00.000000000 Z
 - - :license
   - "github.com/hashicorp/go-discover/provider/gce"
   - MPL2
@@ -334,10 +355,10 @@
 - - :license
   - "github.com/hashicorp/memberlist"
   - MPL2
-  - :who: Robert Marshall
-    :why: https://github.com/hashicorp/memberlist/blob/master/LICENSE
-    :versions: [ v0.6.0 ]
-    :when: 2026-09-01 15:04:41.817671000 Z
+  - :who: Alec Xu
+    :why: https://github.com/hashicorp/memberlist/blob/v0.5.2/LICENSE
+    :versions: [ v0.5.2, v0.6.0 ]
+    :when: 2026-09-03 00:00:00.000000000 Z
 - - :license
   - "gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/clients/gopb"
   - MIT
