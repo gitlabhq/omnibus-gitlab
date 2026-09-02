@@ -105,6 +105,10 @@ RSpec.describe 'gitlab::gitlab-rails' do
       expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/agent_plan_content')
     end
 
+    it 'does not create the ci_catalog_bundles storage directory' do
+      expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/ci_catalog_bundles')
+    end
+
     it 'does not create the GitLab pages directory' do
       expect(chef_run).not_to run_ruby_block('directory resource: /tmp/shared/pages')
     end
@@ -180,6 +184,10 @@ RSpec.describe 'gitlab::gitlab-rails' do
 
     it 'creates the agent_plan_content directory' do
       expect(chef_run).to create_storage_directory('/tmp/shared/agent_plan_content').with(owner: 'git', group: 'git', mode: '0700')
+    end
+
+    it 'creates the ci_catalog_bundles directory' do
+      expect(chef_run).to create_storage_directory('/tmp/shared/ci_catalog_bundles').with(owner: 'git', group: 'git', mode: '0700')
     end
 
     it 'creates the encrypted_settings directory' do

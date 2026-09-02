@@ -460,6 +460,16 @@ production: &base
       remote_directory: <%= quote(@agent_plan_content_object_store_remote_directory) %>
       connection: <%= @agent_plan_content_object_store_connection.to_json %>
 
+  ## CI Catalog Bundles
+  ci_catalog_bundles:
+    enabled: <%= @ci_catalog_bundles_enabled %>
+    # The location where CI catalog component bundles are stored (default: shared/ci_catalog_bundles).
+    storage_path: <%= @ci_catalog_bundles_storage_path %>
+    object_store:
+      enabled: <%= @ci_catalog_bundles_object_store_enabled %>
+      remote_directory: <%= quote(@ci_catalog_bundles_object_store_remote_directory) %>
+      connection: <%= @ci_catalog_bundles_object_store_connection.to_json %>
+
   ## Container Registry
   registry:
     enabled: <%= @registry_enabled %>
