@@ -49,7 +49,12 @@ dependency 'libiconv'
 
 dependency 'git' unless project.dependencies.include?('git')
 
-source git: version.remote
+# Shallow-fetch the pinned revision instead of cloning the full history of
+# the Gitaly repo, which is one of the largest sources of git egress. The
+# fetcher resolves the version to a SHA and fetches it at this depth, so this
+# works for tag, branch, and SHA pins. Requires an omnibus gem with the
+# `depth` source option (>= 9.0.19.6).
+source git: version.remote, depth: 1
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
