@@ -16,7 +16,7 @@
 #
 
 name 'postgresql'
-default_version '17.10'
+default_version '17.11'
 major_version = default_version.split('.')[0]
 
 license 'PostgreSQL'
@@ -38,7 +38,7 @@ if Build::Check.use_ubt? && !Build::Check.use_system_ssl?
   build(&Build::UBT.install)
 else
   version default_version do
-    source sha256: '078a03516dcdbdb705fecaf415ea3d13a956c589e46f09fed68a06fb00598c90'
+    source sha256: 'dd27f2b3c59e73ed14aa3324901242bf69a032a6347805f274e6260322d42979'
   end
 
   source url: "https://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.bz2"
