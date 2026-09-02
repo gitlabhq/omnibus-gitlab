@@ -58,6 +58,7 @@ module GitlabRails
       parse_terraform_state_dir
       parse_ci_secure_files_dir
       parse_agent_plan_content_dir
+      parse_ci_catalog_bundles_dir
       parse_encrypted_settings_path
       parse_pages_dir
     end
@@ -369,6 +370,11 @@ module GitlabRails
     def parse_agent_plan_content_dir
       # This requires the parse_shared_dir to be executed before
       Gitlab['gitlab_rails']['agent_plan_content_storage_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'agent_plan_content')
+    end
+
+    def parse_ci_catalog_bundles_dir
+      # This requires the parse_shared_dir to be executed before
+      Gitlab['gitlab_rails']['ci_catalog_bundles_storage_path'] ||= File.join(Gitlab['gitlab_rails']['shared_path'], 'ci_catalog_bundles')
     end
 
     def parse_encrypted_settings_path
