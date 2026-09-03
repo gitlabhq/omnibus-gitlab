@@ -20,7 +20,7 @@ require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 require "#{Omnibus::Config.project_root}/lib/gitlab/prometheus_helper"
 
 name 'alertmanager'
-version = Gitlab::Version.new('alertmanager', '0.31.1')
+version = Gitlab::Version.new('alertmanager', '0.34.0')
 default_version version.print
 
 license 'APACHE-2.0'
@@ -49,7 +49,12 @@ else
     cwd = "#{exporter_source_dir}/src/#{go_source}"
 
     prom_version = Prometheus::VersionFlags.new(version)
-
+    # alertmanager 0.32.1+ uses go:embed for ui/app/dist/, which is
+    # populated upstream by an Elm-based UI build. The bundled UI is not
+    # surfaced through GitLab; satisfy the embed with a placeholder so
+    # `go build` succeeds without running the UI build.
+    mkdir "#{cwd}/ui/app/dist"
+    command "sh -c 'echo \"<!-- stub -->\" > #{cwd}/ui/app/dist/index.html'"
     command "go build -ldflags '#{prom_version.print_ldflags}' ./cmd/alertmanager", env: env, cwd: cwd
 
     mkdir "#{install_dir}/embedded/bin/"
