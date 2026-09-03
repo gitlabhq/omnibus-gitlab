@@ -16,7 +16,7 @@
 #
 
 name 'patroni'
-default_version '3.3.1'
+default_version '4.0.5'
 
 license 'MIT'
 license_file 'LICENSE'
@@ -31,22 +31,5 @@ build do
 
   patch source: "add-license-file.patch"
 
-  # Version 1.0 of PrettyTable does not work with Patroni 1.6.4
-  # https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5701
-  command "#{install_dir}/embedded/bin/pip3 install prettytable==0.7.2", env: env
-
-  # Pin ydiff to 1.2 since 1.3 requires cdiff:
-  # https://github.com/zalando/patroni/blob/634b44ee0586f063033074806a42b534a354cbff/docs/releases.rst
-  # According to Patroni 3.3.0 release notes, upgrading to this version
-  # should be enough to fix this problem. We should test unpinning
-  # this library once we update to Patroni 3.3.0.
-  # See: https://github.com/zalando/patroni/blob/634b44ee0586f063033074806a42b534a354cbff/docs/releases.rst
-  command "#{install_dir}/embedded/bin/pip3 install ydiff==1.2", env: env
-
   command "#{install_dir}/embedded/bin/pip3 install patroni[consul]==#{version}", env: env
-
-  # The available_parameters module introduced in 3.0.3 breaks file traversal. This was fixed in 4.0.0.
-  # https://github.com/patroni/patroni/pull/3152
-  patch source: "permission-denied.patch",
-        target: "#{install_dir}/embedded/lib/python3.12/site-packages/patroni/postgresql/available_parameters/__init__.py"
 end
