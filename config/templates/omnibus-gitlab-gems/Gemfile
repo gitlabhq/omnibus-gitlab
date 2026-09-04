@@ -37,11 +37,8 @@ gem 'rack', '2.2.23'
 gem 'remote_syslog-gitlab', '0.0.2'
 gem 'erb', '>= 4.0.3.1'
 
-# pin the version of faraday and faraday-net_http temporarily until
-# conflicts between the version of net-http it requires and the version of
-# net-http shipped in the Gemfile can be resolved
 gem 'faraday-net_http', '3.0.2'
-gem 'faraday', '2.8.1'
+gem 'faraday', '2.14.3'
 
 # Temporary workaround because upstream inspec-core does not list this as
 # a requirement and it causes failures during gitlab-ctl reconfigure in
