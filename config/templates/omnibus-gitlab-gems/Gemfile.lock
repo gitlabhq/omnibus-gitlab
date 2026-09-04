@@ -143,10 +143,10 @@ GEM
     eventmachine (1.2.7)
     eventmachine-tail (0.6.6)
       eventmachine
-    faraday (2.8.1)
-      base64
-      faraday-net_http (>= 2.0, < 3.1)
-      ruby2_keywords (>= 0.0.4)
+    faraday (2.14.3)
+      faraday-net_http (>= 2.0, < 3.5)
+      json
+      logger
     faraday-follow_redirects (0.3.0)
       faraday (>= 1, < 3)
     faraday-http-cache (2.5.1)
@@ -201,6 +201,7 @@ GEM
       with_env (= 1.1.0)
       xml-simple (~> 1.1.9)
     little-plugger (1.1.4)
+    logger (1.7.0)
     logging (2.3.1)
       little-plugger (~> 1.1)
       multi_json (~> 1.14)
@@ -295,7 +296,6 @@ GEM
     rspec-support (3.12.2)
     rubocop-ast (1.21.0)
       parser (>= 3.1.1.0)
-    ruby2_keywords (0.0.5)
     rubyntlm (0.6.5)
       base64
     rubyzip (2.3.2)
@@ -404,7 +404,7 @@ DEPENDENCIES
   chef-config (= 18.3.0)!
   chef-zero (= 15.0.11)!
   erb (>= 4.0.3.1)
-  faraday (= 2.8.1)
+  faraday (= 2.14.3)
   faraday-net_http (= 3.0.2)
   ffi (= 1.17.4)
   gitlab-ruby-shadow (= 2.6.0)
@@ -457,7 +457,7 @@ CHECKSUMS
   erubis (2.7.0) sha256=63653f5174a7997f6f1d6f465fbe1494dcc4bdab1fb8e635f6216989fb1148ba
   eventmachine (1.2.7) sha256=994016e42aa041477ba9cff45cbe50de2047f25dd418eba003e84f0d16560972
   eventmachine-tail (0.6.6) sha256=1dbeeaae11e1307b2a93d5a1e951797b07b7c4cd9362f17112958c5600ba1b64
-  faraday (2.8.1) sha256=a823dc6e1f5deaf6f91c8c1c02f37393f2339b39d811d9de33cef59d7d2ee4a6
+  faraday (2.14.3) sha256=1882247e6766615c8220b4392bf1d27f6ebb63d8e28267587cef1fb0bf37f278
   faraday-follow_redirects (0.3.0) sha256=d92d975635e2c7fe525dd494fcd4b9bb7f0a4a0ec0d5f4c15c729530fdb807f9
   faraday-http-cache (2.5.1) sha256=cbfc129a85e1ad8580130189832cf59e7e117d94fe277547d61fc531f7689483
   faraday-net_http (3.0.2) sha256=6882929abed8094e1ee30344a3369e856fe34530044630d1f652bf70ebd87e8d
@@ -489,6 +489,7 @@ CHECKSUMS
   license-acceptance (2.1.13) sha256=eecb259b87adaebf162cd25e613b0e0f6d3005c92ffd76ddeca0c053e450058a
   license_finder (7.2.1) sha256=179ead19b64b170638b72fd16024233813673ac9d20d5ba75ae0b4444887ef14
   little-plugger (1.1.4) sha256=d5f347c00d9d648040ef7c17d6eb09d3d0719adf19ca30d1a3b6fb26d0a631bb
+  logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
   logging (2.3.1) sha256=02347901efa6bc96d319bd5a83ad194395b900299a35f940080c3dd22f64d4fd
   method_source (1.0.0) sha256=d779455a2b5666a079ce58577bfad8534f571af7cec8107f4dce328f0981dede
   mime-types (3.5.2) sha256=c1299f10fa34c75a6f168e99e9dadbd11bc507d9d62dc5cf98c4e65f2af8c4e4
@@ -532,7 +533,6 @@ CHECKSUMS
   rspec-mocks (3.12.7) sha256=b2f10a7879781de9448f28e5dc399277d4eac14d577b450e4c04b7897fe4c6a8
   rspec-support (3.12.2) sha256=de719abdc9d03842c96052be4a2dab8d7fd9314d0b2488b0f755008d071b761d
   rubocop-ast (1.21.0) sha256=8f5d98611343498602de2d41bc583aca71599daad16daeadaeeee60f134c9568
-  ruby2_keywords (0.0.5) sha256=ffd13740c573b7301cf7a2e61fc857b2a8e3d3aff32545d6f8300d8bae10e3ef
   rubyntlm (0.6.5) sha256=47013402b99ae29ee93f930af51edaec8c6008556f4be25705a422b4430314f5
   rubyzip (2.3.2) sha256=3f57e3935dc2255c414484fbf8d673b4909d8a6a57007ed754dde39342d2373f
   semverse (3.0.2) sha256=c9726aee7858d37c84948a4101daffdcf03a0963a12a33ad7cc39a72c03530ef
