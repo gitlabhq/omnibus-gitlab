@@ -398,3 +398,10 @@
   - :who: Adam Chu
     :why: https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/LICENSE
     :when: 2026-06-19 00:00:00.000000000 Z
+- - :license
+  - "./third_party/icu"
+  - BSD-2-Clause
+  - :who: Jon Doveston
+    :why: https://gitlab.com/gitlab-org/go/icu/blob/master/README.md#licence
+    :versions: []
+    :when: 2026-09-04 00:00:00.000000000 Z
