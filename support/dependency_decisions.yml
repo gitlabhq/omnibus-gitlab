@@ -405,3 +405,10 @@
     :why: https://github.com/hashicorp/nomad/blob/main/api/LICENSE
     :versions: []
     :when: 2026-08-21 00:00:00.000000000 Z
+- - :license
+  - "./third_party/icu"
+  - BSD-2-Clause
+  - :who: Jon Doveston
+    :why: https://gitlab.com/gitlab-org/go/icu/blob/master/README.md#licence
+    :versions: []
+    :when: 2026-09-04 00:00:00.000000000 Z
