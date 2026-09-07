@@ -18,7 +18,7 @@
 
 name 'nginx'
 
-version = Gitlab::Version.new('nginx', 'release-1.31.0')
+version = Gitlab::Version.new('nginx', 'release-1.31.4')
 default_version version.print(false)
 display_version version.print(false).delete_prefix('release-')
 
