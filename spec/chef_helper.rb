@@ -65,6 +65,7 @@ RSpec.configure do |config|
     stub_command("semodule -l | grep -E '^#{gitlab_shell_module}([[:space:]]|$)'").and_return(true)
     stub_command("semodule -l | grep -E '^#{sshd_session_module}([[:space:]]|$)'").and_return(true)
     stub_command("semodule -l | grep -E '^#{gitlab_unified_module}([[:space:]]|$)'").and_return(true)
+    allow(SELinuxHelper).to receive(:module_installed_and_current?).and_return(true)
     stub_command(%r{set \-x \&\& \[ \-d "[^"]\" \]}).and_return(false)
     stub_command(%r{set \-x \&\& \[ "\$\(stat \-\-printf='[^']*' \$\(readlink -f /[^\)]*\)\) }).and_return(false)
     stub_command('/opt/gitlab/embedded/bin/psql --version').and_return("fake_version")

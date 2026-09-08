@@ -400,4 +400,64 @@ RSpec.describe SELinuxHelper do
       expect(SELinuxHelper.equivalent_spec('/var/opt/gitlab/.ssh(/.*)?', [])).to eq('/var/opt/gitlab/.ssh(/.*)?')
     end
   end
+
+  context 'when checking if an installed module matches the shipped package' do
+    let!(:base_dir) { Dir.mktmpdir('selinux-helper-spec') }
+    let!(:extract_dir) { File.join(base_dir, 'extract').tap { |dir| FileUtils.mkdir_p(dir) } }
+    let!(:shipped_pp) { File.join(base_dir, 'gitlab.pp').tap { |file| File.binwrite(file, "shipped\x00policy") } }
+    let(:extracted_pp) { File.join(extract_dir, 'gitlab.pp') }
+    let(:exitstatus) { 0 }
+
+    before do
+      # chef_helper.rb stubs this method to true for recipe specs; exercise the real implementation here.
+      allow(SELinuxHelper).to receive(:module_installed_and_current?).and_call_original
+      allow(Dir).to receive(:mktmpdir).and_yield(extract_dir)
+      allow(Mixlib::ShellOut).to receive(:new).with('semodule', '-E', 'gitlab', cwd: extract_dir).and_return(
+        double(run_command: double(exitstatus: exitstatus))
+      )
+    end
+
+    after do
+      FileUtils.rm_rf(base_dir)
+    end
+
+    it 'returns true when the extracted module is byte-identical to the shipped package' do
+      File.binwrite(extracted_pp, "shipped\x00policy")
+
+      expect(SELinuxHelper.module_installed_and_current?('gitlab', shipped_pp)).to be true
+    end
+
+    it 'returns false when the extracted module differs from the shipped package' do
+      File.binwrite(extracted_pp, "older\x00policy")
+
+      expect(SELinuxHelper.module_installed_and_current?('gitlab', shipped_pp)).to be false
+    end
+
+    it 'returns false when semodule -E succeeds but produces no file' do
+      expect(SELinuxHelper.module_installed_and_current?('gitlab', shipped_pp)).to be false
+    end
+
+    context 'when the module is not installed' do
+      let(:exitstatus) { 1 }
+
+      it 'returns false' do
+        expect(SELinuxHelper.module_installed_and_current?('gitlab', shipped_pp)).to be false
+      end
+    end
+
+    context 'when semodule is not available' do
+      before do
+        allow(Mixlib::ShellOut).to receive(:new).with('semodule', '-E', 'gitlab', cwd: extract_dir).and_raise(Errno::ENOENT)
+      end
+
+      it 'returns false so the install resource surfaces the error' do
+        expect(SELinuxHelper.module_installed_and_current?('gitlab', shipped_pp)).to be false
+      end
+    end
+
+    it 'raises when the shipped package is missing' do
+      expect { SELinuxHelper.module_installed_and_current?('gitlab', File.join(base_dir, 'missing.pp')) }
+        .to raise_error(/SELinux policy package .* not found/)
+    end
+  end
 end

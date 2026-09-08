@@ -24,11 +24,15 @@ if SELinuxDistroHelper.selinux_supported?
   gitlab_shell_module = 'gitlab-13.5.0-gitlab-shell'
   sshd_session_module = 'gitlab-19.4.0-sshd-session'
   gitlab_unified_module = 'gitlab'
+  selinux_policy_dir = '/opt/gitlab/embedded/selinux'
 
   if SELinuxHelper.use_unified_policy?(node)
+    # Reinstall when the installed module differs from the shipped .pp so that
+    # upgraded hosts pick up policy changes. A name-only guard would leave them
+    # running a stale module.
     execute "semodule -i /opt/gitlab/embedded/selinux/#{gitlab_unified_module}.pp" do
       not_if "getenforce | grep Disabled"
-      not_if "semodule -l | grep -E '^#{gitlab_unified_module}([[:space:]]|$)'"
+      not_if { SELinuxHelper.module_installed_and_current?(gitlab_unified_module, "#{selinux_policy_dir}/#{gitlab_unified_module}.pp") }
       retries SELINUX_OPERATION_RETRIES
       retry_delay SELINUX_OPERATION_RETRY_DELAY
     end
@@ -68,9 +72,12 @@ if SELinuxDistroHelper.selinux_supported?
       retry_delay SELINUX_OPERATION_RETRY_DELAY
     end
 
+    # Reinstall when the installed module differs from the shipped .pp so that
+    # upgraded hosts pick up policy changes. A name-only guard would leave them
+    # running a stale module.
     execute "semodule -i /opt/gitlab/embedded/selinux/#{authorized_keys_module}.pp" do
       not_if "getenforce | grep Disabled"
-      not_if "semodule -l | grep -E '^#{authorized_keys_module}([[:space:]]|$)'"
+      not_if { SELinuxHelper.module_installed_and_current?(authorized_keys_module, "#{selinux_policy_dir}/#{authorized_keys_module}.pp") }
       retries SELINUX_OPERATION_RETRIES
       retry_delay SELINUX_OPERATION_RETRY_DELAY
     end

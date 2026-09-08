@@ -1,14 +1,43 @@
 
-module gitlab-10.5.0-ssh-authorized-keys 1.0;
+module gitlab-10.5.0-ssh-authorized-keys 1.1;
 
 require {
         type var_log_t;
         type sshd_t;
         type http_cache_port_t;
+        type unconfined_service_t;
         class tcp_socket name_connect;
-        class file { open read };
+        class unix_stream_socket connectto;
+        class file { open read append };
 }
 
 #============= sshd_t ==============
+# Core bug fix: sshd_t must be able to connect to the workhorse socket
+# (AuthorizedKeysCommand on EL 9/10 with SELinux enforcing).
+# AVC: denied { connectto } for sshd_t -> unconfined_service_t tclass=unix_stream_socket
+# sock_file write already passes; connectto was the only missing permission.
+allow sshd_t unconfined_service_t:unix_stream_socket connectto;
 allow sshd_t http_cache_port_t:tcp_socket name_connect;
-allow sshd_t var_log_t:file open;
+allow sshd_t var_log_t:file { open append };
+
+# sshd_session_t: per-session binary introduced in OpenSSH 9.8 (EL 10).
+# Grants connectto for workhorse socket, name_connect for TCP key lookup,
+# and open+append for gitlab-shell.log.
+optional {
+    require {
+        type sshd_session_t;
+    }
+    allow sshd_session_t unconfined_service_t:unix_stream_socket connectto;
+    allow sshd_session_t http_cache_port_t:tcp_socket name_connect;
+    allow sshd_session_t var_log_t:file { open append };
+}
+
+# sshd_auth_t: authentication-phase domain introduced in OpenSSH 10.0 / Fedora 43.
+optional {
+    require {
+        type sshd_auth_t;
+    }
+    allow sshd_auth_t unconfined_service_t:unix_stream_socket connectto;
+    allow sshd_auth_t http_cache_port_t:tcp_socket name_connect;
+    allow sshd_auth_t var_log_t:file { open append };
+}
