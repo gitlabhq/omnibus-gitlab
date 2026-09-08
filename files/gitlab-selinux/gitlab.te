@@ -1,4 +1,4 @@
-module gitlab 1.1.0;
+module gitlab 1.2.0;
 
 ############################
 # External policy components
@@ -9,6 +9,7 @@ require {
     type init_tmp_t;
     type ssh_keygen_t;
     type sshd_t;
+    type unconfined_service_t;
     type var_log_t;
 
     attribute file_type;
@@ -17,6 +18,7 @@ require {
     class file { open read getattr append };
     class sock_file { write read };
     class tcp_socket name_connect;
+    class unix_stream_socket connectto;
 }
 
 ################################
@@ -31,8 +33,9 @@ typeattribute gitlab_shell_t file_type;
 #####################
 allow ssh_keygen_t init_tmp_t:file open;
 
+allow sshd_t unconfined_service_t:unix_stream_socket connectto;
 allow sshd_t http_cache_port_t:tcp_socket name_connect;
-allow sshd_t var_log_t:file open;
+allow sshd_t var_log_t:file { open append };
 allow sshd_t gitlab_shell_t:file { read open getattr };
 allow sshd_t gitlab_shell_t:sock_file write;
 
@@ -42,6 +45,7 @@ allow httpd_t gitlab_shell_t:sock_file { read write };
 # Without these rules, git-over-SSH fails with SELinux Enforcing because sshd-session
 # cannot read the gitlab_shell_t-labelled authorized_keys file. The sock_file and
 # var_log_t rules mirror the sshd_t grants and cover fast SSH key lookup.
+# connectto and name_connect cover AuthorizedKeysCommand via workhorse socket / TCP.
 # See: https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/10048
 optional {
     require {
@@ -50,7 +54,9 @@ optional {
     allow sshd_session_t gitlab_shell_t:dir { search getattr };
     allow sshd_session_t gitlab_shell_t:file { getattr open read };
     allow sshd_session_t gitlab_shell_t:sock_file write;
-    allow sshd_session_t var_log_t:file append;
+    allow sshd_session_t unconfined_service_t:unix_stream_socket connectto;
+    allow sshd_session_t http_cache_port_t:tcp_socket name_connect;
+    allow sshd_session_t var_log_t:file { open append };
 }
 
 # sshd_auth_t: authentication-phase domain introduced in OpenSSH 10.0 / Fedora 43.
@@ -61,5 +67,7 @@ optional {
     allow sshd_auth_t gitlab_shell_t:dir { search getattr };
     allow sshd_auth_t gitlab_shell_t:file { getattr open read };
     allow sshd_auth_t gitlab_shell_t:sock_file write;
-    allow sshd_auth_t var_log_t:file append;
+    allow sshd_auth_t unconfined_service_t:unix_stream_socket connectto;
+    allow sshd_auth_t http_cache_port_t:tcp_socket name_connect;
+    allow sshd_auth_t var_log_t:file { open append };
 }

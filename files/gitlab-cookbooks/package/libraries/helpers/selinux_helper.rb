@@ -1,3 +1,6 @@
+require 'fileutils'
+require 'tmpdir'
+
 require_relative '../helpers/shell_out_helper'
 
 class SELinuxHelper
@@ -8,6 +11,30 @@ class SELinuxHelper
       return false if node['package']['selinux_policy_version'].nil?
 
       true
+    end
+
+    # Returns true when the SELinux module `name` is installed and its stored
+    # policy package is byte-identical to the shipped .pp at `pp_path`.
+    #
+    # `semodule -l` no longer prints module versions on libsemanage >= 2.4
+    # (EL 8+), so the installed version cannot be read from its output.
+    # Instead, `semodule -E <name>` extracts the installed module's original
+    # .pp into the current directory, which is then compared with the shipped
+    # one. A missing or differing module means the shipped .pp must be
+    # (re)installed. The temporary directory is removed when the block exits.
+    def module_installed_and_current?(name, pp_path)
+      raise "SELinux policy package #{pp_path} not found" unless File.exist?(pp_path)
+
+      Dir.mktmpdir do |dir|
+        result = Mixlib::ShellOut.new('semodule', '-E', name, cwd: dir).run_command
+        next false unless result.exitstatus.zero?
+
+        extracted = File.join(dir, "#{name}.pp")
+        File.exist?(extracted) && FileUtils.compare_file(extracted, pp_path)
+      end
+    rescue Errno::ENOENT
+      # semodule is not available; let the install resource surface the error.
+      false
     end
 
     def gitlab_shell_files(node)
