@@ -41,6 +41,30 @@ RSpec.describe 'gitlab::gitlab-selinux' do
         expect(chef_run.execute("semodule -r gitlab-13.5.0-gitlab-shell")).to have_attributes(retries: 3, retry_delay: 5)
         expect(chef_run.execute("semodule -r gitlab-19.4.0-sshd-session")).to have_attributes(retries: 3, retry_delay: 5)
       end
+
+      context 'when the installed unified module matches the shipped package', type: :chef do
+        before do
+          stub_command("getenforce | grep Disabled").and_return(false)
+          allow(SELinuxHelper).to receive(:module_installed_and_current?)
+            .with('gitlab', '/opt/gitlab/embedded/selinux/gitlab.pp').and_return(true)
+        end
+
+        it 'does not reinstall the unified module' do
+          expect(chef_run).not_to run_execute("semodule -i /opt/gitlab/embedded/selinux/gitlab.pp")
+        end
+      end
+
+      context 'when the unified module is missing or differs from the shipped package', type: :chef do
+        before do
+          stub_command("getenforce | grep Disabled").and_return(false)
+          allow(SELinuxHelper).to receive(:module_installed_and_current?)
+            .with('gitlab', '/opt/gitlab/embedded/selinux/gitlab.pp').and_return(false)
+        end
+
+        it 'reinstalls the unified module' do
+          expect(chef_run).to run_execute("semodule -i /opt/gitlab/embedded/selinux/gitlab.pp")
+        end
+      end
     end
 
     context 'when not using unified policy' do
@@ -54,6 +78,30 @@ RSpec.describe 'gitlab::gitlab-selinux' do
         expect(chef_run.execute("semodule -i /opt/gitlab/embedded/selinux/gitlab-10.5.0-ssh-authorized-keys.pp")).to have_attributes(retries: 3, retry_delay: 5)
         expect(chef_run.execute("semodule -i /opt/gitlab/embedded/selinux/gitlab-13.5.0-gitlab-shell.pp")).to have_attributes(retries: 3, retry_delay: 5)
         expect(chef_run.execute("semodule -i /opt/gitlab/embedded/selinux/gitlab-19.4.0-sshd-session.pp")).to have_attributes(retries: 3, retry_delay: 5)
+      end
+
+      context 'when the installed authorized-keys module matches the shipped package', type: :chef do
+        before do
+          stub_command("getenforce | grep Disabled").and_return(false)
+          allow(SELinuxHelper).to receive(:module_installed_and_current?)
+            .with('gitlab-10.5.0-ssh-authorized-keys', '/opt/gitlab/embedded/selinux/gitlab-10.5.0-ssh-authorized-keys.pp').and_return(true)
+        end
+
+        it 'does not reinstall the authorized-keys module' do
+          expect(chef_run).not_to run_execute("semodule -i /opt/gitlab/embedded/selinux/gitlab-10.5.0-ssh-authorized-keys.pp")
+        end
+      end
+
+      context 'when the authorized-keys module is missing or differs from the shipped package', type: :chef do
+        before do
+          stub_command("getenforce | grep Disabled").and_return(false)
+          allow(SELinuxHelper).to receive(:module_installed_and_current?)
+            .with('gitlab-10.5.0-ssh-authorized-keys', '/opt/gitlab/embedded/selinux/gitlab-10.5.0-ssh-authorized-keys.pp').and_return(false)
+        end
+
+        it 'reinstalls the authorized-keys module' do
+          expect(chef_run).to run_execute("semodule -i /opt/gitlab/embedded/selinux/gitlab-10.5.0-ssh-authorized-keys.pp")
+        end
       end
     end
 
