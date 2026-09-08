@@ -9,8 +9,8 @@ add_command('upgrade-check', 'Check if the upgrade is acceptable', 2) do
     is_major_upgrade = new_major > old_major
     warn "It seems you are upgrading from #{old_version} to #{new_version}."
     warn "It is required to upgrade to the latest #{GitlabCtl::UpgradeCheck.min_version}.x version first before proceeding."
-    warn "Please follow the upgrade documentation at https://docs.gitlab.com/ee/update/index.html#upgrading-to-a-new-major-version" if is_major_upgrade
-    warn "Please follow the upgrade documentation at https://docs.gitlab.com/ee/update/#upgrade-paths" unless is_major_upgrade
+    warn "Please follow the upgrade documentation at https://docs.gitlab.com/update/" if is_major_upgrade
+    warn "Please follow the upgrade documentation at https://docs.gitlab.com/update/upgrade_paths/" unless is_major_upgrade
     Kernel.exit 1
   end
 end

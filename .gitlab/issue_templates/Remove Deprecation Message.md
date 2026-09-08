@@ -14,11 +14,11 @@ List here the deprecation messages you want to remove.
 ### Preparation when creating the Issue
 
 - [ ] List all the [Remove deprecation messages](#remove-deprecation-messages) section all the deprecations you want to remove.
-- [ ] Set the milestone of this issue to [next planned required stop](https://docs.gitlab.com/ee/update/index.html#upgrade-paths), which should be after
+- [ ] Set the milestone of this issue to [next planned required stop](https://docs.gitlab.com/update/upgrade_paths/), which should be after
   the milestone when the configuration will be removed.
 
 ### Preparation when executing the Issue
 
 - [ ] Verify that the related configuration got indeed removed in a previous milestone.
-- [ ] Make sure the MR removing the deprecation message is released on a [required stop](https://docs.gitlab.com/ee/update/index.html#upgrade-paths)
+- [ ] Make sure the MR removing the deprecation message is released on a [required stop](https://docs.gitlab.com/update/upgrade_paths/)
   which is later than the removal of the configuration.

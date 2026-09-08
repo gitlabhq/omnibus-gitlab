@@ -48,7 +48,7 @@ config_check() {
 
 upgrade_check() {
   # Minimum version from which jumps are permitted to current version.
-  # Follows https://docs.gitlab.com/ee/update/index.html#upgrade-paths
+  # Follows https://docs.gitlab.com/update/upgrade_paths/
   MIN_VERSION=19.2
 
   if [ -n "${OLD_VERSION_STRING}" ] ; then
@@ -60,9 +60,9 @@ upgrade_check() {
 
       # If the upgrade is a major version jump, print a major upgrade notification.
       if test ${OLD_MAJOR_VERSION} -lt ${NEW_MAJOR_VERSION}; then
-        notify "Please follow the upgrade documentation at https://docs.gitlab.com/ee/update/#upgrading-to-a-new-major-version"
+        notify "Please follow the upgrade documentation at https://docs.gitlab.com/update/"
       else
-        notify "Please follow the upgrade documentation at https://docs.gitlab.com/ee/update/index.html#upgrade-paths"
+        notify "Please follow the upgrade documentation at https://docs.gitlab.com/update/upgrade_paths/"
       fi
       exit 1
     fi
@@ -89,7 +89,7 @@ pg_check() {
   if ! $(echo ${running_version} | awk -v PG_MIN_VERSION="$PG_MIN_VERSION" '$NF+0 < PG_MIN_VERSION {exit 1}'); then
     notify
     notify "Your version of PostgreSQL is no longer supported. Please upgrade your PostgreSQL version to ${PG_MIN_VERSION}."
-    notify "Check https://docs.gitlab.com/omnibus/settings/database.html#upgrade-packaged-postgresql-server for details."
+    notify "Check https://docs.gitlab.com/omnibus/settings/database/#upgrade-packaged-postgresql-server for details."
     notify ""
     notify "Upgrade failed. Retry the upgrade after upgrading your PostgreSQL version."
     exit 1
