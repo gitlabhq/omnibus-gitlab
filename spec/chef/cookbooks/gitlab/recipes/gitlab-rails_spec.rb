@@ -1488,6 +1488,67 @@ RSpec.describe 'gitlab::gitlab-rails' do
       end
     end
 
+    describe 'Artifact Registry' do
+      context 'with default values' do
+        it 'does not render the artifact_registry block' do
+          expect(parsed_gitlab_yml[:production][:artifact_registry]).to be_nil
+        end
+      end
+
+      context 'when only api_url is set' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              artifact_registry: {
+                'api_url' => 'https://artifact-registry.example.com'
+              }
+            }
+          )
+        end
+
+        it 'renders api_url and no service_token' do
+          artifact_registry = parsed_gitlab_yml[:production][:artifact_registry]
+          expect(artifact_registry[:api_url]).to eq('https://artifact-registry.example.com')
+          expect(artifact_registry).not_to have_key(:service_token)
+        end
+      end
+
+      context 'when api_url and the service token file are set' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              artifact_registry: {
+                'api_url' => 'https://artifact-registry.example.com',
+                'service_token_file' => '/etc/gitlab/artifact-registry/.gitlab_artifact_registry_secret'
+              }
+            }
+          )
+        end
+
+        it 'renders api_url and the nested service_token.secret_file' do
+          artifact_registry = parsed_gitlab_yml[:production][:artifact_registry]
+          expect(artifact_registry[:api_url]).to eq('https://artifact-registry.example.com')
+          expect(artifact_registry[:service_token][:secret_file]).to eq('/etc/gitlab/artifact-registry/.gitlab_artifact_registry_secret')
+        end
+      end
+
+      context 'when only the service token file is set without api_url' do
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              artifact_registry: {
+                'service_token_file' => '/etc/gitlab/artifact-registry/.gitlab_artifact_registry_secret'
+              }
+            }
+          )
+        end
+
+        it 'does not render the artifact_registry block' do
+          expect(parsed_gitlab_yml[:production][:artifact_registry]).to be_nil
+        end
+      end
+    end
+
     describe 'NATS' do
       context 'with default values' do
         it 'does not render the nats block' do

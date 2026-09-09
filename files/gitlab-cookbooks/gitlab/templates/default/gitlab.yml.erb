@@ -512,6 +512,11 @@ production: &base
     enabled: <%= @orbit_enabled %>
     grpc_endpoint: <%= quote(@orbit_grpc_endpoint) %>
 
+  <%- unless @artifact_registry_settings.empty? -%>
+  ## Artifact Registry (runs as a separate service; hybrid deployments only)
+  artifact_registry: <%= @artifact_registry_settings.to_json %>
+
+  <%- end -%>
   ## Error Reporting and Logging with Sentry
   sentry:
     enabled: <%= @sentry_enabled %>
