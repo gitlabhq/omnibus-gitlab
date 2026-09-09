@@ -585,6 +585,19 @@ gitlab_rails['gitlab_shell_ssh_port'] = 2222
       settings
     end
 
+    def artifact_registry_settings
+      config = Gitlab['node']['gitlab']['gitlab_rails']['artifact_registry'].to_h
+      api_url = config['api_url']
+      return {} if api_url.to_s.empty?
+
+      settings = { 'api_url' => api_url }
+
+      secret_file = config['service_token_file']
+      settings['service_token'] = { 'secret_file' => secret_file } unless secret_file.to_s.empty?
+
+      settings
+    end
+
     def public_path
       "#{Gitlab['node']['package']['install-dir']}/embedded/service/gitlab-rails/public"
     end
