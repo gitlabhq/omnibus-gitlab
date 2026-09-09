@@ -795,6 +795,11 @@ default['gitlab']['gitlab_rails']['orbit_grpc_endpoint'] = nil
 default['gitlab']['gitlab_rails']['orbit_secret'] = nil
 
 ###
+# Artifact Registry (experimental; hybrid deployments only, not packaged by omnibus)
+###
+default['gitlab']['gitlab_rails']['artifact_registry'] = {}
+
+###
 # OpenBao
 ###
 default['gitlab']['gitlab_rails']['openbao'] = {}

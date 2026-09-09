@@ -2569,6 +2569,17 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['orbit_secret'] = nil
 
 ################################################################################
+## GitLab Artifact Registry
+##! EXPERIMENTAL: GitLab.com-only, subject to change. Not installed or packaged
+##! by omnibus. These settings connect GitLab Rails to a separately-run Artifact
+##! Registry service, for hybrid deployments only.
+################################################################################
+
+# gitlab_rails['artifact_registry']['api_url'] = 'https://artifact-registry.example.com'
+##! Path to an operator-supplied file holding the service token for the internal API.
+# gitlab_rails['artifact_registry']['service_token_file'] = '/etc/gitlab/artifact-registry/.gitlab_artifact_registry_secret'
+
+################################################################################
 ## Registry NGINX
 ################################################################################
 
