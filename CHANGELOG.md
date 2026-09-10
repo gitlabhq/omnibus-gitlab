@@ -54,6 +54,17 @@ No changes.
 - [Bump Ruby to 3.3.12 to fix CVE-2026-41316 (erb)](gitlab-org/omnibus-gitlab@3012cc43f9151e6ef42ebfc34919715c6b65f13a) by @dmakovey ([merge request](gitlab-org/omnibus-gitlab!9634))
 - [Bump pgbouncer-exporter from 0.11.0 to 0.12.1](gitlab-org/omnibus-gitlab@6c2684c5202459ea7ace8e0a236b38dbd2760cbf) ([merge request](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/9628))
 
+## 19.2.6 (2026-09-10)
+
+### Changed (1 change)
+
+- [Update Go to version 1.26.7](gitlab-org/security/omnibus-gitlab@0c5ac3fa8bcdaa6057b20e4c67e15b3e925bf6f9)
+
+### Security (2 changes)
+
+- [Update NGINX from 1.31.0 to 1.31.4](gitlab-org/security/omnibus-gitlab@40e7aada897903c46237c1194c514eab214e5c31) ([merge request](gitlab-org/security/omnibus-gitlab!518))
+- [Add ./third_party/icu to dependency_decisions](gitlab-org/security/omnibus-gitlab@75e5f129abc05f2b2f8ed9b53a8143a22a34fb7a) ([merge request](gitlab-org/security/omnibus-gitlab!522))
+
 ## 19.2.5 (2026-08-25)
 
 ### Fixed (1 change)
