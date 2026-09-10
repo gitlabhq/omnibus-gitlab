@@ -30,3 +30,4 @@ title: Configuring a Linux package installation
 - [SMTP](smtp.md)
 - [SSL](ssl/_index.md)
 - [Image scaling](image_scaling.md)
+- [Artifact Registry](artifact_registry.md)
