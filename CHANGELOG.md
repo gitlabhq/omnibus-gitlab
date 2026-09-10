@@ -3,6 +3,17 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.3.2 (2026-09-10)
+
+### Changed (1 change)
+
+- [Upgrade Go to version 1.26.7](gitlab-org/security/omnibus-gitlab@80b65edde0e7e4feadaf3f75ab49d7c2f6d92ead)
+
+### Security (2 changes)
+
+- [Update NGINX from 1.31.0 to 1.31.4](gitlab-org/security/omnibus-gitlab@21fc28ba521b53d0f81737dcc6f135941ce38b81) ([merge request](gitlab-org/security/omnibus-gitlab!519))
+- [Add ./third_party/icu to dependency_decisions](gitlab-org/security/omnibus-gitlab@b5a7ddc7480abcd0275baf1cc8a286ad1aee6acd) ([merge request](gitlab-org/security/omnibus-gitlab!521))
+
 ## 19.3.1 (2026-08-25)
 
 No changes.
