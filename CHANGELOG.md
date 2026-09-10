@@ -3,6 +3,17 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.3.2 (2026-09-10)
+
+### Changed (1 change)
+
+- [Upgrade Go to version 1.26.7](gitlab-org/security/omnibus-gitlab@80b65edde0e7e4feadaf3f75ab49d7c2f6d92ead)
+
+### Security (2 changes)
+
+- [Update NGINX from 1.31.0 to 1.31.4](gitlab-org/security/omnibus-gitlab@21fc28ba521b53d0f81737dcc6f135941ce38b81) ([merge request](gitlab-org/security/omnibus-gitlab!519))
+- [Add ./third_party/icu to dependency_decisions](gitlab-org/security/omnibus-gitlab@b5a7ddc7480abcd0275baf1cc8a286ad1aee6acd) ([merge request](gitlab-org/security/omnibus-gitlab!521))
+
 ## 19.3.1 (2026-08-25)
 
 No changes.
@@ -42,6 +53,17 @@ No changes.
 
 - [Bump Ruby to 3.3.12 to fix CVE-2026-41316 (erb)](gitlab-org/omnibus-gitlab@3012cc43f9151e6ef42ebfc34919715c6b65f13a) by @dmakovey ([merge request](gitlab-org/omnibus-gitlab!9634))
 - [Bump pgbouncer-exporter from 0.11.0 to 0.12.1](gitlab-org/omnibus-gitlab@6c2684c5202459ea7ace8e0a236b38dbd2760cbf) ([merge request](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/9628))
+
+## 19.2.6 (2026-09-10)
+
+### Changed (1 change)
+
+- [Update Go to version 1.26.7](gitlab-org/security/omnibus-gitlab@0c5ac3fa8bcdaa6057b20e4c67e15b3e925bf6f9)
+
+### Security (2 changes)
+
+- [Update NGINX from 1.31.0 to 1.31.4](gitlab-org/security/omnibus-gitlab@40e7aada897903c46237c1194c514eab214e5c31) ([merge request](gitlab-org/security/omnibus-gitlab!518))
+- [Add ./third_party/icu to dependency_decisions](gitlab-org/security/omnibus-gitlab@75e5f129abc05f2b2f8ed9b53a8143a22a34fb7a) ([merge request](gitlab-org/security/omnibus-gitlab!522))
 
 ## 19.2.5 (2026-08-25)
 
@@ -91,6 +113,17 @@ No changes.
 ### Security (1 change)
 
 - [Uninstall the default net-imap gem shipped with Ruby](gitlab-org/omnibus-gitlab@814da0ffe03af81d77d692464f0986e26325ef02) ([merge request](gitlab-org/omnibus-gitlab!9523))
+
+## 19.1.8 (2026-09-10)
+
+### Changed (1 change)
+
+- [Update Go to 1.25.14](gitlab-org/security/omnibus-gitlab@1286cfe1f23b145d0285b191c8cb1a02082e1b82)
+
+### Security (2 changes)
+
+- [Update NGINX from 1.31.0 to 1.31.4](gitlab-org/security/omnibus-gitlab@98116a97d8b8d1b4b34f815c886ef5d4a2dc0a01) ([merge request](gitlab-org/security/omnibus-gitlab!517))
+- [Add ./third_party/icu to dependency_decisions](gitlab-org/security/omnibus-gitlab@1d8634ab7736da0fcb5856838f6069d505a61d7b) ([merge request](gitlab-org/security/omnibus-gitlab!523))
 
 ## 19.1.7 (2026-08-25)
 
