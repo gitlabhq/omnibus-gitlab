@@ -53,6 +53,7 @@ RSpec.configure do |config|
     ssh_keygen_module = 'gitlab-7.2.0-ssh-keygen'
     authorized_keys_module = 'gitlab-10.5.0-ssh-authorized-keys'
     gitlab_shell_module = 'gitlab-13.5.0-gitlab-shell'
+    sshd_session_module = 'gitlab-19.4.0-sshd-session'
     gitlab_unified_module = 'gitlab'
 
     stub_command('id -Z').and_return(false)
@@ -62,6 +63,7 @@ RSpec.configure do |config|
     stub_command("semodule -l | grep -E '^#{ssh_keygen_module}([[:space:]]|$)'").and_return(true)
     stub_command("semodule -l | grep -E '^#{authorized_keys_module}([[:space:]]|$)'").and_return(true)
     stub_command("semodule -l | grep -E '^#{gitlab_shell_module}([[:space:]]|$)'").and_return(true)
+    stub_command("semodule -l | grep -E '^#{sshd_session_module}([[:space:]]|$)'").and_return(true)
     stub_command("semodule -l | grep -E '^#{gitlab_unified_module}([[:space:]]|$)'").and_return(true)
     stub_command(%r{set \-x \&\& \[ \-d "[^"]\" \]}).and_return(false)
     stub_command(%r{set \-x \&\& \[ "\$\(stat \-\-printf='[^']*' \$\(readlink -f /[^\)]*\)\) }).and_return(false)
