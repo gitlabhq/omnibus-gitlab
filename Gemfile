@@ -68,5 +68,5 @@ group :test do
   gem 'fantaskspec'
   gem 'rspec_junit_formatter'
   gem 'rspec-parameterized', require: false
-  gem 'simplecov-cobertura'
+  gem 'simplecov-cobertura', '~> 3.1'
 end
