@@ -39,6 +39,7 @@ RSpec.describe 'gitlab::gitlab-selinux' do
         expect(chef_run.execute("semodule -r gitlab-7.2.0-ssh-keygen")).to have_attributes(retries: 3, retry_delay: 5)
         expect(chef_run.execute("semodule -r gitlab-10.5.0-ssh-authorized-keys")).to have_attributes(retries: 3, retry_delay: 5)
         expect(chef_run.execute("semodule -r gitlab-13.5.0-gitlab-shell")).to have_attributes(retries: 3, retry_delay: 5)
+        expect(chef_run.execute("semodule -r gitlab-19.4.0-sshd-session")).to have_attributes(retries: 3, retry_delay: 5)
       end
     end
 
@@ -52,6 +53,7 @@ RSpec.describe 'gitlab::gitlab-selinux' do
         expect(chef_run.execute("semodule -i /opt/gitlab/embedded/selinux/gitlab-7.2.0-ssh-keygen.pp")).to have_attributes(retries: 3, retry_delay: 5)
         expect(chef_run.execute("semodule -i /opt/gitlab/embedded/selinux/gitlab-10.5.0-ssh-authorized-keys.pp")).to have_attributes(retries: 3, retry_delay: 5)
         expect(chef_run.execute("semodule -i /opt/gitlab/embedded/selinux/gitlab-13.5.0-gitlab-shell.pp")).to have_attributes(retries: 3, retry_delay: 5)
+        expect(chef_run.execute("semodule -i /opt/gitlab/embedded/selinux/gitlab-19.4.0-sshd-session.pp")).to have_attributes(retries: 3, retry_delay: 5)
       end
     end
 
