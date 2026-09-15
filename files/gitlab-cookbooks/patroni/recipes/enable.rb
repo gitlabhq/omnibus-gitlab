@@ -90,7 +90,7 @@ end
 ruby_block 'wait for node bootstrap to complete' do
   block do
     Timeout.timeout(30) do
-      sleep 2 until patroni_helper.node_status == 'running'
+      sleep 2 until patroni_helper.node_running?
     end
   end
   action :nothing
@@ -98,7 +98,7 @@ end
 
 execute 'update dynamic configuration settings' do
   command "#{patroni_helper.ctl_command} -c #{patroni_config_file} edit-config --force --replace #{dcs_config_file}"
-  only_if { patroni_helper.node_status == 'running' }
+  only_if { patroni_helper.node_running? }
   action :nothing
   notifies :run, 'ruby_block[wait for node bootstrap to complete]', :before
 end
@@ -122,7 +122,7 @@ end
 
 execute 'reload postgresql' do
   command "#{patroni_helper.ctl_command} -c #{patroni_config_file} reload --force #{node['patroni']['scope']} #{node['patroni']['name']}"
-  only_if { patroni_helper.node_status == 'running' }
+  only_if { patroni_helper.node_running? }
   action :nothing
 end
 
@@ -136,13 +136,13 @@ include_recipe 'postgresql::managed_databases'
 
 execute 'signal to restart postgresql' do
   command "#{patroni_helper.ctl_command} -c #{patroni_config_file} restart --force #{node['patroni']['scope']} #{node['patroni']['name']}"
-  only_if { omnibus_helper.service_dir_enabled?('postgresql') && patroni_helper.node_status == 'running' }
+  only_if { omnibus_helper.service_dir_enabled?('postgresql') && patroni_helper.node_running? }
   notifies :run, 'ruby_block[wait for node bootstrap to complete]', :before
 end
 
 execute 'signal to restart postgresql if running version is less than installed one' do
   command "#{patroni_helper.ctl_command} -c #{patroni_config_file} restart --pg-version #{pg_helper.version} --force #{node['patroni']['scope']} #{node['patroni']['name']}"
-  only_if { node['postgresql']['auto_restart_on_version_change'] && patroni_helper.node_status == 'running' }
+  only_if { node['postgresql']['auto_restart_on_version_change'] && patroni_helper.node_running? }
   notifies :run, 'ruby_block[wait for node bootstrap to complete]', :before
 end
 

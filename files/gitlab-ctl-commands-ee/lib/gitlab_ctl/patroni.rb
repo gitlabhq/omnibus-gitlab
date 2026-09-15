@@ -5,6 +5,15 @@ require 'optparse'
 
 module GitlabCtl
   module Patroni
+    # States that indicate a Patroni member is up and healthy. The leader
+    # reports "running", while Patroni 3.0.4+ reports a healthy standby's
+    # state as "streaming" (it has a live replication connection) or "in
+    # archive recovery" (it is replaying from the WAL archive).
+    # https://patroni.readthedocs.io/en/latest/releases.html#version-3-0-4
+    #
+    # Keep in sync with PatroniHelper::RUNNING_STATES in the patroni cookbook.
+    RUNNING_STATES ||= ['running', 'streaming', 'in archive recovery'].freeze
+
     USAGE ||= <<~EOS.freeze
       Usage:
         gitlab-ctl patroni [options] command [options]
