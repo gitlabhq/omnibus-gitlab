@@ -1,6 +1,13 @@
 require 'chef_helper'
+require 'patroni'
 
 RSpec.describe PatroniHelper do
+  describe 'RUNNING_STATES' do
+    it 'stays in sync with Patroni::RUNNING_STATES' do
+      expect(PatroniHelper::RUNNING_STATES).to eq(Patroni::RUNNING_STATES)
+    end
+  end
+
   let(:chef_run) do
     ChefSpec::SoloRunner.new(step_into: %w(patroni)).converge('gitlab-base::config', 'patroni::enable')
   end
@@ -85,6 +92,42 @@ RSpec.describe PatroniHelper do
 
       it 'returns running current node state' do
         expect(helper.node_status).to eq 'running'
+      end
+    end
+  end
+
+  describe '#node_running?' do
+    context 'when Patroni service is down' do
+      before do
+        allow_any_instance_of(OmnibusHelper).to receive(:service_up?).and_return(false)
+        allow_any_instance_of(OmnibusHelper).to receive(:service_up?).with('patroni').and_return(false)
+      end
+
+      it 'returns false' do
+        expect(helper.node_running?).to be false
+      end
+    end
+
+    context 'when Patroni service is up' do
+      before do
+        allow_any_instance_of(OmnibusHelper).to receive(:service_up?).and_return(false)
+        allow_any_instance_of(OmnibusHelper).to receive(:service_up?).with('patroni').and_return(true)
+      end
+
+      # "streaming" and "in archive recovery" are the healthy standby states
+      # introduced in Patroni 3.0.4.
+      ['running', 'streaming', 'in archive recovery'].each do |state|
+        it "returns true when the node state is #{state.inspect}" do
+          allow(helper).to receive(:node_status).and_return(state)
+
+          expect(helper.node_running?).to be true
+        end
+      end
+
+      it 'returns false when the node is stopped' do
+        allow(helper).to receive(:node_status).and_return('stopped')
+
+        expect(helper.node_running?).to be false
       end
     end
   end
