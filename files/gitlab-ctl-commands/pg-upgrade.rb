@@ -753,7 +753,7 @@ def check_patroni_cluster_status
 
   running_replica_count = 0
   node.cluster_status[:members]&.each do |member|
-    running_replica_count += 1 if member[:state] == 'running' && member[:role] == 'replica'
+    running_replica_count += 1 if GitlabCtl::Patroni::RUNNING_STATES.include?(member[:state]) && member[:role] == 'replica'
   end
   log Rainbow("WARNING: Looks like that at least one replica node is running.\n" \
               "         It is strongly recommended to shutdown all replicas\n" \
