@@ -4,6 +4,16 @@ class PatroniHelper < BaseHelper
   DCS_ATTRIBUTES ||= %w(loop_wait ttl retry_timeout maximum_lag_on_failover max_timelines_history master_start_timeout).freeze
   DCS_POSTGRESQL_ATTRIBUTES ||= %w(use_pg_rewind use_slots).freeze
 
+  # States that indicate a Patroni member is up and healthy. The leader
+  # reports "running", while Patroni 3.0.4+ reports a healthy standby's state
+  # as "streaming" (it has a live replication connection) or "in archive
+  # recovery" (it is replaying from the WAL archive) instead of "running".
+  # https://patroni.readthedocs.io/en/latest/releases.html#version-3-0-4
+  #
+  # Keep in sync with GitlabCtl::Patroni::RUNNING_STATES in
+  # gitlab-ctl-commands-ee, which cannot be required from the cookbook.
+  RUNNING_STATES ||= ['running', 'streaming', 'in archive recovery'].freeze
+
   attr_reader :node
 
   def ctl_command
@@ -31,6 +41,12 @@ class PatroniHelper < BaseHelper
 
     cmd = "#{ctl_command} -c #{node['patroni']['dir']}/patroni.yaml list | grep #{node.name} | cut -d '|' -f 5"
     do_shell_out(cmd).stdout.chomp.strip
+  end
+
+  # Whether this node is up and healthy, accounting for the different states
+  # Patroni reports for a leader versus a streaming standby.
+  def node_running?
+    RUNNING_STATES.include?(node_status)
   end
 
   def use_tls?
