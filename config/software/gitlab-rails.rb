@@ -113,7 +113,14 @@ build do
     env['CARGO_HOME'] = '/run'
   end
 
-  bundle "config set --local gemfile #{gitlab_bundle_gemfile}" if gitlab_bundle_gemfile != 'Gemfile'
+  if gitlab_bundle_gemfile != 'Gemfile'
+    # Keep the root marker for runtime while building in the custom Gemfile context.
+    bundle "config set --local gemfile #{gitlab_bundle_gemfile}"
+    env['BUNDLE_GEMFILE'] = File.expand_path(
+      gitlab_bundle_gemfile,
+      File.join(Omnibus::Config.source_dir, 'gitlab-rails')
+    )
+  end
   bundle 'config force_ruby_platform true', env: env if OhaiHelper.ruby_native_gems_unsupported?
 
   # RedHat 9.7 ships glibc 2.34 with backported epoll_pwait2 support
