@@ -137,6 +137,7 @@ default['gitlab']['gitlab_rails']['analytics_usage_trends_count_job_trigger_work
 default['gitlab']['gitlab_rails']['member_invitation_reminder_emails_worker_cron'] = nil
 default['gitlab']['gitlab_rails']['user_status_cleanup_batch_worker_cron'] = nil
 default['gitlab']['gitlab_rails']['loose_foreign_keys_cleanup_worker_cron'] = nil
+default['gitlab']['gitlab_rails']['import_export_project_cleanup_worker_cron'] = nil
 default['gitlab']['gitlab_rails']['elastic_index_bulk_cron'] = nil
 default['gitlab']['gitlab_rails']['incoming_email_enabled'] = false
 default['gitlab']['gitlab_rails']['incoming_email_address'] = nil

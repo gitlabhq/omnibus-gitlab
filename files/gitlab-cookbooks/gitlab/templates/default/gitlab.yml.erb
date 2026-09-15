@@ -689,6 +689,12 @@ production: &base
       cron: "<%= @loose_foreign_keys_cleanup_worker_cron %>"
     <% end %>
 
+    # Remove stale import/export project archives
+    <% unless @import_export_project_cleanup_worker_cron.nil? %>
+    import_export_project_cleanup_worker:
+      cron: "<%= @import_export_project_cleanup_worker_cron %>"
+    <% end %>
+
     # Periodically update ci_runner_versions table with up-to-date versions and status
     <% unless @ci_runner_versions_reconciliation_worker_cron.nil? %>
     ci_runner_versions_reconciliation_worker:

@@ -212,6 +212,7 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['ssh_keys_expired_notification_worker_cron'] = "0 2 * * *"
 # gitlab_rails['ssh_keys_expiring_soon_notification_worker_cron'] = "0 1 * * *"
 # gitlab_rails['loose_foreign_keys_cleanup_worker_cron'] = "*/5 * * * *"
+# gitlab_rails['import_export_project_cleanup_worker_cron'] = "0 * * * *"
 # gitlab_rails['ci_runner_versions_reconciliation_worker_cron'] = "@daily"
 # gitlab_rails['ci_runners_stale_machines_cleanup_worker_cron'] = "36 * * * *"
 # gitlab_rails['ci_catalog_resources_process_sync_events_worker_cron'] = "*/1 * * * *"

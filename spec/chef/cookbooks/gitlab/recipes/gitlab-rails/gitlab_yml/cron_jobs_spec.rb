@@ -28,6 +28,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
         'geo_secondary_registry_consistency_worker'              | 'geo_secondary_registry_consistency_worker'
         'geo_secondary_usage_data_cron_worker'                   | 'geo_secondary_usage_data_cron_worker'
         'historical_data_worker'                                 | 'historical_data_worker_cron'
+        'import_export_project_cleanup_worker'                   | 'import_export_project_cleanup_worker_cron'
         'ldap_group_sync_worker'                                 | 'ldap_group_sync_worker_cron'
         'ldap_sync_worker'                                       | 'ldap_sync_worker_cron'
         'member_invitation_reminder_emails_worker'               | 'member_invitation_reminder_emails_worker_cron'
