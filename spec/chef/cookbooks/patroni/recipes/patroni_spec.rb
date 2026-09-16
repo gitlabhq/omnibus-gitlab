@@ -541,6 +541,17 @@ RSpec.describe 'patroni cookbook' do
       end
     end
 
+    context 'when the node reports the streaming state (Patroni 3.0.4+)' do
+      before do
+        allow_any_instance_of(OmnibusHelper).to receive(:service_dir_enabled?).and_return(true)
+        allow_any_instance_of(PatroniHelper).to receive(:node_status).and_return('streaming')
+      end
+
+      it 'should still signal to node to restart postgresql' do
+        expect(chef_run).to run_execute('signal to restart postgresql')
+      end
+    end
+
     context 'on a replica' do
       before do
         allow_any_instance_of(PgHelper).to receive(:replica?).and_return(true)
