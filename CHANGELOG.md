@@ -3,6 +3,48 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.4.0 (2026-09-16)
+
+### Added (5 changes)
+
+- [Add Artifact Registry configuration for hybrid deployments](gitlab-org/omnibus-gitlab@d015f72baa1adfb31832bbdb2d77667d93e5244a) ([merge request](gitlab-org/omnibus-gitlab!9755))
+- [Add Artifact Registry configuration for hybrid deployments](gitlab-org/omnibus-gitlab@6d0f3d7133176857ab670bdb293d119913aa6287) ([merge request](gitlab-org/omnibus-gitlab!9754))
+- [Add ci_catalog_bundles object storage configuration](gitlab-org/omnibus-gitlab@aec4834c3b86323440f22464fa62f2821448ac7d) ([merge request](gitlab-org/omnibus-gitlab!9712))
+- [Add mobile push APNs settings](gitlab-org/omnibus-gitlab@80211b50f794d05ebf7a55bb2321a2ab71e5ca8a) ([merge request](gitlab-org/omnibus-gitlab!9676))
+- [Add support for configuring managed settings](gitlab-org/omnibus-gitlab@65b93921de1eb34292861531e86ae46433bf174e) ([merge request](gitlab-org/omnibus-gitlab!9673))
+
+### Fixed (1 change)
+
+- [Treat Patroni streaming state as a running node](gitlab-org/omnibus-gitlab@310bb133f785e6d373e13e1c4b4a323a3b797921) ([merge request](gitlab-org/omnibus-gitlab!9796))
+
+### Changed (19 changes)
+
+- [Update dependency gitlab-exporter to v17.0.2](gitlab-org/omnibus-gitlab@fa27769920a522bf5875b6bade67f01b2ae64177) ([merge request](gitlab-org/omnibus-gitlab!9721))
+- [Update dependency curl/curl to curl-8_22_0](gitlab-org/omnibus-gitlab@85fddb57c66dc768568434a55b7f1c7997652246) ([merge request](gitlab-org/omnibus-gitlab!9760))
+- [Allow sshd fast SSH key lookup under SELinux](gitlab-org/omnibus-gitlab@d5d21a7bae5831f53acf0eeeba2f1ad5a93c50cf) ([merge request](gitlab-org/omnibus-gitlab!9744))
+- [Update Go version to 1.26.7](gitlab-org/omnibus-gitlab@030ce13503dffb7029c0c21521c1c772922cb6e2) ([merge request](gitlab-org/omnibus-gitlab!9716))
+- [Update dependency redis/redis to v7.2.16](gitlab-org/omnibus-gitlab@2123b8781db2593877f66a540f2eef7a3eef7611) ([merge request](gitlab-org/omnibus-gitlab!9707))
+- [Bump Patroni to version 4.0.5](gitlab-org/omnibus-gitlab@0199546652a064a5ae088af3cc20e91547b5e1af) ([merge request](gitlab-org/omnibus-gitlab!9682))
+- [Add glaz-ffi software definition for gitlab-kas](gitlab-org/omnibus-gitlab@cfaa0d867eaa04f8d04733bedd18b1e6f679fe9c) ([merge request](gitlab-org/omnibus-gitlab!9703))
+- [Update dependency libpng to v1.6.58](gitlab-org/omnibus-gitlab@45664f0fb61341752602fa8ab9b8b15515756514) ([merge request](gitlab-org/omnibus-gitlab!9324))
+- [Bump curl to 8.21.0](gitlab-org/omnibus-gitlab@38c5c8427fb87718879abf5c1ae609b0844b11e3) ([merge request](gitlab-org/omnibus-gitlab!9567))
+- [Update dependency valkey-io/valkey to v7.2.14](gitlab-org/omnibus-gitlab@9c0b5738bf1aa5124ca3f231f0e2fd5cdef0cea9) ([merge request](gitlab-org/omnibus-gitlab!9150))
+- [Update gitlabsos digest to 6c126e1](gitlab-org/omnibus-gitlab@bb5c85545c87690cbf425f081e2e5e535a0165ac) ([merge request](gitlab-org/omnibus-gitlab!9633))
+- [Update dependency graphicsmagick to v1.3.48](gitlab-org/omnibus-gitlab@36ebbd43248c7432944b6a6284a63a3d9b6daa35) ([merge request](gitlab-org/omnibus-gitlab!9625))
+- [Update dependency postgres-exporter to v0.20.1](gitlab-org/omnibus-gitlab@50fe6d2d9ad5043ce7c9c1ac9d2e50cfbc85f5eb) ([merge request](gitlab-org/omnibus-gitlab!9581))
+- [Update dependency libarchive/libarchive to v3.8.9](gitlab-org/omnibus-gitlab@5508e87924f17caf68f7cd06d219fe483f59cf0b) ([merge request](gitlab-org/omnibus-gitlab!9589))
+- [Bump PostgreSQL to version 18.6](gitlab-org/omnibus-gitlab@02cc28baae36ab7d1c4865d4e067d707432d169a) ([merge request](gitlab-org/omnibus-gitlab!9709))
+- [Use patronictl --leader in gitlab-ctl patroni](gitlab-org/omnibus-gitlab@a459a134be4433b9cbf088bf7bab0b32c9917cac) ([merge request](gitlab-org/omnibus-gitlab!9683))
+- [Update dependency gitlab-exporter to v17.0.1](gitlab-org/omnibus-gitlab@0e35e265ce3dea78e273fd9db5200cfe511ec467) ([merge request](gitlab-org/omnibus-gitlab!9702))
+- [Update dependency RsyncProject/rsync to v3.5.0](gitlab-org/omnibus-gitlab@e0332c6547ab2d71d4cef5251e1094d09c346401) ([merge request](gitlab-org/omnibus-gitlab!9569))
+- [Update gitlab-org/build/omnibus-mirror/nginx-module-vts to v0.2.6](gitlab-org/omnibus-gitlab@8c1d97e9fd6749f7151bcfcb4e46c4dbbb29db71) ([merge request](gitlab-org/omnibus-gitlab!9649))
+
+### Security (3 changes)
+
+- [Update NGINX from 1.31.0 to 1.31.4](gitlab-org/omnibus-gitlab@c020051129d5101c69903b7c4392707fc301665b)
+- [Add ./third_party/icu to dependency_decisions](gitlab-org/omnibus-gitlab@7680ad38cc280450e02e4c3ba9617832cbbc61cd)
+- [Update faraday gem to v2.14.3](gitlab-org/omnibus-gitlab@6378aa0572961cc0fbfd5d49bd3f09cf79079105) ([merge request](gitlab-org/omnibus-gitlab!9686))
+
 ## 19.3.2 (2026-09-10)
 
 ### Changed (1 change)
