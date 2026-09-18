@@ -133,6 +133,12 @@ build do
   # needed for 3.3, 3.4, and 4.0.
   patches += %w[thread-scheduler-priority] if version.satisfies?('>= 3.3.0', '< 4.1.0')
 
+  # Backport of https://github.com/ruby/ruby/pull/13332 to fix a double-free
+  # when parsing a regexp with a too-big repetition quantifier, which aborts
+  # the process instead of raising RegexpError. The fix is included upstream
+  # in Ruby 4.0, so this patch is only needed for 3.3 and 3.4.
+  patches += %w[regexp-repeat-range-double-free] if version.satisfies?('>= 3.3.0', '< 4.0.0')
+
   # Backport of https://github.com/ruby/ruby/pull/19020 to Ruby 3.3 and 3.4.
   # Ruby 4.0 is not patched here yet.
   patches += %w[regexp-program-size] if version.satisfies?('>= 3.3.0', '< 4.0.0')
