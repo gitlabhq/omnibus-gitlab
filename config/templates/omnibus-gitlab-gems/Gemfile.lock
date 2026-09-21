@@ -93,24 +93,28 @@ GEM
     addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
     ast (2.4.2)
-    aws-eventstream (1.3.0)
-    aws-partitions (1.883.0)
-    aws-sdk-core (3.194.2)
+    aws-eventstream (1.4.0)
+    aws-partitions (1.1287.0)
+    aws-sdk-core (3.257.0)
       aws-eventstream (~> 1, >= 1.3.0)
-      aws-partitions (~> 1, >= 1.651.0)
-      aws-sigv4 (~> 1.8)
+      aws-partitions (~> 1, >= 1.992.0)
+      aws-sigv4 (~> 1.9)
+      base64
+      bigdecimal
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-kms (1.76.0)
-      aws-sdk-core (~> 3, >= 3.188.0)
-      aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.149.1)
-      aws-sdk-core (~> 3, >= 3.194.0)
+      logger
+      rexml (~> 3.4, >= 3.4.2)
+    aws-sdk-kms (1.132.0)
+      aws-sdk-core (~> 3, >= 3.256.0)
+      aws-sigv4 (~> 1.5)
+    aws-sdk-s3 (1.232.1)
+      aws-sdk-core (~> 3, >= 3.256.0)
       aws-sdk-kms (~> 1)
-      aws-sigv4 (~> 1.8)
+      aws-sigv4 (~> 1.5)
     aws-sdk-secretsmanager (1.92.0)
       aws-sdk-core (~> 3, >= 3.193.0)
       aws-sigv4 (~> 1.1)
-    aws-sigv4 (1.8.0)
+    aws-sigv4 (1.12.1)
       aws-eventstream (~> 1, >= 1.0.2)
     base64 (0.2.0)
     bigdecimal (3.1.8)
@@ -424,13 +428,13 @@ CHECKSUMS
   activesupport (7.0.8.4) sha256=69047070402b20fbaeebbeb56d21238db457c54c7e66f356dcba683e500ae197
   addressable (2.9.0) sha256=7fdf6ac3660f7f4e867a0838be3f6cf722ace541dd97767fa42bc6cfa980c7af
   ast (2.4.2) sha256=1e280232e6a33754cde542bc5ef85520b74db2aac73ec14acef453784447cc12
-  aws-eventstream (1.3.0) sha256=f1434cc03ab2248756eb02cfa45e900e59a061d7fbdc4a9fd82a5dd23d796d3f
-  aws-partitions (1.883.0) sha256=14c03676dd905ebb7a049790a776c999d36b5043cd593a240f4ef5ea218bb557
-  aws-sdk-core (3.194.2) sha256=f925fb739cd093e5834910aed85aba5ac8d1b210f26c2cf51f0daf932cc77567
-  aws-sdk-kms (1.76.0) sha256=e7f75013cba9ba357144f66bbc600631c192e2cda9dd572794be239654e2cf49
-  aws-sdk-s3 (1.149.1) sha256=664e608190d42b486dc79b5dc65e7c2240923902a9833063327a9d831226a46a
+  aws-eventstream (1.4.0) sha256=116bf85c436200d1060811e6f5d2d40c88f65448f2125bc77ffce5121e6e183b
+  aws-partitions (1.1287.0) sha256=76f4c73011654553566c5db5bbef0f24738bb016e923910e8b1b3f9cb7d989ca
+  aws-sdk-core (3.257.0) sha256=a92ad19c7ff668cec6688ee3200ee562da80647a3bbeed9fda02e8b0ca6492c6
+  aws-sdk-kms (1.132.0) sha256=094b0097bb3be9d5c1ac87e971ca7f5aebb746801dfb5f0f576480bf98dca69c
+  aws-sdk-s3 (1.232.1) sha256=124440f3a44fbc28cc3a2dec6eaeeea2a236bfc33772005010a19baa62654870
   aws-sdk-secretsmanager (1.92.0) sha256=e9e5ba3ef253ab76db48ff4ba15534fca42ecc020266f3c026ee910101b4c65f
-  aws-sigv4 (1.8.0) sha256=84dd99768b91b93b63d1d8e53ee837cfd06ab402812772a7899a78f9f9117cbc
+  aws-sigv4 (1.12.1) sha256=6973ff95cb0fd0dc58ba26e90e9510a2219525d07620c8babeb70ef831826c00
   base64 (0.2.0) sha256=0f25e9b21a02a0cc0cea8ef92b2041035d39350946e8789c562b2d1a3da01507
   bigdecimal (3.1.8) sha256=a89467ed5a44f8ae01824af49cbc575871fa078332e8f77ea425725c1ffe27be
   builder (3.2.4) sha256=99caf08af60c8d7f3a6b004029c4c3c0bdaebced6c949165fe98f1db27fbbc10
