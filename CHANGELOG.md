@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.3.3 (2026-09-22)
+
+### Fixed (2 changes)
+
+- [Treat Patroni streaming state as a running node](gitlab-org/security/omnibus-gitlab@7bb8a0c509fe3035d9b18404c1fd1b4b2adacf19)
+- [Add sshd_session_t and sshd_auth_t rules for EL10](gitlab-org/security/omnibus-gitlab@689269b5a90b64265c78129690a1483d35d4836d)
+
 ## 19.3.2 (2026-09-10)
 
 ### Changed (1 change)
