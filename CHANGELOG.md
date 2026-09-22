@@ -327,6 +327,12 @@ No changes.
 - [Remove Spamcheck from Omnibus-GitLab for 19.0](gitlab-org/omnibus-gitlab@ca64c4627e2b95a2dec19e44e3f76561ebf4afb2) ([merge request](gitlab-org/omnibus-gitlab!9366))
 - [Remove Mattermost for SLES-12.5](gitlab-org/omnibus-gitlab@580302851cb4486434e0db203d4a1062b9abc4e0) ([merge request](gitlab-org/omnibus-gitlab!9274))
 
+## 18.11.12 (2026-09-22)
+
+### Fixed (1 change)
+
+- [Treat Patroni streaming state as a running node](gitlab-org/omnibus-gitlab@9ad3b0cdbc4765f76ab8037830b49a63f8bd8dd5) ([merge request](gitlab-org/omnibus-gitlab!9791))
+
 ## 18.11.11 (2026-08-14)
 
 No changes.
