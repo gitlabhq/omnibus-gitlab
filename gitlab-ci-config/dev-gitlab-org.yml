@@ -147,6 +147,13 @@
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
+    # Offer the FIPS packages as manual jobs on every auto-deploy pipeline, so
+    # the Dedicated US PubSec QA instance can be upgraded to a FIPS package.
+    # Manual, so a normal auto-deploy never spends resources building FIPS; the
+    # jobs are present but idle until played (by a person or the Dedicated QA
+    # pipeline through the API). See gitlab-com/gl-infra/delivery#22409.
+    - if: '$PIPELINE_TYPE == "AUTO_DEPLOY_BUILD_PIPELINE"'
+      when: manual
 
 .arm64_tag_template:
   extends: .tag_template
@@ -190,6 +197,11 @@
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG|NIGHTLY)_BUILD_PIPELINE$/'
+    # Upload the on-demand auto-deploy FIPS packages to the same FIPS staging
+    # repo as other FIPS packages (USE_SYSTEM_SSL routes it there). Manual, to
+    # match the FIPS build jobs. See gitlab-com/gl-infra/delivery#22409.
+    - if: '$PIPELINE_TYPE == "AUTO_DEPLOY_BUILD_PIPELINE"'
+      when: manual
 
 
 ### This stage is ran only on tag:
@@ -958,10 +970,16 @@ Ubuntu-22.04-fips-staging:
       optional: true
     - job: Ubuntu-22.04-fips-branch
       optional: true
+  # This job overrides the template rules (to add INTERNAL_RELEASE), so it must
+  # also repeat the auto-deploy manual rule, otherwise the Ubuntu 22.04 FIPS
+  # package would build but never upload on an auto-deploy pipeline.
+  # See gitlab-com/gl-infra/delivery#22409.
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG|NIGHTLY)_BUILD_PIPELINE$/'
     - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_BUILD_PIPELINE"'
+    - if: '$PIPELINE_TYPE == "AUTO_DEPLOY_BUILD_PIPELINE"'
+      when: manual
 
 ### Package releases
 Ubuntu-22.04-release:
