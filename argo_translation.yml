@@ -14,7 +14,7 @@ components:
     ignored_paths:
       - 'doc/.*/**'
       - 'doc/development/**'
-      - 'doc/CLAUDE.md'
+      - 'doc/AGENTS.md'
       - 'doc/SKILLS.md'
       # Redirects: See Redirects component for more info
       - 'doc/installation/_index.md'
