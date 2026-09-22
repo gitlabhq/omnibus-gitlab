@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 18.11.12 (2026-09-22)
+
+### Fixed (1 change)
+
+- [Treat Patroni streaming state as a running node](gitlab-org/omnibus-gitlab@9ad3b0cdbc4765f76ab8037830b49a63f8bd8dd5) ([merge request](gitlab-org/omnibus-gitlab!9791))
+
 ## 18.11.11 (2026-08-14)
 
 No changes.
