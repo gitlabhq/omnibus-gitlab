@@ -22,7 +22,7 @@ For anything in this list which will not be completed, please provide a reason i
 - [ ] MR title and description are up to date, accurate, and descriptive.
 - [ ] MR targeting the appropriate branch.
 - [ ] Latest Merge Result pipeline is green.
-- [ ] When ready for review, MR is labeled ~"workflow::ready for review" per the [Distribution MR workflow](https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/distribution/merge_requests/).
+- [ ] When ready for review, MR is marked as ready (not a draft) and a reviewer is requested. Pick the reviewer suggested by the reviewer roulette, or one of the [project maintainers](https://gitlab-org.gitlab.io/gitlab-roulette/?currentProject=omnibus-gitlab&visible=maintainer%7Cbuild&visible=maintainer%7Cconfigure).
 - [ ] The UBT version and corresponding checksum hash have been updated and referenced in the merge request if applicable.
   - [ ] UBT EE pipeline (`Trigger:ee-package-ubt`) is green
 
@@ -44,5 +44,9 @@ If you don't have access to this, the reviewer should trigger these jobs for you
 - [ ] Integration tests added to [GitLab QA](https://gitlab.com/gitlab-org/gitlab-qa).
 - [ ] Equivalent MR/issue for the [GitLab Chart](https://gitlab.com/gitlab-org/charts/gitlab) opened.
 - [ ] Validate potential values for new configuration settings. Formats such as integer `10`, duration `10s`, URI `scheme://user:passwd@host:port` may require quotation or other special handling when rendered in a template and written to a configuration file.
+
+### Reviewer checklist
+
+- [ ] As soon as you begin reviewing, select **Start a review** on your first comment so the MR shows *Reviewer started review*.
 
 /assign me

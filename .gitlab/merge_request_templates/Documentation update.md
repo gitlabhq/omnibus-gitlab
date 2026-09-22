@@ -13,7 +13,7 @@
   - [Documentation process](https://docs.gitlab.com/ee/development/documentation/workflow.html).
   - [Documentation guidelines](https://docs.gitlab.com/ee/development/documentation/).
   - [Style Guide](https://docs.gitlab.com/ee/development/documentation/styleguide/).
-- [ ] When ready for review, MR is labeled ~"workflow::ready for review" per the [Distribution MR workflow](https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/distribution/merge_requests/)
+- [ ] When ready for review, MR is marked as ready (not a draft) and a reviewer is requested. Pick the reviewer suggested by the reviewer roulette, or one of the [project maintainers](https://gitlab-org.gitlab.io/gitlab-roulette/?currentProject=omnibus-gitlab&visible=maintainer%7Cbuild&visible=maintainer%7Cconfigure).
 
 If you are only adding documentation, do not add any of the following labels:
 
@@ -29,6 +29,7 @@ These labels cause the MR to be added to code verification QA issues.
 
 Documentation-related MRs should be reviewed by a Technical Writer for a non-blocking review, based on [Documentation Guidelines](https://docs.gitlab.com/ee/development/documentation/) and the [Style Guide](https://docs.gitlab.com/ee/development/documentation/styleguide/).
 
+- [ ] As soon as you begin reviewing, select **Start a review** on your first comment so the MR shows *Reviewer started review*.
 - [ ] If the content requires it, ensure the information is reviewed by a subject matter expert.
 - Technical writer review items:
   - [ ] Ensure docs metadata is present and up-to-date.

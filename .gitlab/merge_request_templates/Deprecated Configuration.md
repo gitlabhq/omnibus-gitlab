@@ -29,7 +29,7 @@ For anything in this list which will not be completed, please provide a reason i
 - [ ] MR has a green pipeline on GitLab.com
 - [ ] Pipeline is green on the [dev.gitlab.org](https://dev.gitlab.org/gitlab/omnibus-gitlab/-/pipelines) mirror for this branch if the change is touching anything besides documentation or internal cookbooks. Please note that feature branches are not automatically mirrored to dev.gitlab.org, and should be manually pushed whenever necessary.
 - [ ] `trigger-package` has a green pipeline running against latest commit
-- [ ] When ready for review, MR is labeled ~"workflow::ready for review" per the [Distribution MR workflow](https://about.gitlab.com/handbook/engineering/development/enablement/systems/distribution/merge_requests.html)
+- [ ] When ready for review, MR is marked as ready (not a draft) and a reviewer is requested. Pick the reviewer suggested by the reviewer roulette, or one of the [project maintainers](https://gitlab-org.gitlab.io/gitlab-roulette/?currentProject=omnibus-gitlab&visible=maintainer%7Cbuild&visible=maintainer%7Cconfigure).
 
 ### Expected (please provide an explanation if not completing)
 
@@ -38,5 +38,9 @@ For anything in this list which will not be completed, please provide a reason i
 - [ ] Tests updated
 - [ ] Equivalent MR/issue for the [GitLab Chart](https://gitlab.com/gitlab-org/charts/gitlab) opened
 - [ ] Notify Product for inclusion in release notes
+
+### Reviewer checklist
+
+- [ ] As soon as you begin reviewing, select **Start a review** on your first comment so the MR shows *Reviewer started review*.
 
 /assign me
