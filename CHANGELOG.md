@@ -240,6 +240,13 @@ No changes.
 - [Update dependency gitlab-exporter to v16.8.0](gitlab-org/omnibus-gitlab@9a6db0449a815454ff3bcda61c0b8815015260cf) ([merge request](gitlab-org/omnibus-gitlab!9388))
 - [Update dependency redis/redis to v7.2.13](gitlab-org/omnibus-gitlab@e3a190bfadb2f56b59b241e166f091cb5753e419) ([merge request](gitlab-org/omnibus-gitlab!9351))
 
+## 19.0.9 (2026-09-22)
+
+### Fixed (2 changes)
+
+- [Treat Patroni streaming state as a running node](gitlab-org/omnibus-gitlab@127dcd6159a00d8cc0b67ed38121cb46f239c63f) ([merge request](gitlab-org/omnibus-gitlab!9792))
+- [Merge branch 'bocarbonell-master-patch-81812' into 'master'](gitlab-org/omnibus-gitlab@b69108ea100450ce5aba78677c8e5f5490f071d1) ([merge request](gitlab-org/omnibus-gitlab!9678))
+
 ## 19.0.8 (2026-08-14)
 
 No changes.
