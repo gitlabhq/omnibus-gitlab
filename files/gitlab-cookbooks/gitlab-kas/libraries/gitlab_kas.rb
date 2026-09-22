@@ -178,13 +178,14 @@ module GitlabKas
 
       kas_uri = URI(Gitlab[key].to_s)
 
-      raise "gitlab_kas_external_url must include a scheme and FQDN, e.g. wss://kas.gitlab.example.com/" unless kas_uri.host
+      raise "gitlab_kas_external_url must include a scheme and FQDN, e.g. grpcs://kas.gitlab.example.com/" unless kas_uri.host
 
-      # We are temporarily not supporting grpc/grpcs as this requires a bigger change in the NGINX configuration
-      raise "gitlab_kas_external_url scheme must be 'ws' or 'wss'" unless ws_scheme?(kas_uri.scheme)
-      raise "gitlab_kas['listen_websocket'] must be set to `true`" unless gitlab_kas_attr('listen_websocket')
+      # grpc:// (gRPC without TLS) is not supported: the bundled NGINX serves HTTP/2 on its TLS listener only.
+      raise "gitlab_kas_external_url scheme must be 'ws', 'wss' or 'grpcs'" unless %w[ws wss grpcs].include?(kas_uri.scheme)
+      raise "gitlab_kas['listen_websocket'] must be set to `true`" if ws_scheme?(kas_uri.scheme) && !gitlab_kas_attr('listen_websocket')
+      raise "gitlab_kas_external_url uses grpcs://, which needs HTTP/2 on the KAS NGINX vhost. Set gitlab_kas['nginx']['http2_enabled'] to true and keep gitlab_kas['nginx']['listen_https'] enabled, or use wss://" if kas_uri.scheme == 'grpcs' && !kas_nginx_serves_http2?
 
-      use_ssl = kas_uri.scheme == 'wss'
+      use_ssl = secure_scheme?(kas_uri.scheme)
 
       Gitlab['gitlab_kas']['nginx']['host'] ||= kas_uri.host
       Gitlab['gitlab_kas']['nginx']['port'] ||= use_ssl ? '443' : '80'
@@ -220,7 +221,7 @@ module GitlabKas
       return unless Gitlab['gitlab_rails'][key].nil?
 
       kas_uri = URI(Gitlab['gitlab_kas_external_url'].to_s)
-      scheme = kas_uri.scheme == 'wss' ? 'https' : 'http'
+      scheme = secure_scheme?(kas_uri.scheme) ? 'https' : 'http'
 
       Gitlab['gitlab_rails'][key] = "#{scheme}://#{kas_uri.host}/k8s-proxy/"
     end
@@ -234,23 +235,59 @@ module GitlabKas
     end
 
     def build_default_gitlab_kas_external_url
-      # For now, the default external URL is on the subpath /-/kubernetes-agent/
-      # so whether to use TLS is determined from the primary external_url.
+      # Whether to use TLS is determined from the primary external_url.
       # See https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/5784
       gitlab_uri = URI(Gitlab['external_url'])
 
       case gitlab_uri.scheme
       when 'https'
+        # Native gRPC is the default when the bundled NGINX terminates TLS with HTTP/2 on the
+        # GitLab host, where it routes /gitlab.agent.* to KAS. agentk cannot prefix that path,
+        # so a relative URL root keeps the WebSocket URL under /-/kubernetes-agent/.
+        return "grpcs://#{gitlab_uri.host}#{port_suffix(gitlab_uri, 443)}" if native_grpc_default?(gitlab_uri)
+
         scheme = gitlab_kas_attr('listen_websocket') ? 'wss' : 'grpcs'
-        port = gitlab_uri.port == 443 ? '' : ":#{port}"
+        port = port_suffix(gitlab_uri, 443)
       when 'http'
         scheme = gitlab_kas_attr('listen_websocket') ? 'ws' : 'grpc'
-        port = gitlab_uri.port == 80 ? '' : ":#{port}"
+        port = port_suffix(gitlab_uri, 80)
       else
         raise "external_url scheme should be 'http' or 'https', got '#{gitlab_uri.scheme}"
       end
 
-      "#{scheme}://#{gitlab_uri.host}#{port}#{gitlab_uri.path}/-/kubernetes-agent/"
+      # Legacy derivation, kept for existing installs. With listen_websocket false it yields a
+      # gRPC scheme on the WebSocket path, which the bundled NGINX does not route: that location
+      # proxies HTTP/1.1 and KAS accepts no WebSocket connections. Warn instead of raising so
+      # that reconfigure keeps working for installs that hand out agent addresses themselves.
+      url = "#{scheme}://#{gitlab_uri.host}#{port}#{gitlab_uri.path}/-/kubernetes-agent/"
+      warn_unroutable_default_url(url) unless gitlab_kas_attr('listen_websocket')
+
+      url
+    end
+
+    def warn_unroutable_default_url(url)
+      LoggingHelper.warning("gitlab_kas['listen_websocket'] is false, but the GitLab NGINX vhost cannot serve native gRPC here, " \
+                            "so the default gitlab_kas_external_url '#{url}' does not work through the bundled NGINX. " \
+                            "Set gitlab_rails['gitlab_kas_external_url'] explicitly.")
+    end
+
+    def native_grpc_default?(gitlab_uri)
+      return false unless gitlab_uri.path.to_s.empty? || gitlab_uri.path == '/'
+      # The GitLab vhost only emits `http2 on` when it terminates TLS itself. With TLS terminated
+      # at a load balancer (listen_https false) it speaks HTTP/1.1, which cannot carry gRPC.
+      return false if rails_nginx_attr('listen_https') == false
+
+      rails_nginx_attr('enable') && rails_nginx_attr('http2_enabled')
+    end
+
+    # Same rule for the KAS vhost on its own subdomain. Only explicit settings matter here:
+    # http2_enabled defaults to true and listen_https follows the URL scheme.
+    def kas_nginx_serves_http2?
+      Gitlab['gitlab_kas']['nginx']['http2_enabled'] != false && Gitlab['gitlab_kas']['nginx']['listen_https'] != false
+    end
+
+    def port_suffix(uri, default_port)
+      uri.port == default_port ? '' : ":#{uri.port}"
     end
 
     def kas_domain_matches_gitlab_domain?
@@ -267,8 +304,22 @@ module GitlabKas
       Gitlab['node']['gitlab_kas'][key]
     end
 
+    # Settings of the NGINX vhost for the GitLab host. `gitlab_rails['nginx']` is their
+    # namespace since 19.2. GitlabRails parses before this library (priority 15 vs 20) and
+    # copies the deprecated top-level `nginx[...]` keys into it, so both forms are seen here.
+    def rails_nginx_attr(key)
+      configured = Gitlab['gitlab_rails']['nginx'][key]
+      return configured unless configured.nil?
+
+      Gitlab['node']['gitlab']['gitlab_rails']['nginx'][key]
+    end
+
     def ws_scheme?(scheme)
       %w[ws wss].include?(scheme)
+    end
+
+    def secure_scheme?(scheme)
+      %w[wss grpcs].include?(scheme)
     end
   end
 end

@@ -2425,12 +2425,19 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ##! Settings used by the GitLab application
 # gitlab_rails['gitlab_kas_enabled'] = true
-# gitlab_rails['gitlab_kas_external_url'] = 'ws://gitlab.example.com/-/kubernetes-agent/'
+##! URL that agents connect to. Defaults to native gRPC on the GitLab host, `grpcs://gitlab.example.com`,
+##! when `external_url` uses HTTPS, has no relative URL root, and the bundled NGINX terminates TLS with
+##! HTTP/2 (`nginx['enable']` and `gitlab_rails['nginx']['http2_enabled']` true, both the default, and
+##! `gitlab_rails['nginx']['listen_https']` not set to false). Otherwise, for example with TLS terminated
+##! at a load balancer, it defaults to WebSocket, `wss://gitlab.example.com/-/kubernetes-agent/` or `ws://...`.
+# gitlab_rails['gitlab_kas_external_url'] = 'grpcs://gitlab.example.com'
 # gitlab_rails['gitlab_kas_internal_url'] = 'grpc://localhost:8153'
 # gitlab_rails['gitlab_kas_external_k8s_proxy_url'] = 'https://gitlab.example.com/-/kubernetes-agent/k8s-proxy/'
 
 ##! Settings for GitLab KAS
-# gitlab_kas_external_url "ws://gitlab.example.com/-/kubernetes-agent/"
+##! Set this to serve KAS on its own subdomain. Supported schemes: grpcs, wss, ws.
+##! grpcs needs HTTP/2 on the KAS vhost: gitlab_kas['nginx']['http2_enabled'] true and listen_https not false.
+# gitlab_kas_external_url "grpcs://kas.gitlab.example.com/"
 # gitlab_kas['enable'] = true
 
 ##! Agent configuration for GitLab KAS

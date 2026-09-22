@@ -250,9 +250,129 @@ RSpec.describe 'gitlab-kas' do
       it 'renders gitlab_kas enabled with default URLs in config/gitlab.yml' do
         expect(gitlab_yml[:production][:gitlab_kas]).to include(
           enabled: true,
-          external_url: 'wss://gitlab.example.com/-/kubernetes-agent/',
+          external_url: 'grpcs://gitlab.example.com',
           internal_url: 'grpc://localhost:8153',
           external_k8s_proxy_url: 'https://gitlab.example.com/-/kubernetes-agent/k8s-proxy/'
+        )
+      end
+    end
+
+    context 'with a non-standard HTTPS port' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com:8443'
+        )
+      end
+
+      it 'keeps the port in the gRPC URL' do
+        expect(gitlab_yml[:production][:gitlab_kas]).to include(
+          external_url: 'grpcs://gitlab.example.com:8443'
+        )
+      end
+    end
+
+    context 'when NGINX HTTP/2 is disabled' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_rails: { nginx: { http2_enabled: false } }
+        )
+      end
+
+      it 'falls back to the WebSocket URL' do
+        expect(gitlab_yml[:production][:gitlab_kas]).to include(
+          external_url: 'wss://gitlab.example.com/-/kubernetes-agent/'
+        )
+      end
+    end
+
+    context 'when NGINX HTTP/2 is disabled with the deprecated top-level key' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          nginx: { http2_enabled: false }
+        )
+      end
+
+      it 'falls back to the WebSocket URL' do
+        expect(gitlab_yml[:production][:gitlab_kas]).to include(
+          external_url: 'wss://gitlab.example.com/-/kubernetes-agent/'
+        )
+      end
+    end
+
+    context 'when the NGINX vhost for GitLab is disabled' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_rails: { nginx: { enable: false } }
+        )
+      end
+
+      it 'falls back to the WebSocket URL' do
+        expect(gitlab_yml[:production][:gitlab_kas]).to include(
+          external_url: 'wss://gitlab.example.com/-/kubernetes-agent/'
+        )
+      end
+    end
+
+    context 'when the bundled NGINX is disabled' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          nginx: { enable: false }
+        )
+      end
+
+      it 'falls back to the WebSocket URL' do
+        expect(gitlab_yml[:production][:gitlab_kas]).to include(
+          external_url: 'wss://gitlab.example.com/-/kubernetes-agent/'
+        )
+      end
+    end
+
+    context 'when TLS is terminated at a load balancer' do
+      before do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_rails: { nginx: { listen_port: 80, listen_https: false } }
+        )
+      end
+
+      it 'falls back to the WebSocket URL' do
+        expect(gitlab_yml[:production][:gitlab_kas]).to include(
+          external_url: 'wss://gitlab.example.com/-/kubernetes-agent/'
+        )
+      end
+    end
+
+    context 'when KAS does not listen for WebSocket connections' do
+      before do
+        allow(LoggingHelper).to receive(:warning).and_call_original
+      end
+
+      it 'uses the native gRPC URL without a warning' do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_kas: { listen_websocket: false }
+        )
+
+        expect(LoggingHelper).not_to receive(:warning).with(/listen_websocket/)
+        expect(gitlab_yml[:production][:gitlab_kas]).to include(
+          external_url: 'grpcs://gitlab.example.com'
+        )
+      end
+
+      it 'keeps the legacy URL and warns when native gRPC is unavailable' do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_rails: { nginx: { http2_enabled: false } },
+          gitlab_kas: { listen_websocket: false }
+        )
+
+        expect(LoggingHelper).to receive(:warning).with(/gitlab_kas\['listen_websocket'\] is false.*does not work through the bundled NGINX/)
+        expect(gitlab_yml[:production][:gitlab_kas]).to include(
+          external_url: 'grpcs://gitlab.example.com/-/kubernetes-agent/'
         )
       end
     end
@@ -286,7 +406,7 @@ RSpec.describe 'gitlab-kas' do
       it 'derives the external URLs from the top level external URL, and the internal URL from the listen address' do
         expect(gitlab_yml[:production][:gitlab_kas]).to include(
           enabled: true,
-          external_url: 'wss://gitlab.example.com/-/kubernetes-agent/',
+          external_url: 'grpcs://gitlab.example.com',
           internal_url: 'grpc://custom-api-address:9999',
           external_k8s_proxy_url: 'https://gitlab.example.com/-/kubernetes-agent/k8s-proxy/'
         )
@@ -371,16 +491,68 @@ RSpec.describe 'gitlab-kas' do
         )
       end
 
-      it "does not allow grpc/grpcs" do
+      it "allows grpcs scheme regardless of gitlab_kas['listen_websocket']" do
         stub_gitlab_rb(
           external_url: 'https://gitlab.example.com',
           gitlab_kas_external_url: 'grpcs://kas.gitlab.example.com/',
           gitlab_kas: { listen_websocket: false }
         )
 
+        expect(gitlab_yml[:production][:gitlab_kas]).to include(
+          enabled: true,
+          external_url: 'grpcs://kas.gitlab.example.com/',
+          external_k8s_proxy_url: 'https://kas.gitlab.example.com/k8s-proxy/'
+        )
+        expect(chef_run.node['gitlab_kas']['nginx']).to include('enable' => true, 'https' => true, 'host' => 'kas.gitlab.example.com', 'port' => '443')
+      end
+
+      it "raises an error for grpcs when HTTP/2 is disabled on the KAS vhost" do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_kas_external_url: 'grpcs://kas.gitlab.example.com/',
+          gitlab_kas: { nginx: { http2_enabled: false } }
+        )
+
         expect { gitlab_yml }.to raise_error(
           RuntimeError,
-          "gitlab_kas_external_url scheme must be 'ws' or 'wss'"
+          /gitlab_kas_external_url uses grpcs:\/\/, which needs HTTP\/2 on the KAS NGINX vhost/
+        )
+      end
+
+      it "raises an error for grpcs when the KAS vhost does not terminate TLS" do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_kas_external_url: 'grpcs://kas.gitlab.example.com/',
+          gitlab_kas: { nginx: { listen_port: 80, listen_https: false } }
+        )
+
+        expect { gitlab_yml }.to raise_error(
+          RuntimeError,
+          /gitlab_kas_external_url uses grpcs:\/\/, which needs HTTP\/2 on the KAS NGINX vhost/
+        )
+      end
+
+      it "allows wss when HTTP/2 is disabled on the KAS vhost" do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_kas_external_url: 'wss://kas.gitlab.example.com/',
+          gitlab_kas: { nginx: { http2_enabled: false } }
+        )
+
+        expect(gitlab_yml[:production][:gitlab_kas]).to include(
+          external_url: 'wss://kas.gitlab.example.com/'
+        )
+      end
+
+      it "does not allow grpc without TLS" do
+        stub_gitlab_rb(
+          external_url: 'https://gitlab.example.com',
+          gitlab_kas_external_url: 'grpc://kas.gitlab.example.com/'
+        )
+
+        expect { gitlab_yml }.to raise_error(
+          RuntimeError,
+          "gitlab_kas_external_url scheme must be 'ws', 'wss' or 'grpcs'"
         )
       end
 
@@ -393,7 +565,7 @@ RSpec.describe 'gitlab-kas' do
 
         expect { gitlab_yml }.to raise_error(
           RuntimeError,
-          "gitlab_kas_external_url scheme must be 'ws' or 'wss'"
+          "gitlab_kas_external_url scheme must be 'ws', 'wss' or 'grpcs'"
         )
       end
 
