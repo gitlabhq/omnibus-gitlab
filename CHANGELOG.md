@@ -107,6 +107,13 @@ No changes.
 - [Bump Ruby to 3.3.12 to fix CVE-2026-41316 (erb)](gitlab-org/omnibus-gitlab@3012cc43f9151e6ef42ebfc34919715c6b65f13a) by @dmakovey ([merge request](gitlab-org/omnibus-gitlab!9634))
 - [Bump pgbouncer-exporter from 0.11.0 to 0.12.1](gitlab-org/omnibus-gitlab@6c2684c5202459ea7ace8e0a236b38dbd2760cbf) ([merge request](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/9628))
 
+## 19.2.7 (2026-09-22)
+
+### Fixed (2 changes)
+
+- [Treat Patroni streaming state as a running node](gitlab-org/security/omnibus-gitlab@889804e3cfb7747daf06e242f7c01c6fd374d23b)
+- [Add sshd_session_t and sshd_auth_t rules for EL10](gitlab-org/security/omnibus-gitlab@5f9b024aaf06f3fd9659de2e68f7ee47e9b6e221)
+
 ## 19.2.6 (2026-09-10)
 
 ### Changed (1 change)
