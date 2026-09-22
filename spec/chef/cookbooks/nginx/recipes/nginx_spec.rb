@@ -927,6 +927,9 @@ RSpec.describe 'nginx' do
         expect(content).to include('proxy_pass http://localhost:8150/;')
         expect(content).to include('proxy_http_version 1.1;')
 
+        expect(content).to include('location /gitlab.agent. {')
+        expect(content).to include('grpc_pass grpc://localhost:8150;')
+
         expect(content).to include('location /-/kubernetes-agent/k8s-proxy/ {')
         expect(content).to include('proxy_pass http://localhost:8154/;')
       }
@@ -958,10 +961,14 @@ RSpec.describe 'nginx' do
         expect(chef_run).to render_file(http_conf['gitlab_kas']).with_content { |content|
           expect(content).to include('listen *:443')
           expect(content).to include('server_name kas.gitlab.example.com;')
+          expect(content).to include('http2 on;')
 
           expect(content).to include('proxy_http_version 1.1;')
           expect(content).to include('proxy_pass http://localhost:8150/;')
           expect(content).to include('proxy_http_version 1.1;')
+
+          expect(content).to include('location /gitlab.agent. {')
+          expect(content).to include('grpc_pass grpc://localhost:8150;')
 
           expect(content).to include('location /k8s-proxy/ {')
           expect(content).to include('location = /k8s-proxy/ {')
