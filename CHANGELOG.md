@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.0.9 (2026-09-22)
+
+### Fixed (2 changes)
+
+- [Treat Patroni streaming state as a running node](gitlab-org/omnibus-gitlab@127dcd6159a00d8cc0b67ed38121cb46f239c63f) ([merge request](gitlab-org/omnibus-gitlab!9792))
+- [Merge branch 'bocarbonell-master-patch-81812' into 'master'](gitlab-org/omnibus-gitlab@b69108ea100450ce5aba78677c8e5f5490f071d1) ([merge request](gitlab-org/omnibus-gitlab!9678))
+
 ## 19.0.8 (2026-08-14)
 
 No changes.
