@@ -49,6 +49,13 @@ No changes.
 - [Add ./third_party/icu to dependency_decisions](gitlab-org/omnibus-gitlab@7680ad38cc280450e02e4c3ba9617832cbbc61cd)
 - [Update faraday gem to v2.14.3](gitlab-org/omnibus-gitlab@6378aa0572961cc0fbfd5d49bd3f09cf79079105) ([merge request](gitlab-org/omnibus-gitlab!9686))
 
+## 19.3.3 (2026-09-22)
+
+### Fixed (2 changes)
+
+- [Treat Patroni streaming state as a running node](gitlab-org/security/omnibus-gitlab@7bb8a0c509fe3035d9b18404c1fd1b4b2adacf19)
+- [Add sshd_session_t and sshd_auth_t rules for EL10](gitlab-org/security/omnibus-gitlab@689269b5a90b64265c78129690a1483d35d4836d)
+
 ## 19.3.2 (2026-09-10)
 
 ### Changed (1 change)
