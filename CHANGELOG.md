@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.4.1 (2026-09-22)
+
+No changes.
+
 ## 19.4.0 (2026-09-16)
 
 ### Added (5 changes)
@@ -44,6 +48,13 @@ omnibus-gitlab repository.
 - [Update NGINX from 1.31.0 to 1.31.4](gitlab-org/omnibus-gitlab@c020051129d5101c69903b7c4392707fc301665b)
 - [Add ./third_party/icu to dependency_decisions](gitlab-org/omnibus-gitlab@7680ad38cc280450e02e4c3ba9617832cbbc61cd)
 - [Update faraday gem to v2.14.3](gitlab-org/omnibus-gitlab@6378aa0572961cc0fbfd5d49bd3f09cf79079105) ([merge request](gitlab-org/omnibus-gitlab!9686))
+
+## 19.3.3 (2026-09-22)
+
+### Fixed (2 changes)
+
+- [Treat Patroni streaming state as a running node](gitlab-org/security/omnibus-gitlab@7bb8a0c509fe3035d9b18404c1fd1b4b2adacf19)
+- [Add sshd_session_t and sshd_auth_t rules for EL10](gitlab-org/security/omnibus-gitlab@689269b5a90b64265c78129690a1483d35d4836d)
 
 ## 19.3.2 (2026-09-10)
 
@@ -95,6 +106,13 @@ No changes.
 
 - [Bump Ruby to 3.3.12 to fix CVE-2026-41316 (erb)](gitlab-org/omnibus-gitlab@3012cc43f9151e6ef42ebfc34919715c6b65f13a) by @dmakovey ([merge request](gitlab-org/omnibus-gitlab!9634))
 - [Bump pgbouncer-exporter from 0.11.0 to 0.12.1](gitlab-org/omnibus-gitlab@6c2684c5202459ea7ace8e0a236b38dbd2760cbf) ([merge request](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/9628))
+
+## 19.2.7 (2026-09-22)
+
+### Fixed (2 changes)
+
+- [Treat Patroni streaming state as a running node](gitlab-org/security/omnibus-gitlab@889804e3cfb7747daf06e242f7c01c6fd374d23b)
+- [Add sshd_session_t and sshd_auth_t rules for EL10](gitlab-org/security/omnibus-gitlab@5f9b024aaf06f3fd9659de2e68f7ee47e9b6e221)
 
 ## 19.2.6 (2026-09-10)
 
