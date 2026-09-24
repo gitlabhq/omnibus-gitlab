@@ -246,6 +246,9 @@ gitlab_rails['redis_read_timeout'] = 1
 gitlab_rails['redis_write_timeout'] = 1
 ```
 
+These timeouts apply to every Redis store, including stores you split out with
+their own `gitlab_rails['redis_<instance>_instance']` setting.
+
 ## Provide sensitive configuration to Redis clients without plain text storage
 
 For more information, see the example in [configuration documentation](configuration.md#provide-redis-password-to-redis-server-and-client-components).

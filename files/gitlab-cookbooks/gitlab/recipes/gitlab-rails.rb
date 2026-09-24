@@ -406,7 +406,10 @@ RedisHelper::GitlabRails::REDIS_INSTANCES.each do |instance|
       redis_tls_client_cert_file: certificate_file,
       redis_tls_client_key_file: key_file,
       redis_encrypted_settings_file: instance_encrypted_settings_file,
-      redis_extra_config_command: instance_extra_config_command
+      redis_extra_config_command: instance_extra_config_command,
+      redis_connect_timeout: redis_connect_timeout,
+      redis_read_timeout: redis_read_timeout,
+      redis_write_timeout: redis_write_timeout
     )
     dependent_services.each { |svc| notifies :restart, svc }
     action :delete if url.nil? && clusters.empty?

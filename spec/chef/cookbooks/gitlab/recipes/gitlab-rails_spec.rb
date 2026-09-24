@@ -1128,7 +1128,10 @@ RSpec.describe 'gitlab::gitlab-rails' do
               redis_tls_client_cert_file: nil,
               redis_tls_client_key_file: nil,
               redis_encrypted_settings_file: "/var/opt/gitlab/gitlab-rails/shared/encrypted_settings/redis.#{instance}.yml.enc",
-              redis_extra_config_command: nil
+              redis_extra_config_command: nil,
+              redis_connect_timeout: nil,
+              redis_read_timeout: nil,
+              redis_write_timeout: nil
             )
 
             expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml").with_content { |content|
@@ -1176,7 +1179,10 @@ RSpec.describe 'gitlab::gitlab-rails' do
               redis_tls_client_cert_file: nil,
               redis_tls_client_key_file: nil,
               redis_encrypted_settings_file: "/var/opt/gitlab/gitlab-rails/shared/encrypted_settings/redis.#{instance}.yml.enc",
-              redis_extra_config_command: nil
+              redis_extra_config_command: nil,
+              redis_connect_timeout: nil,
+              redis_read_timeout: nil,
+              redis_write_timeout: nil
             )
 
             expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml").with_content { |content|
@@ -1224,7 +1230,10 @@ RSpec.describe 'gitlab::gitlab-rails' do
                 redis_tls_client_cert_file: nil,
                 redis_tls_client_key_file: nil,
                 redis_encrypted_settings_file: "/var/opt/gitlab/gitlab-rails/shared/encrypted_settings/redis.#{instance}.yml.enc",
-                redis_extra_config_command: nil
+                redis_extra_config_command: nil,
+                redis_connect_timeout: nil,
+                redis_read_timeout: nil,
+                redis_write_timeout: nil
               )
 
               expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/redis.#{instance}.yml").with_content { |content|
@@ -1277,7 +1286,10 @@ RSpec.describe 'gitlab::gitlab-rails' do
               redis_tls_client_cert_file: nil,
               redis_tls_client_key_file: nil,
               redis_encrypted_settings_file: '/var/opt/gitlab/gitlab-rails/shared/encrypted_settings/redis.shared_state.yml.enc',
-              redis_extra_config_command: nil
+              redis_extra_config_command: nil,
+              redis_connect_timeout: nil,
+              redis_read_timeout: nil,
+              redis_write_timeout: nil
             )
 
             expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/redis.shared_state.yml').with_content { |content|
@@ -1400,6 +1412,32 @@ RSpec.describe 'gitlab::gitlab-rails' do
               expect(generated_yml.dig('production', 'config_command')).to eq(global_command)
             }
           end
+        end
+      end
+
+      describe 'client timeouts' do
+        cached(:chef_run) do
+          ChefSpec::SoloRunner.new(step_into: %w(templatesymlink)).converge('gitlab-base::config', 'gitlab::gitlab-rails')
+        end
+
+        before do
+          stub_gitlab_rb(
+            gitlab_rails: {
+              redis_connect_timeout: 3,
+              redis_read_timeout: 4,
+              redis_write_timeout: 5,
+              redis_cache_instance: 'redis://redis.cache.instance'
+            }
+          )
+        end
+
+        it 'applies the global timeouts to a separate instance config' do
+          expect(chef_run).to render_file("/var/opt/gitlab/gitlab-rails/etc/redis.cache.yml").with_content { |content|
+            generated_yml = YAML.safe_load(content)
+            expect(generated_yml.dig('production', 'connect_timeout')).to eq(3)
+            expect(generated_yml.dig('production', 'read_timeout')).to eq(4)
+            expect(generated_yml.dig('production', 'write_timeout')).to eq(5)
+          }
         end
       end
     end
