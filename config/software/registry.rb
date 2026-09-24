@@ -19,7 +19,7 @@
 require "#{Omnibus::Config.project_root}/lib/gitlab/version"
 
 name 'registry'
-version = Gitlab::Version.new('registry', 'v4.41.0-gitlab')
+version = Gitlab::Version.new('registry', 'v4.42.0-gitlab')
 
 default_version version.print(false)
 display_version version.print(false).delete_suffix('-gitlab')
@@ -34,9 +34,17 @@ relative_path 'src/github.com/docker/distribution'
 build do
   registry_source_dir = "#{Omnibus::Config.source_dir}/registry"
   cwd = "#{registry_source_dir}/#{relative_path}"
+  # The registry reads no FIPS_MODE variable. Its Makefile passes BUILDTAGS
+  # straight to `go build -tags`, so the `fips` tag has to be appended here.
+  # Without it the binary compiles labkit's `//go:build !fips` stub, where
+  # fips.Enabled() returns false, and the S3 driver then never selects the AWS
+  # FIPS endpoints even though the Go Cryptographic Module is active.
+  build_tags = %w[include_gcs include_oss]
+  build_tags << 'fips' if Build::Check.use_go_fips_module?
+
   env = {
     'GOPATH' => registry_source_dir,
-    'BUILDTAGS' => 'include_gcs include_oss',
+    'BUILDTAGS' => build_tags.join(' '),
     'GOTOOLCHAIN' => 'local',
   }
 

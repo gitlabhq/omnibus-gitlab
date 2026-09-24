@@ -92,10 +92,15 @@ build do
     env['CFLAGS'] << ' -fno-omit-frame-pointer'
   end
 
+  # Gitaly's Makefile makes FIPS_MODE a single switch over two concerns: the
+  # `fips` Go build tag, and -Dsha256_backend=openssl for the bundled Git C
+  # build. Upstream offers no way to request one without the other, so set it
+  # whenever either half of FIPS is asked for. git.rb runs only Git targets,
+  # so there it stays on use_system_ssl? alone.
+  env['FIPS_MODE'] = '1' if Build::Check.use_go_fips_module? || Build::Check.use_system_ssl?
+
   if Build::Check.use_system_ssl?
     env['CMAKE_FLAGS'] = "#{OpenSSLHelper.cmake_flags} #{CurlHelper.cmake_flags}"
-    env['FIPS_MODE'] = '1'
-    env['GOFIPS140'] = Build::Check.go_fips_module_version if Build::Check.use_go_fips_module?
 
     pkg_config_overrides = File.join(project_dir, 'pkg-config-overrides')
     mkdir pkg_config_overrides

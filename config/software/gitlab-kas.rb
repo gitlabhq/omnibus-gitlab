@@ -67,6 +67,11 @@ build do
     'GIT_REF' => version.print,
     'GLAZ_FFI_DIR' => Build::GlazFFI.dir(install_dir),
   }
+  # gitlab-kas turns FIPS_MODE=1 into `-tags fips`, which its own
+  # build/verify_fips_binary.sh asserts on alongside GOFIPS140. The tag only
+  # gates agentk code that the kas binary does not link, so this is metadata
+  # for what we ship -- but without it that verifier fails on our binary.
+  env['FIPS_MODE'] = '1' if Build::Check.use_go_fips_module?
   make 'kas', env: env
 
   # make ignores variables it has no rule for: a gitlab-kas source without the
