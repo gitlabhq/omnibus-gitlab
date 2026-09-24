@@ -92,3 +92,61 @@ build and confirm it there. To use this:
    ```shell
    bundle exec omnibus build simple
    ```
+
+## Go components and FIPS
+
+Go software definitions need no FIPS wiring. When `Build::Check.use_go_fips_module?` is
+true -- because `Build::Check.fips?` returns true, or `USE_GO_FIPS_MODULE=true` is set --
+`omnibus.rb` calls `Build::Check.export_go_fips_module_env!` once, which exports
+`GOFIPS140` into the omnibus process environment. Every build command inherits it,
+because a definition's `env` hash is merged over the inherited environment rather than
+replacing it.
+
+Do not add `GOFIPS140` to a new definition. A component may only opt *out*, and only
+with a justification:
+
+```ruby
+# <component> cannot use the Go Cryptographic Module because <reason>.
+env['GOFIPS140'] = 'off'
+```
+
+A bypass must also be added to `bypasses` in
+`spec/lib/gitlab/build/go_fips_definitions_spec.rb`, which fails the build for any
+definition that sets `GOFIPS140` without one. This keeps the default FIPS-on and makes
+every exception explicit and reviewable.
+
+`omnibus.rb` also calls `Build::Check.verify_go_fips_toolchain!`. That
+check stops the build at config load if the Go toolchain in the builder image cannot
+supply the module, rather than letting the build produce Go binaries with standard Go
+crypto and report nothing.
+
+A component whose upstream build system has its own FIPS switch still sets that switch
+in its definition, gated on the same `Build::Check.use_go_fips_module?`. `FIPS_MODE=1`
+is the convention across the GitLab Go projects: it adds the `fips` build
+tag, which selects the real implementation in `labkit/fips`. The build tag
+and `GOFIPS140` are independent. `GOFIPS140` selects the cryptographic module, and
+the tag decides whether the component's own FIPS-conditional code compiles in.
+
+`FIPS_MODE` is a convention, not a rule. Check what the component's build system
+reads. The `registry` takes `BUILDTAGS`, which its Makefile passes to `go build -tags`,
+so `registry.rb` appends `fips` there instead.
+
+Adding the tag also requires a labkit new enough to build without `crypto/boring`.
+A component that sets the `fips` tag compiles the `//go:build fips` files of
+`labkit/fips`. Before labkit `v1.64.10`, those files import `crypto/boring`, which has
+no buildable files under upstream Go, and the build fails with `build constraints
+exclude all Go files`. From `v1.64.10`, labkit puts that probe behind
+`fips && boringcrypto`, so the tag compiles against the Go Cryptographic Module.
+A component pinned below that version still gets `GOFIPS140`, but it compiles the
+`//go:build !fips` stub and reports FIPS as off at run time. Check the labkit version
+of the component before you add the tag.
+
+Gate that switch on the concerns it actually drives for that component:
+
+- Go-only components, such as `gitlab-shell.rb`, `gitlab-kas.rb` and `gitlab-pages.rb`, gate
+  `FIPS_MODE=1` on `Build::Check.use_go_fips_module?`.
+- `git.rb` runs only Git targets, where `FIPS_MODE=1` does nothing but select the OpenSSL
+  SHA256 backend for the C build. It gates on `Build::Check.use_system_ssl?`.
+- `gitaly.rb` builds both. In Gitaly's Makefile, `FIPS_MODE` adds the `fips` Go build tag and
+  sets `-Dsha256_backend=openssl` for the bundled Git C build, and upstream offers no way to
+  request one without the other. It therefore gates on either check being true.

@@ -89,10 +89,7 @@ build do
   command "echo 'omnibus-gitlab' > INSTALLATION_TYPE"
 
   workhorse_env = { 'GOTOOLCHAIN' => 'local' }
-  if Build::Check.use_system_ssl?
-    workhorse_flags = " FIPS_MODE=1"
-    workhorse_env['GOFIPS140'] = Build::Check.go_fips_module_version if Build::Check.use_go_fips_module?
-  end
+  workhorse_flags = " FIPS_MODE=1" if Build::Check.use_go_fips_module?
   make "install -C workhorse PREFIX=#{install_dir}/embedded#{workhorse_flags}", env: workhorse_env
   command 'go clean -modcache', env: env
 

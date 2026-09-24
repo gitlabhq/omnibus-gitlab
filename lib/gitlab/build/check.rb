@@ -1,3 +1,5 @@
+require 'open3'
+require 'timeout'
 require_relative '../util'
 require_relative 'info/git'
 require_relative 'info/package'
@@ -11,6 +13,10 @@ module Build
     # v1.0.0 holds full CMVP certification (#5247). Overridable via the
     # GO_FIPS_MODULE_VERSION environment variable.
     GO_FIPS_MODULE_VERSION = 'v1.0.0'.freeze
+
+    # Bounds the toolchain probe in go_fips_module_check so config load fails
+    # with a diagnostic instead of hanging before any build output exists.
+    GO_FIPS_TOOLCHAIN_CHECK_TIMEOUT = 30 # seconds
 
     class << self
       def is_ee?
@@ -30,20 +36,65 @@ module Build
         is_ee? || is_jh?
       end
 
-      def boringcrypto_supported?
-        system({ 'GOEXPERIMENT' => 'boringcrypto' }, *%w(go version))
-      end
-
       def go_fips_module_version
         Gitlab::Util.get_env('GO_FIPS_MODULE_VERSION') || GO_FIPS_MODULE_VERSION
       end
 
-      # Two-way door: when true, Go components build against upstream Go's native
-      # FIPS 140-3 module (GOFIPS140) instead of the golang-fips fork
-      # (GOEXPERIMENT=boringcrypto). Only meaningful for FIPS builds, and requires
-      # a builder image that ships upstream Go. Defaults to off (opt-in).
+      # The gate for the Go Cryptographic Module (GOFIPS140). It controls only
+      # which crypto module Go compiles against, and nothing else.
+      #
+      # USE_GO_FIPS_MODULE lets a pipeline request the module on its own.
+      #
+      # TODO: Remove this entire function once `fips?` is properly implemented.
       def use_go_fips_module?
-        use_system_ssl? && Gitlab::Util.get_env('USE_GO_FIPS_MODULE') == 'true'
+        Gitlab::Util.get_env('USE_GO_FIPS_MODULE') == 'true' || fips?
+      end
+
+      # Single point of control for Go FIPS builds. Called from omnibus.rb before
+      # any software definition, so every build command inherits GOFIPS140: a
+      # definition's `env:` hash merges over the process environment rather than
+      # replacing it. A component opts out only by setting GOFIPS140 to 'off',
+      # with a reason. See doc/development/new-software-definition.md.
+      def export_go_fips_module_env!
+        return unless use_go_fips_module?
+
+        Gitlab::Util.set_env('GOFIPS140', go_fips_module_version)
+      end
+
+      # Fails at config load when the builder image's Go toolchain cannot deliver
+      # the module, rather than deep inside the first Go component or not at all.
+      def verify_go_fips_toolchain!
+        return unless use_go_fips_module?
+
+        available, error = go_fips_module_check
+        return if available
+
+        raise "This build requests the Go Cryptographic Module #{go_fips_module_version}, but " \
+              'the Go toolchain on PATH does not supply it. Either no Go is installed, or the ' \
+              'toolchain ships no such module version. Check the builder image and ' \
+              "GO_FIPS_MODULE_VERSION.\n#{error}"
+      end
+
+      # Probes the toolchain once and reports [available, error].
+      #
+      # `go version` accepts any GOFIPS140 value, so it verifies nothing.
+      # `go list std` resolves the module and fails with "unknown GOFIPS140
+      # version" when the toolchain does not ship it. capture3 drains both
+      # streams concurrently, so it cannot deadlock on a chatty toolchain, and
+      # it yields the stderr that verify_go_fips_toolchain! reports.
+      def go_fips_module_check
+        Timeout.timeout(GO_FIPS_TOOLCHAIN_CHECK_TIMEOUT) do
+          _stdout, stderr, status = Open3.capture3(
+            { 'GOTOOLCHAIN' => 'local', 'GOFIPS140' => go_fips_module_version },
+            *%w(go list std)
+          )
+
+          [status.success?, stderr.strip]
+        end
+      rescue Timeout::Error
+        [false, "the Go toolchain did not respond within #{GO_FIPS_TOOLCHAIN_CHECK_TIMEOUT}s"]
+      rescue Errno::ENOENT
+        [false, 'no `go` executable is on PATH']
       end
 
       def fips?

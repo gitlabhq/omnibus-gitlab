@@ -36,17 +36,11 @@ build do
     'GOTOOLCHAIN' => 'local',
   }
 
-  # Pages compiles with CGO_ENABLED=0 by default, so we need to activate
-  # FIPS mode explicitly.
-  if Build::Check.use_system_ssl?
-    env['FIPS_MODE'] = '1'
-    if Build::Check.use_go_fips_module?
-      # Native Go FIPS 140-3 module. Mutually exclusive with GOEXPERIMENT=boringcrypto.
-      env['GOFIPS140'] = Build::Check.go_fips_module_version
-    elsif Build::Check.boringcrypto_supported?
-      env['GOEXPERIMENT'] = 'boringcrypto'
-    end
-  end
+  # FIPS_MODE=1 adds the `fips` build tag, which selects labkit's real
+  # fips.Check(). Pages' own Makefile.build.mk decides the crypto backend from
+  # `go env GOFIPS140`, so this recipe must not set GOEXPERIMENT.
+  # https://gitlab.com/gitlab-org/gitlab-pages/-/merge_requests/1296
+  env['FIPS_MODE'] = '1' if Build::Check.use_go_fips_module?
 
   make 'gitlab-pages', env: env
 

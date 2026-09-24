@@ -369,28 +369,6 @@ RSpec.describe Build::Check do
     end
   end
 
-  describe 'boringcrypto_supported?' do
-    context 'when using a golang with boringcrypto support' do
-      before do
-        allow(described_class).to receive(:system).with(hash_including('GOEXPERIMENT'), 'go', 'version').and_return(true)
-      end
-
-      it 'returns true' do
-        expect(described_class.boringcrypto_supported?).to be_truthy
-      end
-    end
-
-    context 'when using a golang withou boringcrypto support' do
-      before do
-        allow(described_class).to receive(:system).with(hash_including('GOEXPERIMENT'), 'go', 'version').and_return(false)
-      end
-
-      it 'returns true' do
-        expect(described_class.boringcrypto_supported?).to be_falsey
-      end
-    end
-  end
-
   describe 'go_fips_module_version' do
     it 'defaults to the pinned module version' do
       stub_env_var('GO_FIPS_MODULE_VERSION', nil)
@@ -404,31 +382,150 @@ RSpec.describe Build::Check do
   end
 
   describe 'use_go_fips_module?' do
-    context 'when building with system SSL (FIPS)' do
+    before do
+      allow(described_class).to receive_messages(fips?: false, use_system_ssl?: false)
+      stub_env_var('USE_GO_FIPS_MODULE', nil)
+    end
+
+    it 'is false when nothing asks for the module' do
+      expect(described_class.use_go_fips_module?).to be_falsey
+    end
+
+    it 'is true when USE_GO_FIPS_MODULE=true' do
+      stub_env_var('USE_GO_FIPS_MODULE', 'true')
+
+      expect(described_class.use_go_fips_module?).to be_truthy
+    end
+
+    it 'ignores any other USE_GO_FIPS_MODULE value' do
+      stub_env_var('USE_GO_FIPS_MODULE', '1')
+
+      expect(described_class.use_go_fips_module?).to be_falsey
+    end
+
+    it 'is true on a FIPS build' do
+      allow(described_class).to receive(:fips?).and_return(true)
+
+      expect(described_class.use_go_fips_module?).to be_truthy
+    end
+
+    it 'is not implied by building against system SSL' do
+      allow(described_class).to receive(:use_system_ssl?).and_return(true)
+
+      expect(described_class.use_go_fips_module?).to be_falsey
+    end
+  end
+
+  describe 'export_go_fips_module_env!' do
+    context 'on a FIPS build' do
       before do
-        allow(described_class).to receive(:use_system_ssl?).and_return(true)
+        allow(described_class).to receive(:use_go_fips_module?).and_return(true)
+        stub_env_var('GO_FIPS_MODULE_VERSION', nil)
       end
 
-      it 'returns true when USE_GO_FIPS_MODULE=true' do
-        stub_env_var('USE_GO_FIPS_MODULE', 'true')
-        expect(described_class.use_go_fips_module?).to be_truthy
+      it 'exports the pinned module version to the process environment' do
+        expect(Gitlab::Util).to receive(:set_env).with('GOFIPS140', Build::Check::GO_FIPS_MODULE_VERSION)
+
+        described_class.export_go_fips_module_env!
       end
 
-      it 'returns false when USE_GO_FIPS_MODULE is unset' do
-        stub_env_var('USE_GO_FIPS_MODULE', nil)
-        expect(described_class.use_go_fips_module?).to be_falsey
+      it 'honors an overridden module version' do
+        stub_env_var('GO_FIPS_MODULE_VERSION', 'v1.2.3')
+
+        expect(Gitlab::Util).to receive(:set_env).with('GOFIPS140', 'v1.2.3')
+
+        described_class.export_go_fips_module_env!
       end
     end
 
-    context 'when not building with system SSL' do
+    context 'on an ordinary build' do
       before do
-        allow(described_class).to receive(:use_system_ssl?).and_return(false)
+        allow(described_class).to receive(:use_go_fips_module?).and_return(false)
       end
 
-      it 'returns false even when USE_GO_FIPS_MODULE=true' do
-        stub_env_var('USE_GO_FIPS_MODULE', 'true')
-        expect(described_class.use_go_fips_module?).to be_falsey
+      it 'does not touch the process environment' do
+        expect(Gitlab::Util).not_to receive(:set_env)
+
+        described_class.export_go_fips_module_env!
       end
+    end
+  end
+
+  describe 'verify_go_fips_toolchain!' do
+    it 'does not look at the toolchain on an ordinary build' do
+      allow(described_class).to receive(:use_go_fips_module?).and_return(false)
+
+      expect(described_class).not_to receive(:go_fips_module_check)
+
+      expect { described_class.verify_go_fips_toolchain! }.not_to raise_error
+    end
+
+    context 'on a FIPS build' do
+      before do
+        allow(described_class).to receive(:use_go_fips_module?).and_return(true)
+      end
+
+      it 'passes when the toolchain supplies the module' do
+        allow(described_class).to receive(:go_fips_module_check).and_return([true, ''])
+
+        expect { described_class.verify_go_fips_toolchain! }.not_to raise_error
+      end
+
+      it 'fails when the toolchain does not supply the module' do
+        allow(described_class).to receive(:go_fips_module_check).and_return([false, ''])
+
+        expect { described_class.verify_go_fips_toolchain! }.to raise_error(/does not supply it/)
+      end
+
+      it 'includes the toolchain error in the failure message' do
+        allow(described_class).to receive(:go_fips_module_check)
+          .and_return([false, 'go: unknown GOFIPS140 version "v1.0.0"'])
+
+        expect { described_class.verify_go_fips_toolchain! }.to raise_error(/unknown GOFIPS140 version/)
+      end
+    end
+  end
+
+  describe 'go_fips_module_check' do
+    let(:probe_env) { { 'GOTOOLCHAIN' => 'local', 'GOFIPS140' => Build::Check::GO_FIPS_MODULE_VERSION } }
+
+    before do
+      stub_env_var('GO_FIPS_MODULE_VERSION', nil)
+    end
+
+    def stub_probe(success:, stderr:)
+      allow(Open3).to receive(:capture3).with(probe_env, 'go', 'list', 'std')
+        .and_return(['', stderr, instance_double(Process::Status, success?: success)])
+    end
+
+    it 'reports the module as available when the toolchain resolves it' do
+      stub_probe(success: true, stderr: '')
+
+      expect(described_class.go_fips_module_check).to eq([true, ''])
+    end
+
+    it 'reports the toolchain stderr when the module does not resolve' do
+      stub_probe(success: false, stderr: %(go: unknown GOFIPS140 version "v1.1.0"\n))
+
+      expect(described_class.go_fips_module_check).to eq([false, 'go: unknown GOFIPS140 version "v1.1.0"'])
+    end
+
+    it 'names the timeout when the toolchain check times out' do
+      allow(Timeout).to receive(:timeout).and_raise(Timeout::Error)
+
+      available, error = described_class.go_fips_module_check
+
+      expect(available).to be_falsey
+      expect(error).to match(/did not respond within/)
+    end
+
+    it 'names the missing executable when no Go is installed' do
+      allow(Open3).to receive(:capture3).and_raise(Errno::ENOENT)
+
+      available, error = described_class.go_fips_module_check
+
+      expect(available).to be_falsey
+      expect(error).to match(/no `go` executable/)
     end
   end
 end
