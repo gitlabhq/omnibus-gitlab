@@ -23,6 +23,7 @@
 ## but still require an approval from the localization team (covered by later [Localization Team] rules).
 !/doc-locale/
 !/argo_translation.yml
+!/.gitlab/.argo/
 
 ## Technical writing files that do not need `*` rule approval,
 ## but still require an approval from a TW team DRI for each file.
@@ -56,6 +57,7 @@
 [Localization Team]
 /doc-locale/ @gitlab-com/localization/maintainers/tech-docs
 /argo_translation.yml @gitlab-com/localization/maintainers/tech-docs
+/.gitlab/.argo/ @gitlab-com/localization/maintainers/tech-docs
 /doc-locale/ja-jp/ @gitlab-com/localization/maintainers/japanese @gitlab-com/localization/maintainers/tech-docs
 /doc-locale/fr-fr/ @gitlab-com/localization/maintainers/french @gitlab-com/localization/maintainers/tech-docs
 /doc-locale/ko-kr/ @gitlab-com/localization/maintainers/korean @gitlab-com/localization/maintainers/tech-docs
