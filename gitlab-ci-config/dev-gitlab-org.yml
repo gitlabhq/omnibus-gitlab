@@ -15,10 +15,11 @@
     - if: '$SKIP_RELEASE == "true"'
       when: never
 
-# Offer the FIPS packages as manual jobs on every auto-deploy pipeline, so the
-# Dedicated US PubSec QA instance can be upgraded to a FIPS package. Manual, so
-# a normal auto-deploy never spends resources building FIPS; the jobs are
-# present but idle until played (by a person or the Dedicated QA pipeline
+# Offer the Ubuntu 22.04 FIPS jobs as manual jobs on an auto-deploy pipeline, so
+# the Dedicated US PubSec QA instance can be upgraded to a FIPS package. Only
+# Ubuntu 22.04 is needed for the tenant, so only those jobs reference this rule.
+# Manual, so a normal auto-deploy never spends resources building FIPS; the jobs
+# are present but idle until played (by a person or the Dedicated QA pipeline
 # through the API). allow_failure keeps the manual job optional, so an unplayed
 # job does not block the pipeline (which would leave it Blocked and stop
 # issue-bot). See gitlab-com/gl-infra/delivery#22409.
@@ -153,6 +154,14 @@
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /_(RC|TAG)_BUILD_PIPELINE$/'
 
+# The base rules for a FIPS tag build, shared by .fips_tag_template and the
+# Ubuntu-22.04-fips job (which appends the auto-deploy rule), so the two stay in
+# sync.
+.fips_tag_rules:
+  rules:
+    - !reference [.default_rules, rules]
+    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
+
 .fips_tag_template:
   extends: .tag_template
   variables:
@@ -160,9 +169,7 @@
     USE_SYSTEM_LIBGCRYPT: "true"
     USE_GO_FIPS_MODULE: "true"
   rules:
-    - !reference [.default_rules, rules]
-    - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG)_BUILD_PIPELINE$/'
-    - !reference [.fips_auto_deploy_rules, rules]
+    - !reference [.fips_tag_rules, rules]
 
 .arm64_tag_template:
   extends: .tag_template
@@ -206,7 +213,6 @@
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG|NIGHTLY)_BUILD_PIPELINE$/'
-    - !reference [.fips_auto_deploy_rules, rules]
 
 
 ### This stage is ran only on tag:
@@ -729,6 +735,11 @@ AlmaLinux-9-fips:
 Ubuntu-22.04-fips:
   image: "${BUILDER_IMAGE_REGISTRY}/ubuntu_22.04_fips:${BUILDER_IMAGE_REVISION}"
   extends: .fips_tag_template
+  # The shared FIPS tag rules plus the auto-deploy rule, so only this OS gets the
+  # on-demand auto-deploy FIPS job (the other FIPS jobs stay EE RC/TAG only).
+  rules:
+    - !reference [.fips_tag_rules, rules]
+    - !reference [.fips_auto_deploy_rules, rules]
 
 Docker-amd64:
   extends: .docker_job
