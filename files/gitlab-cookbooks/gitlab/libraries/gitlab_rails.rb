@@ -44,6 +44,7 @@ module GitlabRails
       validate_smtp_settings!
       validate_ssh_settings!
       validate_mobile_push_settings!
+      validate_object_store_allowed_download_modes!
       parse_nginx_settings
     end
 
@@ -534,6 +535,56 @@ gitlab_rails['gitlab_shell_ssh_port'] = 2222
       LoggingHelper.warning("gitlab_rails['mobile_push_apns_auth_key_path'] is set to '#{auth_key_path}', " \
                             'but no file exists at that path. APNs delivery will fail until the key is placed ' \
                             'there and is readable by the git user.')
+    end
+
+    ALLOWED_DOWNLOAD_MODES = %w[proxy direct].freeze
+    OBJECT_STORE_ALLOWED_DOWNLOAD_MODES_KEYS = %w[
+      artifacts_object_store_allowed_download_modes
+      external_diffs_object_store_allowed_download_modes
+      lfs_object_store_allowed_download_modes
+      uploads_object_store_allowed_download_modes
+      packages_object_store_allowed_download_modes
+      dependency_proxy_object_store_allowed_download_modes
+      terraform_state_object_store_allowed_download_modes
+      pages_object_store_allowed_download_modes
+      ci_secure_files_object_store_allowed_download_modes
+      agent_plan_content_object_store_allowed_download_modes
+      ci_catalog_bundles_object_store_allowed_download_modes
+    ].freeze
+
+    def validate_object_store_allowed_download_modes!
+      settings = Gitlab['gitlab_rails']
+
+      configured = OBJECT_STORE_ALLOWED_DOWNLOAD_MODES_KEYS.map do |key|
+        ["gitlab_rails['#{key}']", settings[key], settings[key.sub('_allowed_download_modes', '_proxy_download')]]
+      end
+      configured << [
+        "gitlab_rails['object_store']['allowed_download_modes']",
+        settings.dig('object_store', 'allowed_download_modes'),
+        settings.dig('object_store', 'proxy_download')
+      ]
+
+      invalid = configured.to_h { |key, modes, _proxy_download| [key, modes] }
+      invalid.select! { |_key, modes| modes && !(Array(modes) - ALLOWED_DOWNLOAD_MODES).empty? }
+
+      unless invalid.empty?
+        message = invalid.map { |key, modes| "#{key} (#{modes.inspect})" }.join(', ')
+
+        raise "allowed_download_modes contains invalid mode(s). Valid modes are: #{ALLOWED_DOWNLOAD_MODES.join(', ')}. " \
+              "Check the following object storage configuration(s): #{message}"
+      end
+
+      missing = configured.filter_map do |key, modes, proxy_download|
+        next if modes.nil?
+
+        required_mode = proxy_download ? 'proxy' : 'direct'
+        [key, required_mode] unless Array(modes).include?(required_mode)
+      end
+
+      return if missing.empty?
+
+      message = missing.map { |key, mode| "#{key} must include #{mode.inspect}" }.join(', ')
+      raise "allowed_download_modes must include the mode implied by proxy_download. Check the following object storage configuration(s): #{message}"
     end
 
     # Returns variables hash for connection template

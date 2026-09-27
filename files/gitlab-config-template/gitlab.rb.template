@@ -413,6 +413,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['object_store']['connection'] = {}
 # gitlab_rails['object_store']['storage_options'] = {}
 # gitlab_rails['object_store']['proxy_download'] = false
+###! Download modes API clients can request: "proxy" and "direct". When empty, GitLab uses the mode set by proxy_download.
+###! Docs: https://docs.gitlab.com/administration/object_storage/#allow-client-override-for-proxy-download
+# gitlab_rails['object_store']['allowed_download_modes'] = []
 # gitlab_rails['object_store']['objects']['artifacts']['bucket'] = nil
 # gitlab_rails['object_store']['objects']['external_diffs']['bucket'] = nil
 # gitlab_rails['object_store']['objects']['lfs']['bucket'] = nil
@@ -432,6 +435,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 ###! Docs: https://docs.gitlab.com/ee/administration/job_artifacts.html#using-object-storage
 # gitlab_rails['artifacts_object_store_enabled'] = false
 # gitlab_rails['artifacts_object_store_proxy_download'] = false
+###! Docs: https://docs.gitlab.com/administration/object_storage/#allow-client-override-for-proxy-download
+# gitlab_rails['artifacts_object_store_allowed_download_modes'] = []
 # gitlab_rails['artifacts_object_store_remote_directory'] = "artifacts"
 # gitlab_rails['artifacts_object_store_connection'] = {
 #   'provider' => 'AWS',
@@ -452,6 +457,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['external_diffs_storage_path'] = "/var/opt/gitlab/gitlab-rails/shared/external-diffs"
 # gitlab_rails['external_diffs_object_store_enabled'] = false
 # gitlab_rails['external_diffs_object_store_proxy_download'] = false
+###! Docs: https://docs.gitlab.com/administration/object_storage/#allow-client-override-for-proxy-download
+# gitlab_rails['external_diffs_object_store_allowed_download_modes'] = []
 # gitlab_rails['external_diffs_object_store_remote_directory'] = "external-diffs"
 # gitlab_rails['external_diffs_object_store_connection'] = {
 #   'provider' => 'AWS',
@@ -470,6 +477,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['lfs_storage_path'] = "/var/opt/gitlab/gitlab-rails/shared/lfs-objects"
 # gitlab_rails['lfs_object_store_enabled'] = false
 # gitlab_rails['lfs_object_store_proxy_download'] = false
+###! Docs: https://docs.gitlab.com/administration/object_storage/#allow-client-override-for-proxy-download
+# gitlab_rails['lfs_object_store_allowed_download_modes'] = []
 # gitlab_rails['lfs_object_store_remote_directory'] = "lfs-objects"
 # gitlab_rails['lfs_object_store_connection'] = {
 #   'provider' => 'AWS',
@@ -490,6 +499,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['uploads_base_dir'] = "uploads/-/system"
 # gitlab_rails['uploads_object_store_enabled'] = false
 # gitlab_rails['uploads_object_store_proxy_download'] = false
+###! Docs: https://docs.gitlab.com/administration/object_storage/#allow-client-override-for-proxy-download
+# gitlab_rails['uploads_object_store_allowed_download_modes'] = []
 # gitlab_rails['uploads_object_store_remote_directory'] = "uploads"
 # gitlab_rails['uploads_object_store_connection'] = {
 #   'provider' => 'AWS',
@@ -508,6 +519,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['terraform_state_enabled'] = true
 # gitlab_rails['terraform_state_storage_path'] = "/var/opt/gitlab/gitlab-rails/shared/terraform_state"
 # gitlab_rails['terraform_state_object_store_enabled'] = false
+###! Docs: https://docs.gitlab.com/administration/object_storage/#allow-client-override-for-proxy-download
+# gitlab_rails['terraform_state_object_store_allowed_download_modes'] = []
 # gitlab_rails['terraform_state_object_store_remote_directory'] = "terraform"
 # gitlab_rails['terraform_state_object_store_connection'] = {
 #   'provider' => 'AWS',
@@ -525,6 +538,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['ci_secure_files_enabled'] = true
 # gitlab_rails['ci_secure_files_storage_path'] = "/var/opt/gitlab/gitlab-rails/shared/ci_secure_files"
 # gitlab_rails['ci_secure_files_object_store_enabled'] = false
+###! Docs: https://docs.gitlab.com/administration/object_storage/#allow-client-override-for-proxy-download
+# gitlab_rails['ci_secure_files_object_store_allowed_download_modes'] = []
 # gitlab_rails['ci_secure_files_object_store_remote_directory'] = "ci-secure-files"
 # gitlab_rails['ci_secure_files_object_store_connection'] = {
 #   'provider' => 'AWS',
@@ -542,6 +557,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['agent_plan_content_enabled'] = true
 # gitlab_rails['agent_plan_content_storage_path'] = "/var/opt/gitlab/gitlab-rails/shared/agent_plan_content"
 # gitlab_rails['agent_plan_content_object_store_enabled'] = false
+###! Docs: https://docs.gitlab.com/administration/object_storage/#allow-client-override-for-proxy-download
+# gitlab_rails['agent_plan_content_object_store_allowed_download_modes'] = []
 # gitlab_rails['agent_plan_content_object_store_remote_directory'] = "agent-plan-content"
 # gitlab_rails['agent_plan_content_object_store_connection'] = {
 #   'provider' => 'AWS',
@@ -559,6 +576,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['ci_catalog_bundles_enabled'] = true
 # gitlab_rails['ci_catalog_bundles_storage_path'] = "/var/opt/gitlab/gitlab-rails/shared/ci_catalog_bundles"
 # gitlab_rails['ci_catalog_bundles_object_store_enabled'] = false
+###! Docs: https://docs.gitlab.com/administration/object_storage/#allow-client-override-for-proxy-download
+# gitlab_rails['ci_catalog_bundles_object_store_allowed_download_modes'] = []
 # gitlab_rails['ci_catalog_bundles_object_store_remote_directory'] = "ci-catalog-bundles"
 # gitlab_rails['ci_catalog_bundles_object_store_connection'] = {
 #   'provider' => 'AWS',
@@ -574,6 +593,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 
 ### GitLab Pages
 # gitlab_rails['pages_object_store_enabled'] = false
+###! Docs: https://docs.gitlab.com/administration/object_storage/#allow-client-override-for-proxy-download
+# gitlab_rails['pages_object_store_allowed_download_modes'] = []
 # gitlab_rails['pages_object_store_remote_directory'] = "pages"
 # gitlab_rails['pages_object_store_connection'] = {
 #   'provider' => 'AWS',
@@ -3213,6 +3234,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['packages_storage_path'] = "/var/opt/gitlab/gitlab-rails/shared/packages"
 # gitlab_rails['packages_object_store_enabled'] = false
 # gitlab_rails['packages_object_store_proxy_download'] = false
+###! Docs: https://docs.gitlab.com/administration/object_storage/#allow-client-override-for-proxy-download
+# gitlab_rails['packages_object_store_allowed_download_modes'] = []
 # gitlab_rails['packages_object_store_remote_directory'] = "packages"
 # gitlab_rails['packages_object_store_connection'] = {
 #   'provider' => 'AWS',
@@ -3235,6 +3258,8 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_rails['dependency_proxy_storage_path'] = "/var/opt/gitlab/gitlab-rails/shared/dependency_proxy"
 # gitlab_rails['dependency_proxy_object_store_enabled'] = false
 # gitlab_rails['dependency_proxy_object_store_proxy_download'] = false
+###! Docs: https://docs.gitlab.com/administration/object_storage/#allow-client-override-for-proxy-download
+# gitlab_rails['dependency_proxy_object_store_allowed_download_modes'] = []
 # gitlab_rails['dependency_proxy_object_store_remote_directory'] = "dependency_proxy"
 # gitlab_rails['dependency_proxy_object_store_connection'] = {
 #   'provider' => 'AWS',

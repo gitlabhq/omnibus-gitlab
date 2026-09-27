@@ -291,6 +291,9 @@ production: &base
   object_store:
      enabled: <%= @object_store['enabled'] %>
      proxy_download: <%= @object_store['proxy_download'] %>
+     <%- if @object_store['allowed_download_modes'] -%>
+     allowed_download_modes: <%= @object_store['allowed_download_modes'].to_json %>
+     <%- end -%>
      connection: <%= @object_store['connection'].to_json %>
      storage_options: <%= @object_store['storage_options'].to_json %>
      objects: <%= @object_store['objects'].to_json %>
@@ -364,6 +367,9 @@ production: &base
     object_store:
       enabled: <%= @artifacts_object_store_enabled %>
       proxy_download: <%= @artifacts_object_store_proxy_download %>
+      <%- if @artifacts_object_store_allowed_download_modes -%>
+      allowed_download_modes: <%= @artifacts_object_store_allowed_download_modes.to_json %>
+      <%- end -%>
       remote_directory: <%= quote(@artifacts_object_store_remote_directory) %>
       connection: <%= @artifacts_object_store_connection.to_json %>
 
@@ -381,6 +387,9 @@ production: &base
     object_store:
       enabled: <%= @external_diffs_object_store_enabled %>
       proxy_download: <%= @external_diffs_object_store_proxy_download %>
+      <%- if @external_diffs_object_store_allowed_download_modes -%>
+      allowed_download_modes: <%= @external_diffs_object_store_allowed_download_modes.to_json %>
+      <%- end -%>
       remote_directory: <%= quote(@external_diffs_object_store_remote_directory) %>
       connection: <%= @external_diffs_object_store_connection.to_json %>
 
@@ -392,6 +401,9 @@ production: &base
     object_store:
       enabled: <%= @lfs_object_store_enabled %>
       proxy_download: <%= @lfs_object_store_proxy_download %>
+      <%- if @lfs_object_store_allowed_download_modes -%>
+      allowed_download_modes: <%= @lfs_object_store_allowed_download_modes.to_json %>
+      <%- end -%>
       remote_directory: <%= quote(@lfs_object_store_remote_directory) %>
       connection: <%= @lfs_object_store_connection.to_json %>
 
@@ -405,6 +417,9 @@ production: &base
     object_store:
       enabled: <%= @uploads_object_store_enabled %>
       proxy_download: <%= @uploads_object_store_proxy_download %>
+      <%- if @uploads_object_store_allowed_download_modes -%>
+      allowed_download_modes: <%= @uploads_object_store_allowed_download_modes.to_json %>
+      <%- end -%>
       remote_directory: <%= quote(@uploads_object_store_remote_directory) %>
       connection: <%= @uploads_object_store_connection.to_json %>
 
@@ -416,6 +431,9 @@ production: &base
     object_store:
       enabled: <%= @packages_object_store_enabled %>
       proxy_download: <%= @packages_object_store_proxy_download %>
+      <%- if @packages_object_store_allowed_download_modes -%>
+      allowed_download_modes: <%= @packages_object_store_allowed_download_modes.to_json %>
+      <%- end -%>
       remote_directory: <%= quote(@packages_object_store_remote_directory) %>
       connection: <%= @packages_object_store_connection.to_json %>
 
@@ -427,6 +445,9 @@ production: &base
     object_store:
       enabled: <%= @dependency_proxy_object_store_enabled %>
       proxy_download: <%= @dependency_proxy_object_store_proxy_download %>
+      <%- if @dependency_proxy_object_store_allowed_download_modes -%>
+      allowed_download_modes: <%= @dependency_proxy_object_store_allowed_download_modes.to_json %>
+      <%- end -%>
       remote_directory: <%= quote(@dependency_proxy_object_store_remote_directory) %>
       connection: <%= @dependency_proxy_object_store_connection.to_json %>
 
@@ -437,6 +458,9 @@ production: &base
     storage_path: <%= @terraform_state_storage_path %>
     object_store:
       enabled: <%= @terraform_state_object_store_enabled %>
+      <%- if @terraform_state_object_store_allowed_download_modes -%>
+      allowed_download_modes: <%= @terraform_state_object_store_allowed_download_modes.to_json %>
+      <%- end -%>
       remote_directory: <%= quote(@terraform_state_object_store_remote_directory) %>
       connection: <%= @terraform_state_object_store_connection.to_json %>
 
@@ -447,6 +471,9 @@ production: &base
     storage_path: <%= @ci_secure_files_storage_path %>
     object_store:
       enabled: <%= @ci_secure_files_object_store_enabled %>
+      <%- if @ci_secure_files_object_store_allowed_download_modes -%>
+      allowed_download_modes: <%= @ci_secure_files_object_store_allowed_download_modes.to_json %>
+      <%- end -%>
       remote_directory: <%= quote(@ci_secure_files_object_store_remote_directory) %>
       connection: <%= @ci_secure_files_object_store_connection.to_json %>
 
@@ -457,6 +484,9 @@ production: &base
     storage_path: <%= @agent_plan_content_storage_path %>
     object_store:
       enabled: <%= @agent_plan_content_object_store_enabled %>
+      <%- if @agent_plan_content_object_store_allowed_download_modes -%>
+      allowed_download_modes: <%= @agent_plan_content_object_store_allowed_download_modes.to_json %>
+      <%- end -%>
       remote_directory: <%= quote(@agent_plan_content_object_store_remote_directory) %>
       connection: <%= @agent_plan_content_object_store_connection.to_json %>
 
@@ -467,6 +497,9 @@ production: &base
     storage_path: <%= @ci_catalog_bundles_storage_path %>
     object_store:
       enabled: <%= @ci_catalog_bundles_object_store_enabled %>
+      <%- if @ci_catalog_bundles_object_store_allowed_download_modes -%>
+      allowed_download_modes: <%= @ci_catalog_bundles_object_store_allowed_download_modes.to_json %>
+      <%- end -%>
       remote_directory: <%= quote(@ci_catalog_bundles_object_store_remote_directory) %>
       connection: <%= @ci_catalog_bundles_object_store_connection.to_json %>
 
