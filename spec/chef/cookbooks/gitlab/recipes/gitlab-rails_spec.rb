@@ -331,7 +331,7 @@ RSpec.describe 'gitlab::gitlab-rails' do
         }
       end
 
-      it 'creates cable.yml with custom host, port, password and database' do
+      it 'creates cable.yml with custom host, port, password, database, and timeouts' do
         expect(chef_run).to create_templatesymlink('Create a cable.yml and create a symlink to Rails root').with_variables(
           hash_including(
             redis_url: URI('redis://:my%20pass@redis.example.com:8888/2'),
@@ -342,13 +342,19 @@ RSpec.describe 'gitlab::gitlab-rails' do
             redis_tls_ca_cert_file: "/opt/gitlab/embedded/ssl/certs/cacert.pem",
             redis_tls_client_cert_file: nil,
             redis_tls_client_key_file: nil,
-            redis_extra_config_command: nil
+            redis_extra_config_command: nil,
+            redis_connect_timeout: 3,
+            redis_read_timeout: 4,
+            redis_write_timeout: 5
           )
         )
 
-        expect(chef_run).to render_file(config_file).with_content { |content|
+        expect(chef_run).to render_file('/var/opt/gitlab/gitlab-rails/etc/cable.yml').with_content { |content|
           expect(content).to match(%r(url: redis://:my%20pass@redis.example.com:8888/2))
           expect(content).to match(/id:$/)
+          expect(content).to match(/connect_timeout: 3/)
+          expect(content).to match(/read_timeout: 4/)
+          expect(content).to match(/write_timeout: 5/)
         }
       end
 

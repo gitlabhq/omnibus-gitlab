@@ -7,6 +7,15 @@ production:
   <% if !@redis_enable_client %>
   id:
   <% end %>
+  <% if @redis_connect_timeout %>
+  connect_timeout: <%= @redis_connect_timeout %>
+  <% end %>
+  <% if @redis_read_timeout %>
+  read_timeout: <%= @redis_read_timeout %>
+  <% end %>
+  <% if @redis_write_timeout %>
+  write_timeout: <%= @redis_write_timeout %>
+  <% end %>
   <%- if @redis_ssl %>
   <%# For redis-rb v5+, if Sentinel is enabled the ssl flag is needed because rediss:// is ignored in URL (see https://github.com/redis-rb/redis-client/pull/277). %>
   ssl: true
