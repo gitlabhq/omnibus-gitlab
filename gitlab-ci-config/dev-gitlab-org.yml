@@ -29,6 +29,20 @@
       when: manual
       allow_failure: true
 
+# The staging upload counterpart of .fips_auto_deploy_rules. On an auto-deploy
+# pipeline the staging job runs on_success, not manual: it follows the build job
+# through needs, so it runs automatically once the build job is played and is
+# skipped when the build job is not played. This depends on the build job staying
+# non-blocking (allow_failure: true above): an unplayed non-blocking manual job
+# is skipped, which skips the staging job too. allow_failure keeps staging
+# non-blocking as well, so a skipped staging job does not leave the pipeline
+# Blocked (which would stop issue-bot). See gitlab-com/gl-infra/delivery#22409.
+.fips_auto_deploy_staging_rules:
+  rules:
+    - if: '$PIPELINE_TYPE == "AUTO_DEPLOY_BUILD_PIPELINE"'
+      when: on_success
+      allow_failure: true
+
 .package-artifacts: &package-artifacts
   when: always
   expire_in: 1 day
@@ -987,13 +1001,13 @@ Ubuntu-22.04-fips-staging:
     - job: Ubuntu-22.04-fips-branch
       optional: true
   # This job overrides the template rules (to add INTERNAL_RELEASE), so it must
-  # also repeat the auto-deploy manual rule, otherwise the Ubuntu 22.04 FIPS
-  # package would build but never upload on an auto-deploy pipeline.
+  # also repeat the auto-deploy rule, using the staging variant that runs
+  # on_success. See .fips_auto_deploy_staging_rules.
   rules:
     - !reference [.default_rules, rules]
     - if: '$PIPELINE_TYPE =~ /^EE_(RC|TAG|NIGHTLY)_BUILD_PIPELINE$/'
     - if: '$PIPELINE_TYPE == "INTERNAL_RELEASE_BUILD_PIPELINE"'
-    - !reference [.fips_auto_deploy_rules, rules]
+    - !reference [.fips_auto_deploy_staging_rules, rules]
 
 ### Package releases
 Ubuntu-22.04-release:
