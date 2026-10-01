@@ -139,6 +139,10 @@ build do
   # in Ruby 4.0, so this patch is only needed for 3.3 and 3.4.
   patches += %w[regexp-repeat-range-double-free] if version.satisfies?('>= 3.3.0', '< 4.0.0')
 
+  # Backport of https://github.com/ruby/ruby/pull/19020 to Ruby 3.3 and 3.4.
+  # Ruby 4.0 is not patched here yet.
+  patches += %w[regexp-program-size] if version.satisfies?('>= 3.3.0', '< 4.0.0')
+
   ruby_version = Gem::Version.new(version).canonical_segments[0..1].join('.')
 
   patches.each do |patch_name|
