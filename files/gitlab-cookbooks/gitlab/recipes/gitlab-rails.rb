@@ -351,7 +351,10 @@ templatesymlink "Create a cable.yml and create a symlink to Rails root" do
     redis_tls_ca_cert_file: ca_cert_file,
     redis_tls_client_cert_file: certificate_file,
     redis_tls_client_key_file: key_file,
-    redis_extra_config_command: redis_extra_config_command
+    redis_extra_config_command: redis_extra_config_command,
+    redis_connect_timeout: redis_connect_timeout,
+    redis_read_timeout: redis_read_timeout,
+    redis_write_timeout: redis_write_timeout
   )
   dependent_services.each { |svc| notifies :restart, svc }
   sensitive true
