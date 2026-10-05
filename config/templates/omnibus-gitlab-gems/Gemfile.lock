@@ -166,9 +166,8 @@ GEM
     ffi (1.17.4-x86_64-linux-gnu)
     ffi-libarchive (1.1.14)
       ffi (~> 1.0)
-    ffi-yajl (2.7.6)
+    ffi-yajl (2.7.11)
       libyajl2 (>= 2.1)
-      yajl
     file-tail (1.2.0)
       tins (~> 1.0)
     fuzzyurl (0.9.0)
@@ -390,7 +389,6 @@ GEM
     wmi-lite (1.0.7)
     xml-simple (1.1.9)
       rexml
-    yajl (0.3.4)
 
 PLATFORMS
   aarch64-linux
@@ -473,7 +471,7 @@ CHECKSUMS
   ffi (1.17.4-x86_64-darwin) sha256=aa70390523cf3235096cf64962b709b4cfbd5c082a2cb2ae714eb0fe2ccda496
   ffi (1.17.4-x86_64-linux-gnu) sha256=9d3db14c2eae074b382fa9c083fe95aec6e0a1451da249eab096c34002bc752d
   ffi-libarchive (1.1.14) sha256=a3e4ca9484ee4ad754ad04fcc14a12686d48d1463c264173d6f8ff0a4df816a6
-  ffi-yajl (2.7.6) sha256=e173bd23603f7d2472d43cafc1369f6728d2e6603f9a5b5d1e142654daa019ff
+  ffi-yajl (2.7.11) sha256=6b65fdf89d3658185d777b2fa84031e6c7b2fa4ad52683fdc057de0b3dfdf4db
   file-tail (1.2.0) sha256=152f6ca64c009c754b89f06e7636ead96e5b55413641021402118ca66b6b43d9
   fuzzyurl (0.9.0) sha256=542efa80f2bcaadbdc402c2f0b572f2e335a1d53e375aecad68bbb3d86860c0f
   gitlab-ruby-shadow (2.6.0) sha256=ee08be29b65ec8efbbb1b76f6b808335851977b14bc80c400e723720510b8e26
@@ -578,7 +576,6 @@ CHECKSUMS
   with_env (1.1.0) sha256=50b3e4f0a6cda8f90d8a6bd87a6261f6c381429abafb161c4c69ad4a0cd0b6e4
   wmi-lite (1.0.7) sha256=116ef5bb470dbe60f58c2db9047af3064c16245d6562c646bc0d90877e27ddda
   xml-simple (1.1.9) sha256=d21131e519c86f1a5bc2b6d2d57d46e6998e47f18ed249b25cad86433dbd695d
-  yajl (0.3.4) sha256=0d718473ec261a817e18eb79648bb68d050baf2624783306a2d4dad5a50431e4
 
 BUNDLED WITH
   4.0.12
