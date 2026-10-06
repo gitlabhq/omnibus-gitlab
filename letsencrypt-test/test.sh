@@ -6,7 +6,7 @@ DEFAULT_IMAGE="gitlab/gitlab-ee:nightly"
 IMAGE="${IMAGE:-$DEFAULT_IMAGE}"
 
 CLEANUP="${CLEANUP:-1}"
-GITLAB_POST_RECONFIGURE_SCRIPT="${GITLAB_POST_RECONFIGURE_SCRIPT-'exit'}"  # set to '' to disable
+GITLAB_POST_RECONFIGURE_SCRIPT="${GITLAB_POST_RECONFIGURE_SCRIPT-}"  # set to '' to disable
 
 cleanup() {
   local exitcode=$?
@@ -40,7 +40,7 @@ start_pebble() {
 
 run_gitlab() {
   docker compose up -d gitlab
-  wait_for_healthy gitlab 1200
+  wait_for_reconfigure gitlab 1200
 
   echo "Verifying the default RSA certificate key"
   docker compose exec -T gitlab openssl rsa \
@@ -56,15 +56,23 @@ run_gitlab() {
 }
 
 
-wait_for_healthy() {
+# The container reports (healthy) as soon as its first health probe runs,
+# which is before the initial reconfigure (and so the certificate) is done.
+# Wait for the end of the reconfigure run itself instead.
+wait_for_reconfigure() {
   local service="$1"
   local max="$2"
   local i=0
 
-  echo "Waiting for $service to become healthy"
-  while ! docker compose ps "$service" 2>/dev/null | grep -q "(healthy)"; do
+  echo "Waiting for $service to finish its initial reconfigure"
+  until docker compose logs "$service" 2>/dev/null | grep -q "Reconfigured!"; do
+    if [ -z "$(docker compose ps -q --status running "$service")" ]; then
+      echo "$service stopped before the reconfigure finished"
+      docker compose logs --tail 50 "$service"
+      return 1
+    fi
     i=$((i+1))
-    [ "$i" -ge "$max" ] && { echo "$service did not become healthy after ${max}s"; return 1; }
+    [ "$i" -ge "$max" ] && { echo "$service did not finish reconfiguring after ${max}s"; return 1; }
     sleep 1
   done
 }
