@@ -55,6 +55,13 @@ No changes.
 - [Add ./third_party/icu to dependency_decisions](gitlab-org/omnibus-gitlab@7680ad38cc280450e02e4c3ba9617832cbbc61cd)
 - [Update faraday gem to v2.14.3](gitlab-org/omnibus-gitlab@6378aa0572961cc0fbfd5d49bd3f09cf79079105) ([merge request](gitlab-org/omnibus-gitlab!9686))
 
+## 19.3.4 (2026-10-07)
+
+### Changed (2 changes)
+
+- [Add Ruby regexp program size patch for 3.3 and 3.4](gitlab-org/security/omnibus-gitlab@8fef37be5a525f4745df845a9215f6740ab39fb8)
+- [Bumps Elastic Search version](gitlab-org/security/omnibus-gitlab@2b71fe18f112c600cb39bd2567b34fe0dbec7409)
+
 ## 19.3.3 (2026-09-22)
 
 ### Fixed (2 changes)
