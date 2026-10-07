@@ -3,6 +3,13 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.3.4 (2026-10-07)
+
+### Changed (2 changes)
+
+- [Add Ruby regexp program size patch for 3.3 and 3.4](gitlab-org/security/omnibus-gitlab@8fef37be5a525f4745df845a9215f6740ab39fb8)
+- [Bumps Elastic Search version](gitlab-org/security/omnibus-gitlab@2b71fe18f112c600cb39bd2567b34fe0dbec7409)
+
 ## 19.3.3 (2026-09-22)
 
 ### Fixed (2 changes)
