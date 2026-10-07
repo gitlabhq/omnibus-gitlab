@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.4.2 (2026-10-07)
+
+### Changed (1 change)
+
+- [Add Ruby regexp program size patch for 3.3 and 3.4](gitlab-org/security/omnibus-gitlab@5af4eec3d4fd0dbdf3ed94b24fc3a4703d44b502)
+
 ## 19.4.1 (2026-09-22)
 
 No changes.
