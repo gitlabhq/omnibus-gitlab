@@ -6,13 +6,29 @@ The following files are named by the GitLab version they were first
 introduced. For example, `gitlab-7.2.0-ssh-keygen` maps to GitLab v7.2. Both
 .te (Type Enforcement) and .pp (Project Policy) files are included.
 
-For reference, we created the .pp files from the .te files by using the
-following commands on CentOS:
+The .pp files are built from the .te files by
+`config/software/gitlab-selinux.rb`.
+
+On EL 9, EL 10 and Amazon Linux 2023:
+
+```sh
+checkmodule -M -m -c 19 -o filename.mod filename.te
+semodule_package -o filename.pp -m filename.mod
+```
+
+On EL 8:
 
 ```sh
 checkmodule -M -m -o filename.mod filename.te
 semodule_package -o filename.pp -m filename.mod
 ```
+
+`-c 19` pins the module policy format. Without it, `checkmodule` writes the
+newest format the build host supports, which hosts running an older minor
+release of the same OS cannot load. EL 8's `checkmodule` has no `-c` option,
+but already writes format 19. `Build::SELinuxPolicy` in
+`lib/gitlab/build/selinux_policy.rb` holds the pinned version, and the build
+fails if any module comes out in a different format.
 
 ### rhel/7/gitlab-7.2.0-ssh-keygen.pp
 

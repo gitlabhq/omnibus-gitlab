@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require "#{Omnibus::Config.project_root}/lib/gitlab/build/selinux_policy"
 
 name 'gitlab-selinux'
 
@@ -32,8 +33,14 @@ build do
     mod_file = te_file.sub(/\.te$/, ".mod")
     policy_file = te_file.sub(/\.te$/, ".pp")
 
-    command "checkmodule -M -m -o #{mod_file} #{te_file}", cwd: policy_directory
+    command "checkmodule -M -m #{Build::SELinuxPolicy.checkmodule_flags} -o #{mod_file} #{te_file}", cwd: policy_directory
     command "semodule_package -o #{policy_file} -m #{mod_file}", cwd: policy_directory
+  end
+
+  # Fail the build rather than ship modules that hosts with an older libsepol
+  # cannot load, e.g. after a builder image upgrade.
+  block 'assert SELinux modules use the pinned policy format' do
+    Dir.glob("#{policy_directory}/*.pp").each { |policy_file| Build::SELinuxPolicy.verify!(policy_file) }
   end
 
   mkdir "#{install_dir}/embedded/selinux"
