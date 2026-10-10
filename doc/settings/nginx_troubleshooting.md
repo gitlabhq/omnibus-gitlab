@@ -167,7 +167,7 @@ To resolve it, configure the NGINX worker connections to a higher value:
 1. Edit `/etc/gitlab/gitlab.rb`:
 
    ```ruby
-   gitlab['nginx']['worker_connections'] = 10240
+   nginx['worker_connections'] = 10240
    ```
 
    10240 connections is

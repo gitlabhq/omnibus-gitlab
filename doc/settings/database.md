@@ -275,7 +275,7 @@ For the rails client to connect to the server, you will need a certificate and k
    gitlab_rails['db_host'] = 'IP_ADDRESS_OR_HOSTNAME_OF_DATABASE_SERVER'
    gitlab_rails['db_sslcert'] = 'PATH_TO_CERTIFICATE_FILE'
    gitlab_rails['db_sslkey'] = 'PATH_TO_KEY_FILE'
-   gitlab_rails['db_rootcert'] = 'PATH_TO_CA_FILE'
+   gitlab_rails['db_sslrootcert'] = 'PATH_TO_CA_FILE'
    ```
 
 1. Run `gitlab-ctl reconfigure` for the rails client to use the new settings
