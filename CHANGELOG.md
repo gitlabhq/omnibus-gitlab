@@ -55,6 +55,10 @@ No changes.
 - [Add ./third_party/icu to dependency_decisions](gitlab-org/omnibus-gitlab@7680ad38cc280450e02e4c3ba9617832cbbc61cd)
 - [Update faraday gem to v2.14.3](gitlab-org/omnibus-gitlab@6378aa0572961cc0fbfd5d49bd3f09cf79079105) ([merge request](gitlab-org/omnibus-gitlab!9686))
 
+## 19.3.5 (2026-10-12)
+
+No changes.
+
 ## 19.3.4 (2026-10-07)
 
 ### Changed (2 changes)
