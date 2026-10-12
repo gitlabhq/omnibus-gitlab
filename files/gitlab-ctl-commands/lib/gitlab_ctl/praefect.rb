@@ -96,7 +96,7 @@ module GitlabCtl
     end
 
     def self.populate_commands(options)
-      praefect_docs_url = 'https://docs.gitlab.com/ee/administration/gitaly/recovery.html'
+      praefect_docs_url = 'https://docs.gitlab.com/administration/gitaly/praefect/recovery/'
 
       {
         'remove-repository' => OptionParser.new do |opts|

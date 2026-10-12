@@ -137,7 +137,7 @@ class Chef
                 # Check one at a time in case either is ever not specified
                 user_matches = new_resource.owner.nil? ? true : omnibus_helper.expected_user?(config_path, new_resource.owner)
                 group_matches = new_resource.group.nil? ? true : omnibus_helper.expected_group?(config_path, new_resource.group)
-                raise "Unable to persist filesystem ownership changes of #{config_path}. See https://docs.gitlab.com/ee/administration/high_availability/nfs.html#recommended-options for guidance." unless (user_matches && group_matches)
+                raise "Unable to persist filesystem ownership changes of #{config_path}. See https://docs.gitlab.com/administration/nfs/#recommended-options for guidance." unless (user_matches && group_matches)
               end
               action :nothing
             end

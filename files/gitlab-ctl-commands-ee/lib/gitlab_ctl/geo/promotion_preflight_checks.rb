@@ -53,7 +53,7 @@ module GitlabCtl
         puts '---------------------------------------'.color(:yellow)
         puts 'WARNING: Make sure your primary is down'.color(:yellow)
         puts 'If you have more than one secondary please see '\
-          'https://docs.gitlab.com/ee/gitlab-geo/disaster-recovery.html#'\
+          'https://docs.gitlab.com/administration/geo/disaster_recovery/#'\
           'promoting-secondary-geo-replica-in-multi-secondary-configurations'.color(:yellow)
         puts 'There may be data saved to the primary that was not been '\
           'replicated to the secondary before the primary went offline. '\

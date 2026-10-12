@@ -74,7 +74,7 @@ RSpec.shared_examples 'enabled runit service' do |svc_name, owner, group, userna
     allow_any_instance_of(OmnibusHelper).to receive(:expected_group?).with(log_config_re, anything).and_return(false)
 
     block = chef_run.find_resource('ruby_block', "verify_chown_persisted_on_#{svc_name}")
-    expect { block.block.call }.to raise_error("Unable to persist filesystem ownership changes of /opt/gitlab/sv/#{svc_name}/log/config. See https://docs.gitlab.com/ee/administration/high_availability/nfs.html#recommended-options for guidance.")
+    expect { block.block.call }.to raise_error("Unable to persist filesystem ownership changes of /opt/gitlab/sv/#{svc_name}/log/config. See https://docs.gitlab.com/administration/nfs/#recommended-options for guidance.")
   end
 
   it 'creates the symlink to the service directory' do
