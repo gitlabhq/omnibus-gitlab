@@ -168,6 +168,8 @@ build do
   # Ruby 4.0 is not patched here yet.
   patches += %w[regexp-program-size] if version.satisfies?('>= 3.3.0', '< 4.0.0')
 
+  patches += %w[regexp-repeat-id-overflow] if version.satisfies?('>= 3.3.0', '< 4.1.0')
+
   ruby_version = Gem::Version.new(version).canonical_segments[0..1].join('.')
 
   patches.each do |patch_name|
