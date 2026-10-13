@@ -81,7 +81,7 @@ GEM
 GEM
   remote: https://rubygems.org/
   specs:
-    acme-client (2.0.31)
+    acme-client (2.0.35)
       base64 (~> 0.2)
       faraday (>= 1.0, < 3.0.0)
       faraday-retry (>= 1.0, < 3.0.0)
@@ -189,7 +189,7 @@ GEM
     iniparse (1.5.0)
     ipaddress (0.8.3)
     jmespath (1.6.2)
-    json (2.7.2)
+    json (2.7.6)
     libyajl2 (2.1.0)
     license-acceptance (2.1.13)
       pastel (~> 0.7)
@@ -402,7 +402,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  acme-client (= 2.0.31)
+  acme-client (= 2.0.35)
   chef (= 18.3.0)!
   chef-bin (= 18.3.0)!
   chef-config (= 18.3.0)!
@@ -424,7 +424,7 @@ DEPENDENCIES
   unf_ext (= 0.0.9.1)
 
 CHECKSUMS
-  acme-client (2.0.31) sha256=69c6c2bd015fdd4bdacdb3c2baa9f0034dbf91b855e08f15b78a533cc77ff360
+  acme-client (2.0.35) sha256=b34fc70e119a128cf1d8b38218d4aa5e86fa3c09e76df18470359fd216ac9172
   activesupport (7.0.8.4) sha256=69047070402b20fbaeebbeb56d21238db457c54c7e66f356dcba683e500ae197
   addressable (2.9.0) sha256=7fdf6ac3660f7f4e867a0838be3f6cf722ace541dd97767fa42bc6cfa980c7af
   ast (2.4.2) sha256=1e280232e6a33754cde542bc5ef85520b74db2aac73ec14acef453784447cc12
@@ -438,7 +438,6 @@ CHECKSUMS
   base64 (0.2.0) sha256=0f25e9b21a02a0cc0cea8ef92b2041035d39350946e8789c562b2d1a3da01507
   bigdecimal (3.1.8) sha256=a89467ed5a44f8ae01824af49cbc575871fa078332e8f77ea425725c1ffe27be
   builder (3.2.4) sha256=99caf08af60c8d7f3a6b004029c4c3c0bdaebced6c949165fe98f1db27fbbc10
-  bundler (4.0.12) sha256=7f8b757d28dfb636e7b24fba2344ac6dd13b5b24f4b46d62573d483f211825ac
   cgi (0.5.1) sha256=e93fcafc69b8a934fe1e6146121fa35430efa8b4a4047c4893764067036f18e9
   chef (18.3.0) sha256=ef1ed56a52ad4c9008225906329e75da7ab03ccde8ad0671053ab5e11df849fa
   chef-bin (18.3.0) sha256=062be04cae6fc2b141374375ec5367ddd77bf88f6514962047af9b0a7a632e91
@@ -488,7 +487,7 @@ CHECKSUMS
   inspec-core (6.6.0) sha256=36b70ae7527f36286b387a475efda715cc6182023817c9faf04b0626e9ec5d71
   ipaddress (0.8.3) sha256=85640c4f9194c26937afc8c78e3074a8e7c97d5d1210358d1440f01034d006f5
   jmespath (1.6.2) sha256=238d774a58723d6c090494c8879b5e9918c19485f7e840f2c1c7532cf84ebcb1
-  json (2.7.2) sha256=1898b5cbc81cd36c0fd4d0b7ad2682c39fb07c5ff682fc6265f678f550d4982c
+  json (2.7.6) sha256=2d9aba03af3167401e8cf8de50daed5b5aec5b5a622f15c4b7ce2fd8d49a070f
   libyajl2 (2.1.0) sha256=aa5df6c725776fc050c8418450de0f7c129cb7200b811907c4c0b3b5c0aea0ef
   license-acceptance (2.1.13) sha256=eecb259b87adaebf162cd25e613b0e0f6d3005c92ffd76ddeca0c053e450058a
   license_finder (7.2.1) sha256=179ead19b64b170638b72fd16024233813673ac9d20d5ba75ae0b4444887ef14
@@ -581,4 +580,4 @@ CHECKSUMS
   yajl (0.3.4) sha256=0d718473ec261a817e18eb79648bb68d050baf2624783306a2d4dad5a50431e4
 
 BUNDLED WITH
-  4.0.12
+  4.0.18
