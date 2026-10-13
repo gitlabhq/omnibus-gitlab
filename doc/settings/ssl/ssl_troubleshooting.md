@@ -324,6 +324,34 @@ x509: certificate signed by unknown authority
 
 Follow the details in [Self-signed certificates or custom Certification Authorities for GitLab Runner](https://docs.gitlab.com/runner/configuration/tls-self-signed/).
 
+## External Mattermost with a self-signed certificate
+
+When integrating an external Mattermost instance with GitLab using self-signed SSL certificates,
+TLS verification can fail depending on which service initiates the HTTPS request:
+
+- Mattermost connecting to GitLab (for example, during GitLab OAuth sign-in):
+  Mattermost validates requests to the GitLab `/oauth/token` endpoint over HTTPS. If GitLab uses a
+  self-signed certificate, the Mattermost logs may show:
+
+  ```plaintext
+  Token request failed: Post "https://gitlab.example.com/oauth/token": x509: certificate signed by unknown authority
+  ```
+
+  To resolve this issue, add the GitLab self-signed or root CA certificate to the system CA
+  certificates store on the Mattermost host or container:
+
+  - For a Mattermost Docker container, mount the certificate into `/etc/ssl/certs/` or copy it to
+    `/usr/local/share/ca-certificates/` inside the Mattermost container and run
+    `update-ca-certificates`.
+  - For a Linux host installation, add the certificate to the system CA trust store and restart
+    the Mattermost service.
+
+- GitLab connecting to Mattermost (for example, for Mattermost notifications or slash commands):
+  If the external Mattermost instance uses a self-signed certificate, add the Mattermost
+  certificate to `/etc/gitlab/trusted-certs/` on the GitLab instance (or inside the `gitlab`
+  Docker container) and run `sudo gitlab-ctl reconfigure`. For more information, see
+  [Install custom public certificates](_index.md#install-custom-public-certificates).
+
 ## Mirroring a remote GitLab repository that uses a self-signed SSL certificate
 
 When configuring a local GitLab instance to [mirror a repository](https://docs.gitlab.com/user/project/repository/mirror/)
