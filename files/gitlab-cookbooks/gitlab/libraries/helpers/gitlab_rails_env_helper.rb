@@ -24,7 +24,7 @@ class GitlabRailsEnvHelper
         File.open("#{source_dir}/.bundle/config") do |config_file|
           config_file.each do |line|
             if line.match(pattern)
-              gemfile = "#{source_dir}/#{line[pattern, 1]}"
+              gemfile = File.expand_path(line[pattern, 1], source_dir)
               break
             end
           end

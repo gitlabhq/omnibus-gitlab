@@ -367,6 +367,13 @@ build do
     .gitlab
   )
 
+  if gitlab_bundle_gemfile != 'Gemfile'
+    # Bundler resolves a relative `gemfile` setting against the current directory,
+    # and services like Puma and Sidekiq run from other directories.
+    installed_rails_dir = "#{install_dir}/embedded/service/gitlab-rails"
+    bundle "config set --local gemfile #{File.expand_path(gitlab_bundle_gemfile, installed_rails_dir)}", cwd: installed_rails_dir
+  end
+
   mkdir "#{install_dir}/bin/"
   mkdir "#{install_dir}/embedded/bin/"
   # Create a wrapper for the rake tasks of the Rails app
