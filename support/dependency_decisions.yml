@@ -433,3 +433,10 @@
     :why: https://gitlab.com/gitlab-org/go/icu/blob/master/README.md#licence
     :versions: []
     :when: 2026-09-04 00:00:00.000000000 Z
+- - :license
+  - gitlab.com/gitlab-org/go/go-license-detector/v4
+  - Apache2
+  - :who: Mustafa Bayar
+    :why: https://gitlab.com/gitlab-org/go/go-license-detector/-/blob/master/LICENSE.md
+    :versions: []
+    :when: 2026-10-14 00:00:00.000000000 Z
