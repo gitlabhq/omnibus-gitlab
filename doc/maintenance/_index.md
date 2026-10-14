@@ -213,10 +213,14 @@ To rotate the secrets:
 1. [Verify that the database values can be decrypted](https://docs.gitlab.com/administration/raketasks/check/#verify-database-values-can-be-decrypted-using-the-current-secrets) and either make note of any decryption errors shown, or resolve
    them before proceeding.
 
-1. Recommended. Extract your current secrets for `gitlab_rails`. Save the output because you need this later:
+1. Recommended. Extract your current secrets for `gitlab_rails`, including complete array values.
+   Save the output because you need this later:
 
    ```shell
-   sudo grep "secret_key_base\|db_key_base\|otp_key_base\|encrypted_settings_key_base\|openid_connect_signing_key\|active_record_encryption_primary_key\|active_record_encryption_deterministic_key\|active_record_encryption_key_derivation_salt" /etc/gitlab/gitlab-secrets.json
+   sudo /opt/gitlab/embedded/bin/ruby -rjson -e '
+     secrets = JSON.parse(File.read("/etc/gitlab/gitlab-secrets.json"))
+     puts JSON.pretty_generate(secrets.fetch("gitlab_rails"))
+   '
    ```
 
 1. Move your current secrets file to a different location:
@@ -228,8 +232,9 @@ To rotate the secrets:
 1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#reconfigure-a-linux-package-installation). GitLab will
    then generate a new `/etc/gitlab/gitlab-secrets.json` file with new secret values.
 
-1. If you extracted the previous secrets for `gitlab_rails`, edit the new `/etc/gitlab/gitlab-secrets.json` file and replace the key/value pairs
-   under `gitlab_rails` with the previous secrets output obtained earlier.
+1. If you extracted the previous secrets for `gitlab_rails`, edit the new
+   `/etc/gitlab/gitlab-secrets.json` file.
+   Replace the entire `gitlab_rails` object, including its braces, with the saved output.
 
 1. [Reconfigure GitLab](https://docs.gitlab.com/administration/restart_gitlab/#reconfigure-a-linux-package-installation) again
    so the changes made to the secrets file are applied.
