@@ -142,32 +142,6 @@ include:
           skip_qa_full: $[[ inputs.skip_qa_full ]]
     strategy: depend
 
-.review-docs:
-  image: "${RUBY_ALPINE_IMAGE}"
-  stage: post-test
-  cache: {}
-  needs: []
-  before_script:
-    - gem install gitlab --no-doc
-    # We need to download the script rather than clone the repo since the
-    # review-docs-cleanup job will not be able to run when the branch gets
-    # deleted (when merging the MR).
-    - apk add --update openssl
-    - wget https://gitlab.com/gitlab-org/gitlab/-/raw/master/scripts/trigger-build.rb
-    - chmod 755 trigger-build.rb
-  variables:
-    GIT_STRATEGY: none
-    # By default, deploy the Review App using the `main` branch of the `gitlab-org/gitlab-docs` project
-    DOCS_BRANCH: main
-  allow_failure: true
-  rules:
-    - if: '$PIPELINE_TYPE == "GITLAB_BRANCH_TEST_PIPELINE"'
-      when: manual
-    - if: '$PIPELINE_TYPE == "GITLAB_MR_PIPELINE"'
-      when: manual
-    - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
-      when: manual
-
 .qa-template:
   variables:
     QA_RUN_ALL_TESTS: "false"
@@ -470,30 +444,6 @@ yard:
     paths:
       - yard/*
 
-# Trigger a docs build in docs-gitlab-com project
-# Useful to preview the docs changes live
-# https://docs.gitlab.com/development/documentation/review_apps/
-review-docs-deploy:
-  extends:
-  - .review-docs
-  environment:
-    name: review-docs/mr-${CI_MERGE_REQUEST_IID}
-    url: https://docs.gitlab.com/upstream-review-mr-${DOCS_GITLAB_REPO_SUFFIX}-${CI_MERGE_REQUEST_IID}/${DOCS_GITLAB_REPO_SUFFIX}
-    auto_stop_in: 2 weeks
-    on_stop: review-docs-cleanup
-  script:
-  - ./trigger-build.rb docs deploy
-
-# Cleanup remote environment of docs-gitlab-com
-review-docs-cleanup:
-  extends:
-  - .review-docs
-  environment:
-    name: review-docs/mr-${CI_MERGE_REQUEST_IID}
-    action: stop
-  script:
-  - ./trigger-build.rb docs cleanup
-
 danger-review:
   variables:
     BUNDLE_WITH: "danger"
@@ -685,7 +635,6 @@ patroni-ha-test:
       artifacts: true
     - job: Docker-branch
       artifacts: false
-
 
 patroni-pg-upgrade-test:
   extends: .docker_job
