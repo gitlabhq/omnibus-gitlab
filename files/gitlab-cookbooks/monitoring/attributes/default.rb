@@ -121,6 +121,7 @@ default['monitoring']['gitlab_exporter']['listen_address'] = 'localhost'
 default['monitoring']['gitlab_exporter']['listen_port'] = '9168'
 default['monitoring']['gitlab_exporter']['probe_sidekiq'] = true
 default['monitoring']['gitlab_exporter']['probe_elasticsearch'] = false
+default['monitoring']['gitlab_exporter']['probe_geo'] = false
 default['monitoring']['gitlab_exporter']['elasticsearch_url'] = nil
 default['monitoring']['gitlab_exporter']['elasticsearch_authorization'] = nil
 default['monitoring']['gitlab_exporter']['env'] = {

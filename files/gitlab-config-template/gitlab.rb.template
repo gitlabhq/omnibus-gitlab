@@ -2875,6 +2875,9 @@ external_url 'GENERATED_EXTERNAL_URL'
 # gitlab_exporter['elasticsearch_url'] = 'http://localhost:9200'
 # gitlab_exporter['elasticsearch_authorization'] = 'Basic <yourbase64encodedcredentials>'
 
+##! Manage gitlab-exporter Geo node status probes.
+# gitlab_exporter['probe_geo'] = false
+
 ##! Service name used to register GitLab Exporter as a Consul service
 # gitlab_exporter['consul_service_name'] = 'gitlab-exporter'
 ##! Semantic metadata used when registering GitLab Exporter as a Consul service
