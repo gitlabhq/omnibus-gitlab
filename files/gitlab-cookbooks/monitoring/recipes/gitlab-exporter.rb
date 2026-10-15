@@ -61,6 +61,7 @@ template "#{gitlab_exporter_dir}/gitlab-exporter.yml" do
   variables(
     probe_sidekiq: node['monitoring']['gitlab_exporter']['probe_sidekiq'],
     probe_elasticsearch: node['monitoring']['gitlab_exporter']['probe_elasticsearch'],
+    probe_geo: node['monitoring']['gitlab_exporter']['probe_geo'],
     elasticsearch_url: node['monitoring']['gitlab_exporter']['elasticsearch_url'],
     elasticsearch_authorization: node['monitoring']['gitlab_exporter']['elasticsearch_authorization'],
     redis_url: redis_params[:url],

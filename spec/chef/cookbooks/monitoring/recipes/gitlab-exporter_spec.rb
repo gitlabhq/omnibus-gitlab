@@ -65,7 +65,9 @@ RSpec.describe 'monitoring::gitlab-exporter' do
           expect(settings.dig('probes', 'database')).not_to be_nil
           expect(settings.dig('probes', 'ruby')).not_to be_nil
           expect(settings.dig('probes', 'sidekiq')).not_to be_nil
+          expect(settings.dig('probes', 'database', 'geo_node_status')).to be_nil
           expect(settings.dig('probes', 'metrics', 'rows_count')).not_to be_nil
+          expect(settings.dig('probes', 'metrics', 'geo_node_status')).to be_nil
           expect(settings['server']).not_to include('tls_enabled')
 
           expect(content).to match(/host=\/var\/opt\/gitlab\/postgresql/)
@@ -183,6 +185,23 @@ RSpec.describe 'monitoring::gitlab-exporter' do
           transport_options = YAML.safe_load(content, aliases: true)
             .dig('probes', 'elasticsearch', 'opts').first['options']
           expect(transport_options).to eq({ 'headers' => { 'Authorization' => authorization } })
+        }
+    end
+  end
+
+  context 'when gitlab-exporter is enabled with probe_geo enabled' do
+    before do
+      stub_gitlab_rb(
+        gitlab_exporter: { enable: true, probe_geo: true }
+      )
+    end
+
+    it 'adds geo_node_status probe to database and metrics' do
+      expect(chef_run).to render_file('/var/opt/gitlab/gitlab-exporter/gitlab-exporter.yml')
+        .with_content { |content|
+          settings = YAML.safe_load(content, aliases: true)
+          expect(settings.dig('probes', 'database', 'geo_node_status', 'class_name')).to eq('Database::GeoNodeStatusProber')
+          expect(settings.dig('probes', 'metrics', 'geo_node_status', 'class_name')).to eq('Database::GeoNodeStatusProber')
         }
     end
   end
