@@ -3,6 +3,25 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.5.0 (2026-10-15)
+
+### Fixed (3 changes)
+
+- [Add helper to pin and verify SELinux module format](gitlab-org/omnibus-gitlab@8afb8aae642d69250c3d56f8307ac763bbc5140a) ([merge request](gitlab-org/omnibus-gitlab!9856))
+- [Apply Redis timeout settings to split store configs](gitlab-org/omnibus-gitlab@89eaffc2f39714cb4162d24ef61350bfaac350f4) ([merge request](gitlab-org/omnibus-gitlab!9823))
+- [Treat Patroni streaming state as a running node](gitlab-org/omnibus-gitlab@c17279bfb5f469d272c39c6c7b7f04ee50b7666e) ([merge request](gitlab-org/omnibus-gitlab!9782))
+
+### Changed (8 changes)
+
+- [Add Ruby regexp repeat ID overflow patch for 3.3, 3.4 and 4.0](gitlab-org/omnibus-gitlab@3eba02b986ec9aeaf7df7cd3816b7c44cb59f2ac) ([merge request](gitlab-org/omnibus-gitlab!9922))
+- [Bump libxml2 to version 2.15.4](gitlab-org/omnibus-gitlab@44b5cc81788d693336dcc75dfdd4e79dbe0269c7) ([merge request](gitlab-org/omnibus-gitlab!9759))
+- [Update dependency libpng to v1.6.59](gitlab-org/omnibus-gitlab@7ec094f17c1e5d2506c9642b6546333d22a825b8) ([merge request](gitlab-org/omnibus-gitlab!9858))
+- [Update dependency PCRE2Project/pcre2 to pcre2-10.49](gitlab-org/omnibus-gitlab@84074515a707e5fa0abb6a31050494f95a5654df) ([merge request](gitlab-org/omnibus-gitlab!9757))
+- [Add Ruby regexp program size patch for 3.3 and 3.4](gitlab-org/omnibus-gitlab@64c7f6817e16bf202ee443bfc60a329e57b77d50) ([merge request](gitlab-org/omnibus-gitlab!9834))
+- [Advertise grpcs:// to agents by default in the Linux package](gitlab-org/omnibus-gitlab@a765e5c400c12419d1ebfa9bf2ffb03b542b48d4) ([merge request](gitlab-org/omnibus-gitlab!9761))
+- [Update dependency node-exporter to v1.12.1](gitlab-org/omnibus-gitlab@96e6b58a15f46fa3c7837efbea85319fd7c926a3) ([merge request](gitlab-org/omnibus-gitlab!9327))
+- [Support configuring `import_export_project_cleanup_worker_cron`](gitlab-org/omnibus-gitlab@6ffb47888c863cf05cc7a8b5169435a1fd8ff3f3) by @brodock ([merge request](gitlab-org/omnibus-gitlab!9681))
+
 ## 19.4.2 (2026-10-07)
 
 ### Changed (1 change)
