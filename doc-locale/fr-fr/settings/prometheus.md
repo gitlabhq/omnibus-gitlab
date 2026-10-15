@@ -7,7 +7,7 @@ title: Paramètres Prometheus
 
 {{< details >}}
 
-- Niveau : Free, Premium, Ultimate
+- Édition :  Free, Premium, Ultimate
 - Offre : GitLab Self-Managed
 
 {{< /details >}}
@@ -144,4 +144,4 @@ Dans cet exemple, nous implémentons un nouveau récepteur pour VictorOps.
 
 Alertmanager acheminera désormais les alertes `severity = high` vers `victorops-receiver`.
 
-Pour en savoir plus sur les options VictorOps pour Alertmanager, consultez la [documentation VictorOps](https://help.victorops.com/knowledge-base/victorops-prometheus-integration/).
+En savoir plus sur les [options VictorOps pour Alertmanager](https://help.splunk.com/en/splunk-observability-cloud/splunk-on-call/integrations-with-splunk-on-call/prometheus-integration-for-splunk-on-call).
