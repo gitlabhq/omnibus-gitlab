@@ -7,7 +7,7 @@ title: Commandes de maintenance
 
 {{< details >}}
 
-- Niveau : Free, Premium, Ultimate
+- Édition :  Free, Premium, Ultimate
 - Offre : GitLab Self-Managed
 
 {{< /details >}}
@@ -33,7 +33,7 @@ run: puma: (pid 961) 7s; run: log: (pid 960) 7s
 - `Nginx` est le nom du processus.
 - `972` est l'identifiant du processus.
 - NGINX fonctionne depuis 7 secondes (`7s`).
-- `log` indique un [processus de journalisation svlogd](https://manpages.ubuntu.com/manpages/noble/en/man8/svlogd.8.html) attaché au processus précédent.
+- `log` indique un [processus de journalisation svlogd](https://manpages.ubuntu.com/manpages/noble/man8/svlogd.8.html) attaché au processus précédent.
 - `971` est l'identifiant du processus de journalisation.
 - Le processus de journalisation fonctionne depuis 7 secondes (`7s`).
 

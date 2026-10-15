@@ -7,12 +7,15 @@ title: Configurer SSL pour une installation avec le package Linux
 
 {{< details >}}
 
-- Niveau : Free, Premium, Ultimate
+- Édition :  Free, Premium, Ultimate
 - Offre : GitLab Self-Managed
 
 {{< /details >}}
 
 Le package Linux prend en charge plusieurs cas d'utilisation courants pour la configuration SSL.
+
+> [!note]
+> Ces instructions de configuration s'appliquent à GitLab 19.2 et versions ultérieures. Si vous configurez GitLab 19.1 ou une version antérieure, remplacez `gitlab_rails['nginx']` par une clé `nginx` de niveau supérieur. Par exemple, remplacez `gitlab_rails['nginx']['redirect_http_to_https']` par `nginx['redirect_http_to_https']`. L'utilisation d'une clé `nginx` de niveau supérieur fonctionne, mais est dépréciée.
 
 Par défaut, HTTPS n'est pas activé. Pour activer HTTPS, vous pouvez :
 
@@ -61,7 +64,7 @@ Pour activer Let's Encrypt :
 
    ## Container Registry (optional), must use https protocol
    registry_external_url "https://registry.example.com"
-   #registry_nginx['ssl_certificate'] = "path/to/cert"      # Must be absent or commented out
+   #registry['nginx']['ssl_certificate'] = "path/to/cert"      # Must be absent or commented out
 
    ## GitLab Pages (optional), must use https protocol
    pages_external_url "https://pages.example.com"
@@ -147,7 +150,7 @@ Vous pouvez utiliser un serveur ACME autre que Let's Encrypt et configurer GitLa
 - [ZeroSSL](https://zerossl.com/documentation/acme/)
 - [Buypass](https://www.buypass.com/products/tls-ssl-certificates/go-ssl)
 - [SSL.com](https://www.ssl.com/guide/ssl-tls-certificate-issuance-and-revocation-with-acme/)
-- [`step-ca`](https://smallstep.com/docs/step-ca/index.html)
+- [`step-ca`](https://smallstep.com/docs/step-ca/)
 
 Pour configurer GitLab afin d'utiliser un serveur ACME personnalisé :
 
@@ -243,7 +246,7 @@ Pour activer HTTPS :
    Pour spécifier le mot de passe pour le fichier de clé, stockez le mot de passe dans un fichier texte (par exemple, `/etc/gitlab/ssl/key_file_password.txt`) et ajoutez ce qui suit à `/etc/gitlab/gitlab.rb` :
 
    ```ruby
-   nginx['ssl_password_file'] = '/etc/gitlab/ssl/key_file_password.txt'
+   gitlab_rails['nginx']['ssl_password_file'] = '/etc/gitlab/ssl/key_file_password.txt'
    ```
 
 1. Reconfigurer GitLab :
@@ -275,7 +278,7 @@ Par défaut, lorsque vous spécifiez une `external_url` commençant par `https`,
 1. Modifiez `/etc/gitlab/gitlab.rb` :
 
    ```ruby
-   nginx['redirect_http_to_https'] = true
+   gitlab_rails['nginx']['redirect_http_to_https'] = true
    ```
 
 1. Reconfigurer GitLab :
@@ -322,8 +325,8 @@ Pour définir un emplacement différent pour les certificats SSL :
 1. Modifiez `/etc/gitlab/gitlab.rb` :
 
    ```ruby
-   nginx['ssl_certificate'] = "/mnt/gitlab/ssl/gitlab.crt"
-   nginx['ssl_certificate_key'] = "/mnt/gitlab/ssl/gitlab.key"
+   gitlab_rails['nginx']['ssl_certificate'] = "/mnt/gitlab/ssl/gitlab.crt"
+   gitlab_rails['nginx']['ssl_certificate_key'] = "/mnt/gitlab/ssl/gitlab.key"
    ```
 
 1. Reconfigurer GitLab :
@@ -350,8 +353,8 @@ Pour empêcher le NGINX intégré de gérer la terminaison SSL :
 1. Modifiez `/etc/gitlab/gitlab.rb` :
 
    ```ruby
-   nginx['listen_port'] = 80
-   nginx['listen_https'] = false
+   gitlab_rails['nginx']['listen_port'] = 80
+   gitlab_rails['nginx']['listen_https'] = false
    ```
 
 1. Reconfigurer GitLab :
@@ -362,18 +365,18 @@ Pour empêcher le NGINX intégré de gérer la terminaison SSL :
 
 L'équilibreur de charge externe peut avoir besoin d'accéder à un point de terminaison GitLab qui renvoie un code de statut `200` (pour les installations nécessitant une connexion, la page racine renvoie une redirection `302` vers la page de connexion). Dans ce cas, il est recommandé d'utiliser un [point de terminaison de vérification de l'état](https://docs.gitlab.com/administration/monitoring/health_check/).
 
-Les autres composants intégrés, comme le registre de conteneurs ou GitLab Pages, utilisent une stratégie similaire pour le SSL via proxy. Définissez le `*_external_url` du composant concerné avec `https://` et préfixez la configuration `nginx[...]` avec le nom du composant. Par exemple, la configuration du registre de conteneurs GitLab est préfixée par `registry_` :
+Les autres composants intégrés, comme le registre de conteneurs ou GitLab Pages, utilisent une stratégie similaire pour le SSL via proxy. Définissez le `*_external_url` du composant concerné avec `https://` et configurez les paramètres `nginx` sous la clé de configuration de ce composant. Par exemple, le registre de conteneurs GitLab utilise `registry['nginx']` :
 
 1. Modifiez `/etc/gitlab/gitlab.rb` :
 
    ```ruby
    registry_external_url 'https://registry.example.com'
 
-   registry_nginx['listen_port'] = 80
-   registry_nginx['listen_https'] = false
+   registry['nginx']['listen_port'] = 80
+   registry['nginx']['listen_https'] = false
    ```
 
-   Le même format peut être utilisé pour Pages (préfixe `pages_`).
+   Le même format peut être utilisé pour Pages (`gitlab_pages['nginx']`).
 
 1. Reconfigurer GitLab :
 
@@ -394,7 +397,7 @@ Pour modifier les chiffrements SSL :
 1. Modifiez `/etc/gitlab/gitlab.rb` :
 
    ```ruby
-   nginx['ssl_ciphers'] = "CIPHER:CIPHER1"
+   gitlab_rails['nginx']['ssl_ciphers'] = "CIPHER:CIPHER1"
    ```
 
 1. Reconfigurer GitLab :
@@ -414,7 +417,7 @@ Pour activer la directive `ssl_dhparam` :
 1. Modifiez `/etc/gitlab/gitlab.rb` :
 
    ```ruby
-   nginx['ssl_dhparam'] = "/etc/gitlab/ssl/dhparams.pem"
+   gitlab_rails['nginx']['ssl_dhparam'] = "/etc/gitlab/ssl/dhparams.pem"
    ```
 
 1. Reconfigurer GitLab :
@@ -425,11 +428,11 @@ Pour activer la directive `ssl_dhparam` :
 
 ## Configurer le protocole HTTP/2 {#configure-the-http2-protocol}
 
-Par défaut, lorsque vous spécifiez que votre instance GitLab est accessible via HTTPS, le [protocole HTTP/2](https://www.rfc-editor.org/rfc/rfc7540) est également activé.
+Par défaut, lorsque vous indiquez que votre instance GitLab est accessible via HTTPS, le [protocole HTTP/2](https://www.rfc-editor.org/info/rfc7540/) est également activé.
 
 Le package Linux définit les chiffrements SSL requis compatibles avec le protocole HTTP/2.
 
-Si vous spécifiez vos propres [chiffrements SSL personnalisés](#use-custom-ssl-ciphers) et qu'un chiffrement figure dans la [liste noire des chiffrements HTTP/2](https://www.rfc-editor.org/rfc/rfc7540#appendix-A), lorsque vous essayez d'accéder à votre instance GitLab, l'erreur `INADEQUATE_SECURITY` s'affiche dans votre navigateur. Dans ce cas, envisagez de supprimer les chiffrements problématiques de la liste des chiffrements. La modification des chiffrements n'est nécessaire que si vous disposez d'une configuration personnalisée très spécifique.
+Si vous spécifiez vos propres [chiffrements SSL personnalisés](#use-custom-ssl-ciphers) et qu'un chiffrement figure dans la [liste noire des chiffrements HTTP/2](https://www.rfc-editor.org/info/rfc7540/#appendix-A), lorsque vous tentez d'accéder à votre instance GitLab, l'erreur `INADEQUATE_SECURITY` s'affiche dans votre navigateur. Dans ce cas, envisagez de supprimer les chiffrements problématiques de la liste des chiffrements. La modification des chiffrements n'est nécessaire que si vous disposez d'une configuration personnalisée très spécifique.
 
 Pour plus d'informations sur les raisons pour lesquelles vous voudriez activer le protocole HTTP/2, consultez le [livre blanc NGINX HTTP/2](https://cdn.awstatic.com/pub/NGINX_HTTP2_White_Paper_v4.pdf).
 
@@ -438,7 +441,7 @@ Si la modification des chiffrements n'est pas envisageable, vous pouvez désacti
 1. Modifiez `/etc/gitlab/gitlab.rb` :
 
    ```ruby
-   nginx['http2_enabled'] = false
+   gitlab_rails['nginx']['http2_enabled'] = false
    ```
 
 1. Reconfigurer GitLab :
@@ -457,14 +460,14 @@ Pour exiger que les clients web s'authentifient avec un certificat approuvé, vo
 1. Modifiez `/etc/gitlab/gitlab.rb` :
 
    ```ruby
-   nginx['ssl_verify_client'] = "on"
-   nginx['ssl_client_certificate'] = "/etc/pki/tls/certs/root-certs.pem"
+   gitlab_rails['nginx']['ssl_verify_client'] = "on"
+   gitlab_rails['nginx']['ssl_client_certificate'] = "/etc/pki/tls/certs/root-certs.pem"
    ```
 
 1. Facultatif. Vous pouvez configurer la profondeur de vérification dans la chaîne de certificats que NGINX doit effectuer avant de décider que les clients ne disposent pas d'un certificat valide (la valeur par défaut est `1`). Modifiez `/etc/gitlab/gitlab.rb` :
 
    ```ruby
-   nginx['ssl_verify_depth'] = "2"
+   gitlab_rails['nginx']['ssl_verify_depth'] = "2"
    ```
 
 1. Reconfigurer GitLab :
@@ -487,8 +490,8 @@ Pour modifier la valeur de l'âge maximal :
 1. Modifiez `/etc/gitlab/gitlab.rb` :
 
    ```ruby
-   nginx['hsts_max_age'] = 63072000
-   nginx['hsts_include_subdomains'] = false
+   gitlab_rails['nginx']['hsts_max_age'] = 63072000
+   gitlab_rails['nginx']['hsts_include_subdomains'] = false
    ```
 
    Définir `max_age` à `0` désactive HSTS.

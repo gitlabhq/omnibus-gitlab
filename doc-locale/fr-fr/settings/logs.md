@@ -7,7 +7,7 @@ title: Journaux sur les installations de packages Linux
 
 {{< details >}}
 
-- Niveau : Free, Premium, Ultimate
+- Édition :  Free, Premium, Ultimate
 - Offre : GitLab Self-Managed
 
 {{< /details >}}
@@ -171,7 +171,7 @@ Pour modifier ces valeurs :
 
 {{< details >}}
 
-- Niveau : Premium, Ultimate
+- Édition :  Premium, Ultimate
 - Offre : GitLab Self-Managed
 
 {{< /details >}}
@@ -281,7 +281,7 @@ Vous pouvez configurer les niveaux de journalisation minimaux (verbosité) pour 
    ```
 
 > [!note]
-> Vous [ne pouvez pas modifier](https://gitlab.com/groups/gitlab-org/-/epics/6034) le `log_level` pour certains journaux GitLab, par exemple `production_json.log`, `graphql_json.log`, etc. Voir aussi [Remplacer le niveau de journalisation par défaut](https://docs.gitlab.com/administration/logs/#override-default-log-level).
+> Vous [ne pouvez pas modifier](https://gitlab.com/groups/gitlab-org/-/work_items/6034) le `log_level` pour certains logs GitLab, par exemple `production_json.log`, `graphql_json.log`, etc. Voir aussi [Remplacer le niveau de journalisation par défaut](https://docs.gitlab.com/administration/logs/#override-default-log-level).
 
 ## Définir un groupe de journaux personnalisé {#setting-a-custom-log-group}
 

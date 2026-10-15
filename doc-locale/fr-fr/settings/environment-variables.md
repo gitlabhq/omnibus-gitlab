@@ -7,7 +7,7 @@ title: "Définition de variables d'environnement personnalisées"
 
 {{< details >}}
 
-- Niveau : Free, Premium, Ultimate
+- Édition :  Free, Premium, Ultimate
 - Offre : GitLab Self-Managed
 
 {{< /details >}}
@@ -77,7 +77,7 @@ Vous devrez peut-être configurer un répertoire temporaire personnalisé si :
 
 - Votre `/tmp` est monté en tant que `tmpfs` avec un espace limité.
 - Les fichiers volumineux (tels que les objets LFS ou les artefacts CI) provoquent le remplissage de `/tmp`.
-- Les [sites secondaires Geo](https://docs.gitlab.com/ee/administration/geo/) manquent d'espace dans `/tmp` lors de la réplication du stockage d'objets.
+- Les [sites secondaires Geo](https://docs.gitlab.com/administration/geo/) manquent d'espace dans `/tmp` lors de la réplication du stockage d'objets.
 
 Pour configurer un répertoire temporaire personnalisé :
 

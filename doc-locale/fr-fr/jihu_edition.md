@@ -10,7 +10,7 @@ title: JiHu Edition
 
 GitLab a accordé une licence de sa technologie à une nouvelle société chinoise indépendante, appelée JiHu. Cette société indépendante contribuera à favoriser l'adoption de la plateforme DevOps complète GitLab en Chine et à développer la communauté GitLab et les contributions open source.
 
-Pour plus d'informations, consultez l'[annonce sur le blog](https://about.gitlab.com/blog/2021/03/18/gitlab-licensed-technology-to-new-independent-chinese-company/) et la [FAQ](https://about.gitlab.com/pricing/faq-jihu/).
+Pour plus d'informations, consultez l'[annonce sur le blog](https://about.gitlab.com/blog/gitlab-licensed-technology-to-new-independent-chinese-company/) et la [FAQ](https://about.gitlab.com/pricing/faq-jihu/).
 
 ## Prérequis {#prerequisites}
 
@@ -23,7 +23,7 @@ Une fois que vous avez conclu un contrat avec JiHu, un représentant JiHu vous c
 > [!note]
 > Si vous effectuez une installation pour la première fois, vous devez passer la variable `EXTERNAL_URL="<GitLab URL>"` pour définir votre nom de domaine préféré. L'installation configure et démarre automatiquement GitLab à cette URL. L'activation du protocole HTTPS nécessite une [configuration supplémentaire](settings/nginx.md#enable-https) pour spécifier les certificats.
 
-Veuillez vous référer à la page [GitLab Jihu Edition Install](https://gitlab.cn/install/) pour plus de détails sur l'installation ou la mise à jour d'un package JiHu Edition.
+Consultez la page [GitLab Jihu Edition Install](https://gitlab.cn/install) pour plus de détails sur l'installation ou la mise à jour d'un package JiHu Edition.
 
 ### Définir le mot de passe initial et appliquer la licence {#set-initial-password-and-apply-license}
 

@@ -7,7 +7,7 @@ title: Paramètres de la base de données
 
 {{< details >}}
 
-- Niveau : Free, Premium, Ultimate
+- Édition :  Free, Premium, Ultimate
 - Offre : GitLab Self-Managed
 
 {{< /details >}}
@@ -32,6 +32,11 @@ SELECT name,setting FROM pg_settings WHERE context = 'postmaster' AND name = '<s
 ```
 
 Si la modification du paramètre nécessite un redémarrage, la requête retournera le nom du paramètre et la valeur actuelle de ce paramètre dans l'instance PostgreSQL en cours d'exécution.
+
+Lorsque vous reconfigurez GitLab (`gitlab-ctl reconfigure`), si des paramètres PostgreSQL sont en attente d'un redémarrage, la commande affiche un avertissement qui répertorie chaque paramètre en attente avec sa valeur active et sa valeur en attente.
+
+> [!note]
+> La vérification des paramètres en attente s'applique uniquement à PostgreSQL géré par le package Linux. Elle ne couvre pas les nœuds gérés par Patroni dans un cluster Patroni ou HA.
 
 #### Redémarrage automatique lors du changement de version PostgreSQL {#automatic-restart-when-the-postgresql-version-changes}
 
@@ -244,6 +249,7 @@ Les paramètres suivants sont affectés dans le bloc `postgresql` :
 - `trust_auth_cidr_addresses` : Une liste de blocs d'adresses CIDR autorisés à se connecter au serveur, sans aucune authentification. Vous devez uniquement définir ce paramètre pour autoriser les connexions depuis les nœuds qui ont besoin de se connecter, comme GitLab Rails ou Sidekiq. Cela inclut les connexions locales lorsqu'ils sont déployés sur le même nœud ou depuis des composants tels que Postgres Exporter (`127.0.0.1/32`).
 - `sql_user` : Contrôle le nom d'utilisateur attendu pour l'authentification MD5. Par défaut, il s'agit de `gitlab`, et ce n'est pas un paramètre obligatoire.
 - `sql_user_password` : Définit le mot de passe que PostgreSQL acceptera pour l'authentification MD5.
+- `sql_superuser_password` : définit le mot de passe pour le superutilisateur `gitlab-psql`. Requis lors de l'utilisation de `md5_auth_cidr_addresses` avec Patroni afin que Patroni puisse s'authentifier pour les opérations `pg_rewind`. Lorsqu'il est défini, le mot de passe est également renseigné automatiquement dans la configuration de Patroni.
 
 1. Modifiez `/etc/gitlab/gitlab.rb` :
 
@@ -276,10 +282,10 @@ Tout client ou service GitLab qui se connectera via le réseau devra fournir les
 
 Pour configurer l'application `gitlab-rails` afin qu'elle se connecte à la base de données PostgreSQL via le réseau, plusieurs paramètres doivent être configurés :
 
-- `db_host` : Doit être défini sur l'adresse IP du serveur de base de données. Si cela se trouve sur la même instance que le service PostgreSQL, cela peut être `127.0.0.1` et ne nécessite pas d'authentification par mot de passe.
-- `db_port` : Définit le port du serveur PostgreSQL auquel se connecter, et doit être défini si `db_host` est défini.
-- `db_username` : Configure le nom d'utilisateur avec lequel se connecter à PostgreSQL. Par défaut, il s'agit de `gitlab`.
-- `db_password` : Doit être fourni lors de la connexion à PostgreSQL via TCP/IP, et depuis une instance dans le bloc `postgresql['md5_auth_cidr_addresses']` des paramètres ci-dessus. Cela n'est pas requis si vous vous connectez à `127.0.0.1` et que vous avez configuré `postgresql['trust_auth_cidr_addresses']` pour l'inclure.
+- `db_host` : Doit être défini sur l'adresse IP du serveur de base de données. Si cela se trouve sur la même instance que le service PostgreSQL, cela peut être `127.0.0.1` et ne nécessite pas d'authentification par mot de passe.
+- `db_port` : Définit le port du serveur PostgreSQL auquel se connecter, et doit être défini si `db_host` est défini.
+- `db_username` : Configure le nom d'utilisateur avec lequel se connecter à PostgreSQL. Par défaut, il s'agit de `gitlab`.
+- `db_password` : Doit être fourni lors de la connexion à PostgreSQL via TCP/IP, et depuis une instance dans le bloc `postgresql['md5_auth_cidr_addresses']` des paramètres ci-dessus. Cela n'est pas requis si vous vous connectez à `127.0.0.1` et que vous avez configuré `postgresql['trust_auth_cidr_addresses']` pour l'inclure.
 
 1. Modifiez `/etc/gitlab/gitlab.rb` :
 
@@ -334,6 +340,34 @@ Pour activer l'archivage WAL :
 
 1. [Reconfigurez GitLab](https://docs.gitlab.com/administration/restart_gitlab/#reconfigure-a-linux-package-installation) pour que les modifications prennent effet. Cela entraînera un redémarrage de la base de données.
 
+### Restreindre l'accès à la base de données entre les composants {#restrict-database-access-between-components}
+
+Par défaut, PostgreSQL accorde le rôle implicite `PUBLIC` `CONNECT` sur chaque base de données. Par conséquent, chaque utilisateur de base de données géré par le package Linux peut se connecter à chaque base de données gérée. Par exemple, l'utilisateur `registry` peut se connecter à `gitlabhq_production`, et l'utilisateur `gitlab` peut se connecter à `registry`. La propriété des tables empêche toujours la lecture des données, mais un utilisateur connecté peut inspecter les métadonnées de la base de données.
+
+Pour appliquer le principe du moindre privilège, activez la restriction d'accès :
+
+```ruby
+postgresql['restrict_database_access'] = true
+```
+
+Lorsqu'elle est activée, `gitlab-ctl reconfigure` effectue les opérations suivantes pour chaque base de données gérée :
+
+- Crée un rôle de connexion `NOLOGIN` nommé `<database>_connect`.
+- Accorde à ce rôle `CONNECT` sur la base de données et `USAGE` sur le schéma `public`.
+- Accorde le rôle de connexion aux utilisateurs de la base de données qui ont besoin d'un accès.
+- Accorde le rôle de connexion à `pgbouncer`, le seul utilisateur qui doit accéder à chaque base de données en pool pour exécuter sa requête d'authentification.
+- Révoque le privilège implicite `PUBLIC` `CONNECT`.
+
+Les octrois et la révocation s'exécutent dans une seule transaction, de sorte qu'un utilisateur légitime n'est jamais bloqué pendant la reconfiguration. La révocation est reportée à une reconfiguration ultérieure jusqu'à ce que chaque rôle requis, y compris `pgbouncer`, existe.
+
+Ce paramètre est défini par défaut sur `false`, de sorte que les mises à niveau n'entraînent aucun changement de privilège. Ne l'activez qu'après avoir confirmé qu'aucun outil externe ne se connecte en tant qu'utilisateur d'un composant à la base de données d'un autre composant. Ce paramètre s'applique à toutes les bases de données gérées par Omnibus.
+
+Les utilisateurs de sauvegarde et de restauration du registre de conteneurs constituent des exceptions au modèle de rôle de connexion. L'utilisateur de sauvegarde conserve un octroi `CONNECT` direct, et l'utilisateur de restauration est un `SUPERUSER`, de sorte que les deux contournent le rôle de connexion par base de données. Lorsque vous auditez `datacl`, attendez-vous à voir ces octrois directs en plus du rôle `<database>_connect`.
+
+L'application des règles s'effectue uniquement sur le primaire PostgreSQL. Dans un cluster Patroni, les modifications se répliquent vers les nœuds de secours via le journal write-ahead. La réplication WAL, Patroni et Consul ne sont pas affectés, car la réplication utilise un type de connexion distinct et le contrôle du cluster s'exécute en tant que superutilisateur.
+
+Pour plus d'informations, consultez [le ticket 9763](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/9763).
+
 ### Stocker les données PostgreSQL dans un répertoire différent {#store-postgresql-data-in-a-different-directory}
 
 Par défaut, tout est stocké sous `/var/opt/gitlab/postgresql`, contrôlé par l'attribut `postgresql['dir']`.
@@ -365,7 +399,7 @@ Si vous disposez d'un cluster Patroni (PostgreSQL HA) géré par GitLab, utilise
 
 Le package Linux fournit la commande `gitlab-ctl pg-upgrade` pour mettre à jour le serveur PostgreSQL packagé vers une version ultérieure (si elle est incluse dans le package). Cela met à jour PostgreSQL vers la [version livrée par défaut](https://docs.gitlab.com/administration/package_information/postgresql_versions/) lors des mises à niveau de packages, sauf si vous avez spécifiquement [refusé](#opt-out-of-automatic-postgresql-upgrades).
 
-Avant de mettre à niveau GitLab vers une version plus récente, consultez les [modifications spécifiques à la version](https://docs.gitlab.com/update/#version-specific-upgrading-instructions) du package Linux pour voir :
+Avant de mettre à niveau GitLab vers une version plus récente, consultez les [modifications spécifiques à la version](https://docs.gitlab.com/update/versions/) du package Linux pour voir :
 
 - Quand une version de base de données a changé.
 - Quand une mise à niveau est justifiée.
