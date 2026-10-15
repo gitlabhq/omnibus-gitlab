@@ -7,7 +7,7 @@ title: Dépannage de NGINX
 
 {{< details >}}
 
-- Niveau : Free, Premium, Ultimate
+- Édition :  Free, Premium, Ultimate
 - Offre : GitLab Self-Managed
 
 {{< /details >}}
@@ -28,7 +28,7 @@ javax.net.ssl.SSLHandshakeException: Received fatal alert: handshake_failure
 
 Ce problème survient lorsque vous utilisez un client IDE basé sur Java plus ancien pour interagir avec votre instance GitLab. Ces IDE peuvent utiliser le protocole TLS 1, que les installations de packages Linux ne prennent pas en charge par défaut.
 
-Pour résoudre ce problème, mettez à niveau les chiffrements sur votre serveur, comme l'utilisateur dans le [ticket 624](https://gitlab.com/gitlab-org/gitlab-foss/-/issues/624#note_299061).
+Pour résoudre ce problème, mettez à niveau les chiffrements sur votre serveur, comme l'utilisateur mentionné dans [le ticket 624](https://gitlab.com/gitlab-org/gitlab-foss/-/work_items/624#note_299061).
 
 S'il n'est pas possible d'apporter cette modification au serveur, vous pouvez revenir à l'ancien comportement en modifiant les valeurs dans votre `/etc/gitlab/gitlab.rb` :
 

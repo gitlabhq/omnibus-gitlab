@@ -7,7 +7,7 @@ title: Configuration de Redis
 
 {{< details >}}
 
-- Niveau : Free, Premium, Ultimate
+- Édition :  Free, Premium, Ultimate
 - Offre : GitLab Self-Managed
 
 {{< /details >}}
@@ -75,7 +75,7 @@ Voir <https://docs.gitlab.com/administration/redis/replication_and_failover/>.
 
 ## Utilisation de Google Cloud Memorystore {#using-google-cloud-memorystore}
 
-Google Cloud Memorystore [ne prend pas en charge la commande Redis `CLIENT`](https://cloud.google.com/memorystore/docs/redis/product-constraints#blocked_redis_commands). Par défaut, Sidekiq tente de définir `CLIENT` à des fins de débogage. Cela peut être désactivé via le paramètre de configuration suivant :
+Google Cloud Memorystore [ne prend pas en charge la commande Redis `CLIENT`](https://docs.cloud.google.com/memorystore/docs/redis/product-constraints#blocked_redis_commands). Par défaut, Sidekiq tente de définir `CLIENT` à des fins de débogage. Cela peut être désactivé via le paramètre de configuration suivant :
 
 ```ruby
 gitlab_rails['redis_enable_client'] = false
@@ -217,6 +217,8 @@ gitlab_rails['redis_connect_timeout'] = 3
 gitlab_rails['redis_read_timeout'] = 1
 gitlab_rails['redis_write_timeout'] = 1
 ```
+
+Ces délais d'expiration s'appliquent à tous les magasins Redis, y compris ceux que vous avez séparés avec leur propre paramètre `gitlab_rails['redis_<instance>_instance']`.
 
 ## Fournir une configuration sensible aux clients Redis sans stockage en texte clair {#provide-sensitive-configuration-to-redis-clients-without-plain-text-storage}
 

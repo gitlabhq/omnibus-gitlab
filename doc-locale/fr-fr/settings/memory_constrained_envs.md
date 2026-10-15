@@ -7,7 +7,7 @@ title: Exécuter GitLab dans un environnement à mémoire limitée
 
 {{< details >}}
 
-- Niveau : Free, Premium, Ultimate
+- Édition :  Free, Premium, Ultimate
 - Offre : GitLab Self-Managed
 
 {{< /details >}}
@@ -52,7 +52,7 @@ Ces systèmes offrent des performances adéquates pour exécuter de petites inst
 - [Raspberry PI 4 2 Go](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/).
 - [DigitalOcean Basic 2 Go avec SSD](https://www.digitalocean.com/pricing).
 - [Scaleway DEV1-S 2 Go/20 Go](https://www.scaleway.com/en/pricing/).
-- [GCS e2-small](https://cloud.google.com/compute/docs/machine-resource).
+- [GCS e2-small](https://docs.cloud.google.com/compute/docs/machine-resource).
 
 ## Configurer le Swap {#configure-swap}
 
@@ -137,15 +137,6 @@ gitaly['configuration'] = {
         'max_per_repo' => 3,
       },
     ],
-    cgroups: {
-        repositories: {
-            count: 2,
-        },
-        mountpoint: '/sys/fs/cgroup',
-        hierarchy_root: 'gitaly',
-        memory_bytes: 500000,
-        cpu_shares: 512,
-    },
 }
 
 gitaly['env'] = {
@@ -231,15 +222,6 @@ Pour désactiver ces fonctionnalités, accédez à la zone **Admin** de GitLab e
          'max_per_repo' => 3,
        },
      ],
-     cgroups: {
-       repositories: {
-         count: 2,
-       },
-       mountpoint: '/sys/fs/cgroup',
-       hierarchy_root: 'gitaly',
-       memory_bytes: 500000,
-       cpu_shares: 512,
-     },
    }
    gitaly['env'] = {
      'MALLOC_CONF' => 'dirty_decay_ms:1000,muzzy_decay_ms:1000',

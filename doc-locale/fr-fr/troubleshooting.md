@@ -7,7 +7,7 @@ title: "Dépannage de l'installation du package Linux"
 
 {{< details >}}
 
-- Niveau : Free, Premium, Ultimate
+- Édition :  Free, Premium, Ultimate
 - Offre : GitLab Self-Managed
 
 {{< /details >}}
@@ -30,7 +30,9 @@ sudo apt-get update
 sudo apt-get clean
 ```
 
-Une autre solution consiste à télécharger le package manuellement en sélectionnant le package approprié depuis le dépôt [des packages CE](https://packages.gitlab.com/gitlab/gitlab-ce) ou [des packages EE](https://packages.gitlab.com/gitlab/gitlab-ee) :
+Pour plus d'informations, consultez [ce commentaire sur le ticket](https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/628#note_1824330) et [la documentation apt de Debian sur les divergences de somme de hachage](https://wiki.debian.org/DebianRepository/Format).
+
+Pour contourner ce problème, téléchargez le package manuellement. Sélectionnez le package approprié depuis le dépôt des [packages CE](https://packages.gitlab.com/gitlab/gitlab-ce) ou des [packages EE](https://packages.gitlab.com/gitlab/gitlab-ee) :
 
 ```shell
 curl -LJO "https://packages.gitlab.com/gitlab/gitlab-ce/packages/ubuntu/trusty/gitlab-ce_8.1.0-ce.0_amd64.deb/download"
@@ -400,7 +402,7 @@ Ajoutez la ligne suivante à la configuration d'apt-cacher-ng (par exemple dans 
 PassThroughPattern: (packages\.gitlab\.com|packages-gitlab-com\.s3\.amazonaws\.com|*\.cloudfront\.net)
 ```
 
-Pour plus de détails sur la raison pour laquelle cette règle de passage est requise et comment la configurer, consultez la documentation de `apt-cacher-ng` pour les dépôts HTTPS/TLS.
+Pour en savoir plus sur `apt-cacher-ng` et les raisons pour lesquelles cette modification est nécessaire, consultez [la documentation apt-cacher-ng](https://www.unix-ag.uni-kl.de/~bloch/acng/html/).
 
 ## La mise en miroir de packages pour plusieurs distributions avec apt-mirror échoue {#mirroring-packages-for-multiple-distributions-using-apt-mirror-fails}
 
@@ -637,7 +639,7 @@ Si vous utilisez cette configuration, le service runit doit être démarré avan
 
 Le fichier d'unité systemd de GitLab utilise par défaut `multi-user.target` pour les champs `After` et `WantedBy`. Cela est fait pour s'assurer que le service s'exécute après les cibles `remote-fs` et `network`, et que GitLab fonctionne correctement.
 
-Cependant, cela interagit mal avec l'ordonnancement des unités de [cloud-init](https://cloudinit.readthedocs.io/en/latest/), utilisé par AWS Cloudformation.
+Cependant, cela interagit mal avec l'ordonnancement des unités propre à [cloud-init](https://docs.cloud-init.io/en/latest/), utilisé par AWS Cloudformation.
 
 Pour résoudre ce problème, les utilisateurs peuvent utiliser les paramètres `package['systemd_wanted_by']` et `package['systemd_after']` dans `gitlab.rb` pour spécifier les valeurs nécessaires à un ordonnancement correct et exécuter `sudo gitlab-ctl reconfigure`. Une fois la reconfiguration terminée, redémarrez le service `gitlab-runsvdir` pour que les modifications prennent effet.
 
@@ -758,7 +760,7 @@ Dans cet exemple :
 - Le miroir local s'exécute sur un système `RHEL 8`, `Rocky 8` ou `AlmaLinux 8`.
 - Le nom d'hôte utilisé pour le serveur web est `mirror.example.com`.
 - Pulp 3 se synchronise depuis le miroir local.
-- La mise en miroir concerne le [dépôt GitLab Enterprise Edition](https://packages.gitlab.com/gitlab/gitlab-ee).
+- La mise en miroir porte sur le [dépôt GitLab Enterprise Edition](https://packages.gitlab.com/gitlab/gitlab-ee/).
 
 #### Créer et configurer un serveur Apache {#create-and-configure-an-apache-server}
 
@@ -862,7 +864,7 @@ L'option `--delete` utilisée dans la commande `dnf reposync` supprime les RPM d
 
    Cette commande doit être exécutée périodiquement pour mettre à jour le miroir local avec les modifications apportées au dépôt GitLab.
 
-Une fois le dépôt synchronisé, vous pouvez créer une publication et une distribution pour le rendre disponible. Consultez <https://docs.pulpproject.org/pulp_rpm/> pour plus de détails.
+Une fois le dépôt synchronisé, vous pouvez créer une publication et une distribution pour le rendre disponible. Consultez <https://pulpproject.org/pulp_rpm/> pour plus de détails.
 
 ## Erreur : `E: connection refused to d20rj4el6vkp4c.cloudfront.net 443` {#error-e-connection-refused-to-d20rj4el6vkp4ccloudfrontnet-443}
 

@@ -7,7 +7,7 @@ title: Paramètres SMTP
 
 {{< details >}}
 
-- Niveau : Free, Premium, Ultimate
+- Édition :  Free, Premium, Ultimate
 - Offre : GitLab Self-Managed
 
 {{< /details >}}
@@ -137,7 +137,7 @@ Prérequis :
 - Un [mot de passe d'application](https://support.google.com/mail/answer/185833).
 
 > [!note]
-> Gmail a des [limites d'envoi strictes](https://support.google.com/a/answer/166852) qui peuvent nuire aux fonctionnalités à mesure que votre organisation se développe. Nous vous recommandons vivement d'utiliser un service transactionnel comme [SendGrid](https://sendgrid.com/en-us) ou [Mailgun](https://www.mailgun.com/) pour les équipes utilisant la configuration SMTP.
+> Gmail a des [limites d'envoi strictes](https://knowledge.workspace.google.com/admin/gmail/gmail-sending-limits-in-google-workspace) qui peuvent nuire aux fonctionnalités à mesure que votre organisation se développe. Nous recommandons vivement d'utiliser un service transactionnel tel que [SendGrid](https://www.twilio.com/en-us/sendgrid) ou [Mailgun](https://www.mailgun.com/) pour les équipes utilisant la configuration SMTP.
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -156,7 +156,7 @@ _N'oubliez pas de remplacer `my.email@gmail.com` par votre adresse e-mail et `my
 
 ### Relais SMTP Google {#google-smtp-relay}
 
-Vous pouvez acheminer les messages sortants non-Gmail via Google [en utilisant le service de relais SMTP Google](https://support.google.com/a/answer/2956491?hl=en).
+Vous pouvez acheminer les messages sortants non Gmail via Google [en utilisant le service de relais SMTP de Google](https://knowledge.workspace.google.com/admin/gmail/advanced/route-outgoing-smtp-relay-messages-through-google).
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -993,7 +993,7 @@ gitlab_rails['gitlab_email_reply_to'] = 'noreply@example.com'
 
 ### easyDNS (courrier sortant) {#easydns-outbound-mail}
 
-Vérifiez la disponibilité/l'activation et les paramètres de configuration dans le [panneau de contrôle](https://cp.easydns.com/manage/domains/mail/outbound/).
+Vérifiez la disponibilité/l'activation du service et les paramètres de configuration dans le panneau de configuration. Vous devez être connecté : `https://cp.easydns.com/manage/domains/mail/outbound/`.
 
 ```ruby
 gitlab_rails['smtp_enable'] = true
@@ -1384,8 +1384,8 @@ Pour plus d'informations, consultez [Understanding SPF, DKIM, and DMARC : A Simp
 Si vous utilisez un fournisseur cloud pour héberger votre instance GitLab et que vous utilisez le port 25 pour votre serveur SMTP, il est possible que votre fournisseur cloud bloque les connexions sortantes vers le port 25. Cela empêche GitLab d'envoyer tout courrier sortant. Vous pouvez suivre les instructions ci-dessous pour contourner ce problème en fonction de votre fournisseur cloud :
 
 - AWS : [Comment supprimer la restriction sur le port 25 de mon instance Amazon EC2 ou de ma fonction AWS Lambda ?](https://repost.aws/knowledge-center/ec2-port-25-throttle)
-- Azure : [Résoudre les problèmes de connectivité SMTP sortante dans Azure](https://learn.microsoft.com/en-us/azure/virtual-network/troubleshoot-outbound-smtp-connectivity)
-- GCP : [Envoi d'e-mails depuis une instance](https://cloud.google.com/compute/docs/tutorials/sending-mail)
+- Azure : [Résoudre les problèmes de connectivité SMTP sortante dans Azure](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-network/troubleshoot-outbound-smtp-connectivity)
+- GCP : [Envoi d'e-mails depuis une instance](https://docs.cloud.google.com/compute/docs/tutorials/sending-mail)
 
 ### Numéro de version incorrect lors de l'utilisation de SSL/TLS {#wrong-version-number-when-using-ssltls}
 

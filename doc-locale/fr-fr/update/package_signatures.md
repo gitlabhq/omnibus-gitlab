@@ -7,7 +7,7 @@ title: Signatures des packages Linux
 
 {{< details >}}
 
-- Niveau : Free, Premium, Ultimate
+- Édition :  Free, Premium, Ultimate
 - Offre : GitLab Self-Managed
 
 {{< /details >}}
@@ -64,7 +64,7 @@ Pour récupérer la dernière clé de signature du dépôt :
    ```
 
 > [!note]
-> L'utilisation de `apt-key` [a été dépréciée](https://blog.packagecloud.io/secure-solutions-for-apt-key-add-deprecated-messages/) et supprimée dans Debian 13.
+> L'utilisation de `apt-key` [a été dépréciée](https://manpages.debian.org/unstable/apt/apt-key.8.en.html) et supprimée dans Debian 13.
 >
 > Si vous utilisez `apt-key` et ne pouvez pas migrer vers la méthode `signed-by` (vous utilisez `apt-key` si votre fichier de liste de sources ne contient pas `signed-by`), exécutez la commande suivante en tant que root pour mettre à jour les clés publiques des dépôts GitLab :
 >
