@@ -7,7 +7,7 @@ title: Rôles de haute disponibilité
 
 {{< details >}}
 
-- Niveau : Free, Premium, Ultimate
+- Édition :  Free, Premium, Ultimate
 - Offre : GitLab Self-Managed
 
 {{< /details >}}
@@ -38,7 +38,7 @@ roles ['geo_primary_role']
 
 ## Rôles {#roles}
 
-La majorité des rôles suivants ne fonctionneront que sur une [GitLab Enterprise Edition](https://about.gitlab.com/install/ce-or-ee/), c'est-à-dire un package Linux `gitlab-ee`. Cela sera mentionné à côté de chaque rôle.
+La majorité des rôles suivants ne fonctionnent que sur GitLab Enterprise Edition, c'est-à-dire avec un paquet Linux `gitlab-ee`. Cela sera mentionné à côté de chaque rôle.
 
 ### Rôle Application GitLab {#gitlab-app-role}
 

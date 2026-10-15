@@ -109,8 +109,6 @@ Vous pouvez suivre la progression de la construction des packages sur `https://d
 
 ### Mise à jour des images cloud {#updating-cloud-images}
 
-Le processus de release des images cloud est documenté ici : <https://handbook.gitlab.com/handbook/alliances/cloud-images/>.
-
 De nouvelles images sont publiées dans les cas suivants :
 
 1. Il y a une nouvelle release mensuelle de GitLab.

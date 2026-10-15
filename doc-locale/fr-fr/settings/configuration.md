@@ -7,7 +7,7 @@ title: Options de configuration pour les installations de packages Linux
 
 {{< details >}}
 
-- Niveau : Free, Premium, Ultimate
+- Édition :  Free, Premium, Ultimate
 - Offre : GitLab Self-Managed
 
 {{< /details >}}
@@ -259,7 +259,7 @@ Pour modifier l'emplacement du répertoire,
 
 Si vous exécutez Gitaly sur un serveur distinct, consultez [la documentation sur la configuration de Gitaly](https://docs.gitlab.com/administration/gitaly/configure_gitaly/#configure-gitaly-clients).
 
-Si vous ne souhaitez pas déplacer tous les dépôts, mais plutôt déplacer des projets spécifiques entre des stockages de dépôts existants, utilisez le point de terminaison [Edit Project API](https://docs.gitlab.com/api/projects/#edit-a-project) et spécifiez l'attribut `repository_storage`.
+Si vous ne souhaitez pas déplacer tous les dépôts, mais plutôt déplacer des projets spécifiques entre des stockages de dépôts existants, utilisez le point de terminaison [Update Project API](https://docs.gitlab.com/api/projects/#update-a-project) et spécifiez l'attribut `repository_storage`.
 
 ## Modifier le nom de l'utilisateur ou du groupe Git {#change-the-name-of-the-git-user-or-group}
 
@@ -500,6 +500,8 @@ L'activation de ce paramètre empêche la création des répertoires suivants :
 | `/var/opt/gitlab/gitlab-rails/shared/dependency_proxy` | `0700`      | `git:git`        | Contient le proxy de dépendances |
 | `/var/opt/gitlab/gitlab-rails/shared/terraform_state`  | `0700`      | `git:git`        | Contient l'état Terraform |
 | `/var/opt/gitlab/gitlab-rails/shared/ci_secure_files`  | `0700`      | `git:git`        | Contient les fichiers sécurisés téléversés |
+| `/var/opt/gitlab/gitlab-rails/shared/agent_plan_content` | `0700`      | `git:git`        | Contient le contenu des plans d'agent |
+| `/var/opt/gitlab/gitlab-rails/shared/ci_catalog_bundles` | `0700`      | `git:git`        | Contient les bundles de composants du catalogue CI |
 | `/var/opt/gitlab/gitlab-rails/shared/pages`            | `0750`      | `git:gitlab-www` | Contient les pages utilisateur |
 | `/var/opt/gitlab/gitlab-rails/uploads`                 | `0700`      | `git:git`        | Contient les pièces jointes des utilisateurs |
 | `/var/opt/gitlab/gitlab-ci/builds`                     | `0700`      | `git:git`        | Contient les journaux de build CI |
@@ -567,7 +569,7 @@ Pour réactiver les métriques Rails :
 
 ## Configurer un blocage en cas d'échec d'authentification {#configure-a-failed-authentication-ban}
 
-Vous pouvez configurer un [blocage en cas d'échec d'authentification](https://docs.gitlab.com/security/rate_limits/#failed-authentication-ban-for-git-and-container-registry) pour Git et le registre de conteneurs. Lorsqu'un client est banni, un code d'erreur 403 est renvoyé.
+Vous pouvez configurer une [interdiction d'authentification échouée](https://docs.gitlab.com/rate_limits/abuse_bans/#failed-authentication-ban-for-git-and-container-registry) pour Git et le registre de conteneurs. Lorsqu'un client est banni, un code d'erreur 403 est renvoyé.
 
 Les paramètres suivants peuvent être configurés :
 
@@ -765,6 +767,55 @@ Pour modifier le préfixe des valeurs de cookies de session web générées :
    ```
 
 La valeur par défaut est une chaîne vide `""`.
+
+## Paramètres gérés {#managed-settings}
+
+Un paramètre géré remplace la valeur stockée dans la base de données. Les administrateurs ne peuvent pas modifier le paramètre depuis la zone **Admin** ou l'API REST.
+
+> [!note]
+> Dans les déploiements multinœuds et cloud-native hybrides, appliquez la même configuration de paramètres gérés à `gitlab.rb` sur chaque nœud exécutant Puma ou Sidekiq. Cela permet de maintenir la cohérence du paramètre sur tous les nœuds.
+
+Vous pouvez gérer ces paramètres :
+
+| Paramètre                     | Description |
+|-----------------------------|-------------|
+| `sidekiq_timezone_override` | Fuseau horaire utilisé pour évaluer les planifications cron des jobs Sidekiq. |
+
+Pour gérer le fuseau horaire de Sidekiq :
+
+1. Modifiez `/etc/gitlab/gitlab.rb` :
+
+   ```ruby
+   gitlab_rails['managed_settings']['settings'] = {
+     'sidekiq_timezone_override' => 'Europe/London'
+   }
+   ```
+
+1. Reconfigurer GitLab :
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
+
+La reconfiguration écrit les paramètres dans `/var/opt/gitlab/gitlab-rails/etc/managed_settings.yml` et redémarre Puma et Sidekiq. Si vous supprimez tous les paramètres gérés, la reconfiguration supprime le fichier.
+
+### Modifier le nom du gestionnaire {#change-the-managed-by-name}
+
+Dans la zone **Admin**, les paramètres gérés affichent le nom de la partie qui gère le paramètre. Le nom par défaut est `GitLab Omnibus`.
+
+Pour utiliser un nom différent :
+
+1. Modifiez `/etc/gitlab/gitlab.rb` :
+
+   ```ruby
+   gitlab_rails['managed_settings']['installation']['managed_by'] = 'ACME Corp'
+   ```
+
+1. Reconfigurer GitLab :
+
+   ```shell
+   sudo gitlab-ctl reconfigure
+   ```
 
 ## Fournir une configuration sensible aux composants sans stockage en texte brut {#provide-sensitive-configuration-to-components-without-plain-text-storage}
 

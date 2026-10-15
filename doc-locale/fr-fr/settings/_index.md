@@ -7,7 +7,7 @@ title: "Configuration d'une installation de package Linux"
 
 {{< details >}}
 
-- Niveau : Free, Premium, Ultimate
+- Édition :  Free, Premium, Ultimate
 - Offre : GitLab Self-Managed
 
 {{< /details >}}
@@ -30,3 +30,4 @@ title: "Configuration d'une installation de package Linux"
 - [SMTP](smtp.md)
 - [SSL](ssl/_index.md)
 - [Mise à l'échelle des images](image_scaling.md)
+- [Artifact Registry](artifact_registry.md)
