@@ -478,8 +478,12 @@ GitLab, another certificate must be used on the GitLab instance.
 
 ## Use custom SSL ciphers
 
-By default, the Linux package [uses SSL ciphers](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/0482fb343a4434ba3a2523a7fb576d2bbb2a3f5f/files/gitlab-cookbooks/gitlab/attributes/default.rb#L876) that are a combination of testing on
+By default, the Linux package defines default SSL ciphers and protocols that are a combination of testing on
 <https://gitlab.com> and various best practices contributed by the GitLab community.
+
+To inspect the default values, view [`nginx_helper.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/files/gitlab-cookbooks/nginx/libraries/helpers/nginx_helper.rb)
+on `master` and find the `ssl_ciphers` and `ssl_protocols` keys. To view the defaults for your installation,
+select the Git tag that matches your GitLab version.
 
 To change the SSL ciphers:
 
