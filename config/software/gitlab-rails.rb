@@ -410,5 +410,7 @@ build do
   delete "#{install_dir}/embedded/bin/gitlab-gem-license-generator"
 
   delete "#{install_dir}/embedded/service/gitlab-rails/ee/frontend_islands/node_modules" if EE
-  command "find #{install_dir}/embedded/service/gitlab-rails/ee/frontend_islands/apps -name 'node_modules' -type d -exec rm -rf {} +" if EE
+  # GitLab is removing ee/frontend_islands, so skip the cleanup when it is absent.
+  fe_islands_apps_dir = "#{install_dir}/embedded/service/gitlab-rails/ee/frontend_islands/apps"
+  command "test ! -d #{fe_islands_apps_dir} || find #{fe_islands_apps_dir} -name 'node_modules' -type d -exec rm -rf {} +" if EE
 end
