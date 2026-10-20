@@ -312,6 +312,13 @@ No changes.
 - [Update dependency gitlab-exporter to v16.8.0](gitlab-org/omnibus-gitlab@9a6db0449a815454ff3bcda61c0b8815015260cf) ([merge request](gitlab-org/omnibus-gitlab!9388))
 - [Update dependency redis/redis to v7.2.13](gitlab-org/omnibus-gitlab@e3a190bfadb2f56b59b241e166f091cb5753e419) ([merge request](gitlab-org/omnibus-gitlab!9351))
 
+## 19.0.10 (2026-10-20)
+
+### Changed (2 changes)
+
+- [Add Ruby regexp repeat ID overflow patch for 3.3, 3.4 and 4.0](gitlab-org/omnibus-gitlab@307243ca1c33815294eba3b460d52c5e7eb602da) ([merge request](gitlab-org/omnibus-gitlab!9926))
+- [Add Ruby regexp program size patch for 3.3 and 3.4](gitlab-org/omnibus-gitlab@04092f1d45f2c85be87cb5daee1aaceb7df02be8) ([merge request](gitlab-org/omnibus-gitlab!9926))
+
 ## 19.0.9 (2026-09-22)
 
 ### Fixed (2 changes)
