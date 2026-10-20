@@ -143,6 +143,12 @@ No changes.
 - [Bump Ruby to 3.3.12 to fix CVE-2026-41316 (erb)](gitlab-org/omnibus-gitlab@3012cc43f9151e6ef42ebfc34919715c6b65f13a) by @dmakovey ([merge request](gitlab-org/omnibus-gitlab!9634))
 - [Bump pgbouncer-exporter from 0.11.0 to 0.12.1](gitlab-org/omnibus-gitlab@6c2684c5202459ea7ace8e0a236b38dbd2760cbf) ([merge request](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/9628))
 
+## 19.2.9 (2026-10-20)
+
+### Changed (1 change)
+
+- [Add Ruby regexp repeat ID overflow patch for 3.3, 3.4 and 4.0](gitlab-org/omnibus-gitlab@7fafc8787c82ec7f5a926015c40d8d9ea5c04390) ([merge request](gitlab-org/omnibus-gitlab!9925))
+
 ## 19.2.8 (2026-10-07)
 
 ### Changed (1 change)
