@@ -222,6 +222,12 @@ No changes.
 
 - [Uninstall the default net-imap gem shipped with Ruby](gitlab-org/omnibus-gitlab@814da0ffe03af81d77d692464f0986e26325ef02) ([merge request](gitlab-org/omnibus-gitlab!9523))
 
+## 19.1.9 (2026-10-20)
+
+### Fixed (1 change)
+
+- [Treat Patroni streaming state as a running node](gitlab-org/omnibus-gitlab@b1c38124742856bb96042f692ac07354305c7333) ([merge request](gitlab-org/omnibus-gitlab!9793))
+
 ## 19.1.8 (2026-09-10)
 
 ### Changed (1 change)
