@@ -3,6 +3,12 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.4.3 (2026-10-20)
+
+### Changed (1 change)
+
+- [Add Ruby regexp repeat ID overflow patch for 3.3, 3.4 and 4.0](gitlab-org/security/omnibus-gitlab@6b85ccf01e8c0b231f5f9e06576db23d1642c6a0)
+
 ## 19.4.2 (2026-10-07)
 
 ### Changed (1 change)
