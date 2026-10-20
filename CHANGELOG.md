@@ -26,6 +26,12 @@ No changes.
 - [Update dependency node-exporter to v1.12.1](gitlab-org/omnibus-gitlab@96e6b58a15f46fa3c7837efbea85319fd7c926a3) ([merge request](gitlab-org/omnibus-gitlab!9327))
 - [Support configuring `import_export_project_cleanup_worker_cron`](gitlab-org/omnibus-gitlab@6ffb47888c863cf05cc7a8b5169435a1fd8ff3f3) by @brodock ([merge request](gitlab-org/omnibus-gitlab!9681))
 
+## 19.4.3 (2026-10-20)
+
+### Changed (1 change)
+
+- [Add Ruby regexp repeat ID overflow patch for 3.3, 3.4 and 4.0](gitlab-org/security/omnibus-gitlab@6b85ccf01e8c0b231f5f9e06576db23d1642c6a0)
+
 ## 19.4.2 (2026-10-07)
 
 ### Changed (1 change)
