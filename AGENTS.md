@@ -60,7 +60,7 @@ Component versions are read from environment variables (e.g. `GITLAB_VERSION`, `
 Use the Default MR template (`.gitlab/merge_request_templates/Default.md`) when creating MRs. It requires:
 - A "What does this MR do?" section
 - Related issues
-- Checklist including pipeline status, labeling (`~"workflow::ready for review"`), and UBT checks if applicable
+- Checklist including pipeline status, marking the MR as ready and requesting a reviewer, and UBT checks if applicable
 
 ## CI/CD
 

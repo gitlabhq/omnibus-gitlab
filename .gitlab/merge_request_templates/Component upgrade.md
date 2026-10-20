@@ -23,7 +23,7 @@ For anything in this list which will not be completed, please provide a reason i
 - [ ] MR targets the appropriate branch.
 - [ ] Component test plan copied into MR description.
 - [ ] Latest merged results pipeline is green.
-- [ ] When ready for review, MR is labeled ~"workflow::ready for review" per the [Distribution MR workflow](https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/distribution/merge_requests/).
+- [ ] When ready for review, MR is marked as ready (not a draft) and a reviewer is requested. Pick the reviewer suggested by the reviewer roulette, or one of the [project maintainers](https://gitlab-org.gitlab.io/gitlab-roulette/?currentProject=omnibus-gitlab&visible=maintainer%7Cbuild&visible=maintainer%7Cconfigure).
 - [ ] Ensure the equivalent update for [Cloud Native GitLab](https://gitlab.com/gitlab-org/build/CNG/-/merge_requests) exists.
 - [ ] UBT version and corresponding checksum hash have been updated and referenced in the merge request if applicable.
   - [ ] UBT EE pipeline (`Trigger:ee-package-ubt`) is green
@@ -46,6 +46,10 @@ should trigger these jobs for you during the review process.
 - [ ] Integration tests added to [GitLab QA](https://gitlab.com/gitlab-org/gitlab-qa).
 - [ ] Equivalent MR/issue for the [GitLab Chart](https://gitlab.com/gitlab-org/charts/gitlab) opened.
 - [ ] Potential values for new configuration settings validated. Formats such as integer `10`, duration `10s`, URI `scheme://user:passwd@host:port` may require quotation or other special handling when rendered in a template and written to a configuration file.
+
+### Reviewer checklist
+
+- [ ] As soon as you begin reviewing, select **Start a review** on your first comment so the MR shows *Reviewer started review*.
 
 ## Test plan
 
