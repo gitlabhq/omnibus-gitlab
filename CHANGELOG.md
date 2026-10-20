@@ -400,6 +400,17 @@ No changes.
 - [Remove Spamcheck from Omnibus-GitLab for 19.0](gitlab-org/omnibus-gitlab@ca64c4627e2b95a2dec19e44e3f76561ebf4afb2) ([merge request](gitlab-org/omnibus-gitlab!9366))
 - [Remove Mattermost for SLES-12.5](gitlab-org/omnibus-gitlab@580302851cb4486434e0db203d4a1062b9abc4e0) ([merge request](gitlab-org/omnibus-gitlab!9274))
 
+## 18.11.13 (2026-10-20)
+
+### Changed (2 changes)
+
+- [Add Ruby regexp repeat ID overflow patch for 3.3, 3.4 and 4.0](gitlab-org/omnibus-gitlab@a59c9f7147bace24be4ac2eb8a0879bd272e97b3) ([merge request](gitlab-org/omnibus-gitlab!9940))
+- [Add Ruby regexp program size patch for 3.3 and 3.4](gitlab-org/omnibus-gitlab@1986fad68aac77ae54dbd496a79a42f343a9b8e4) ([merge request](gitlab-org/omnibus-gitlab!9940))
+
+### Security (1 change)
+
+- [Mattermost Security Updates August 13, 2026](gitlab-org/omnibus-gitlab@5fb638f5555288246c4ef2e7960e90f8f82e4639) ([merge request](gitlab-org/omnibus-gitlab!9799))
+
 ## 18.11.12 (2026-09-22)
 
 ### Fixed (1 change)
