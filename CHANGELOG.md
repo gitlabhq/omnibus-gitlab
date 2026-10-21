@@ -3,6 +3,10 @@
 The latest version of this file can be found at the master branch of the
 omnibus-gitlab repository.
 
+## 19.5.1 (2026-10-20)
+
+No changes.
+
 ## 19.5.0 (2026-10-15)
 
 ### Fixed (3 changes)
@@ -21,6 +25,12 @@ omnibus-gitlab repository.
 - [Advertise grpcs:// to agents by default in the Linux package](gitlab-org/omnibus-gitlab@a765e5c400c12419d1ebfa9bf2ffb03b542b48d4) ([merge request](gitlab-org/omnibus-gitlab!9761))
 - [Update dependency node-exporter to v1.12.1](gitlab-org/omnibus-gitlab@96e6b58a15f46fa3c7837efbea85319fd7c926a3) ([merge request](gitlab-org/omnibus-gitlab!9327))
 - [Support configuring `import_export_project_cleanup_worker_cron`](gitlab-org/omnibus-gitlab@6ffb47888c863cf05cc7a8b5169435a1fd8ff3f3) by @brodock ([merge request](gitlab-org/omnibus-gitlab!9681))
+
+## 19.4.3 (2026-10-20)
+
+### Changed (1 change)
+
+- [Add Ruby regexp repeat ID overflow patch for 3.3, 3.4 and 4.0](gitlab-org/security/omnibus-gitlab@6b85ccf01e8c0b231f5f9e06576db23d1642c6a0)
 
 ## 19.4.2 (2026-10-07)
 
@@ -73,6 +83,12 @@ No changes.
 - [Update NGINX from 1.31.0 to 1.31.4](gitlab-org/omnibus-gitlab@c020051129d5101c69903b7c4392707fc301665b)
 - [Add ./third_party/icu to dependency_decisions](gitlab-org/omnibus-gitlab@7680ad38cc280450e02e4c3ba9617832cbbc61cd)
 - [Update faraday gem to v2.14.3](gitlab-org/omnibus-gitlab@6378aa0572961cc0fbfd5d49bd3f09cf79079105) ([merge request](gitlab-org/omnibus-gitlab!9686))
+
+## 19.3.6 (2026-10-20)
+
+### Changed (1 change)
+
+- [Add Ruby regexp repeat ID overflow patch for 3.3, 3.4 and 4.0](gitlab-org/security/omnibus-gitlab@4d47cdb7ec9fed9cfdc5fde88cb779b8dd6f8113)
 
 ## 19.3.5 (2026-10-12)
 
