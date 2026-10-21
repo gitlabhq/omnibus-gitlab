@@ -1,3 +1,7 @@
+# Include optional user configuration (/etc/gitlab is a persisted volume).
+# For most keywords, sshd uses the first value it obtains.
+Include /etc/gitlab/sshd_config.d/*.conf
+
 Port 22
 ChallengeResponseAuthentication no
 HostKey /etc/gitlab/ssh_host_rsa_key

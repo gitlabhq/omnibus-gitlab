@@ -145,6 +145,11 @@ if [[ "${GITLAB_DISABLE_OPENSSH}" != 'true' ]]; then
 	ln -sf /opt/gitlab/embedded/bin/sv /opt/gitlab/init/sshd
 	mkdir -p /var/run/sshd
 	mkdir -p /var/log/gitlab/sshd
+
+  if ! sshd_check=$(/usr/sbin/sshd -t -f /etc/ssh/sshd_config 2>&1); then
+    echo "sshd configuration is invalid (check /etc/ssh/sshd_config.d/)"
+    echo "${sshd_check}"
+  fi
 fi
 
 if [ -n "${GITLAB_PRE_RECONFIGURE_SCRIPT+x}" ]; then
