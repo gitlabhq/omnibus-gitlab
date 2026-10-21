@@ -154,6 +154,18 @@ postgresql['port'] = 2345
 puma['port'] = 3456
 ```
 
+When you choose a new port, make sure no other bundled service uses it by default.
+For example:
+
+- If `external_url` uses port `8080`, NGINX listens on port `8080` and Puma can't
+  bind to its default port. Puma keeps restarting and GitLab returns `502` errors.
+- If you move Puma to port `8092`, it conflicts with the Sidekiq health check server.
+  Whichever service starts second keeps restarting.
+
+For the default ports of all bundled services, see
+[package defaults](https://docs.gitlab.com/administration/package_information/defaults/).
+To see which process is using a port, run `sudo ss -ltnp`.
+
 For NGINX port changes please see [Setting the NGINX listen port](settings/nginx.md#set-the-nginx-listen-port).
 
 ## Git user does not have SSH access
