@@ -135,6 +135,18 @@ RSpec.describe PackageRepository::PulpRepository::DebPackage do
       expect(cmd[7]).to eq('gitlab-gitlab-ee-ubuntu-noble') # --repository value
       expect(cmd[9]).to eq('noble') # --distribution value
     end
+
+    it 'does not include --no-publish, because the deb upload command has no such option' do
+      cmd = package_type.build_upload_command(
+        file_path: 'pkg/ubuntu-focal/gitlab-ce.deb',
+        repository_name: 'gitlab-unstable-ubuntu-focal',
+        distribution_version: 'focal',
+        component: 'main',
+        chunk_size: 10_000_000
+      )
+
+      expect(cmd).not_to include('--no-publish')
+    end
   end
 end
 
@@ -215,6 +227,11 @@ RSpec.describe PackageRepository::PulpRepository::RpmPackage do
   end
 
   describe '#build_upload_command' do
+    before do
+      allow(ENV).to receive(:[]).and_call_original
+      stub_env_var('PULP_CLI_PUBLISH', nil)
+    end
+
     it 'builds correct rpm upload command' do
       cmd = package_type.build_upload_command(
         file_path: 'pkg/el-8/gitlab-ce.rpm',
@@ -256,6 +273,67 @@ RSpec.describe PackageRepository::PulpRepository::RpmPackage do
 
       expect(cmd).not_to include('--distribution')
       expect(cmd).not_to include('--component')
+    end
+
+    context 'when PULP_CLI_PUBLISH is false' do
+      before do
+        stub_env_var('PULP_CLI_PUBLISH', 'false')
+      end
+
+      it 'includes --no-publish as the last element' do
+        cmd = package_type.build_upload_command(
+          file_path: 'pkg/el-8/gitlab-ce.rpm',
+          repository_name: 'gitlab-unstable-el-8-x86_64',
+          distribution_version: '8',
+          component: 'main',
+          chunk_size: 10_000_000
+        )
+
+        expect(cmd).to eq(['pulp', 'rpm', 'content', '-t', 'package', 'upload',
+                           '--file', 'pkg/el-8/gitlab-ce.rpm',
+                           '--repository', 'gitlab-unstable-el-8-x86_64',
+                           '--chunk-size', '10000000',
+                           '--no-publish'])
+      end
+    end
+
+    context 'when PULP_CLI_PUBLISH is true' do
+      before do
+        stub_env_var('PULP_CLI_PUBLISH', 'true')
+      end
+
+      it 'does not include --no-publish' do
+        cmd = package_type.build_upload_command(
+          file_path: 'pkg/el-8/gitlab-ce.rpm',
+          repository_name: 'gitlab-unstable-el-8-x86_64',
+          distribution_version: '8',
+          component: 'main',
+          chunk_size: 10_000_000
+        )
+
+        expect(cmd).to eq(['pulp', 'rpm', 'content', '-t', 'package', 'upload',
+                           '--file', 'pkg/el-8/gitlab-ce.rpm',
+                           '--repository', 'gitlab-unstable-el-8-x86_64',
+                           '--chunk-size', '10000000'])
+      end
+    end
+
+    context 'when PULP_CLI_PUBLISH has another value' do
+      before do
+        stub_env_var('PULP_CLI_PUBLISH', 'no')
+      end
+
+      it 'does not include --no-publish' do
+        cmd = package_type.build_upload_command(
+          file_path: 'pkg/el-8/gitlab-ce.rpm',
+          repository_name: 'gitlab-unstable-el-8-x86_64',
+          distribution_version: '8',
+          component: 'main',
+          chunk_size: 10_000_000
+        )
+
+        expect(cmd).not_to include('--no-publish')
+      end
     end
   end
 end
