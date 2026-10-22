@@ -90,6 +90,8 @@ These variables are required to release packages built by the pipeline.
 | `AWS_AMI_ACCESS_KEY_ID`         | Account ID for read/write access to publish the AWS AMIs. |
 | `AWS_MARKETPLACE_ARN`           | AWS ARN to allow AWS Marketplace access our official AMIs. |
 | `PACKAGE_PROMOTION_RUNNER_TAG`  | Tag associated with the shared runners used to run package promotion jobs. |
+| `PULP_USER`                     | User name used by CI/CD to upload packages to Pulp. |
+| `PULP_PASSWORD`                 | Password used by CI/CD to upload packages to Pulp. |
 
 **Available**:
 
@@ -110,6 +112,13 @@ These additional variables are available to override or enable different build b
 | `GITLAB_COM_PKGS_BUILDS_BUCKET`  | GCS bucket where regular branch packages are pushed. |
 | `GITLAB_COM_PKGS_SA_FILE`        | Service account key used for pushing release packages for SaaS deployments, it must have write access to the pkgs bucket. |
 | `GITLAB_NAMESPACE`               | Used to override image URLs in the Dev instance, since the top-level name there diverges from `gitlab-org` to `gitlab`. |
+| `PULP_URL`                       | Base URL of the Pulp server. Defaults to `https://pulp.gitlab.com` for uploads. The package availability check jobs (`scripts/ci/install_package.sh`) require it. |
+| `PULP_REPO`                      | Overrides the Pulp repository that packages are uploaded to, for example `unstable`. The Docker image build also writes it to the image's `RELEASE` file. |
+| `PULP_UPLOAD_TIMEOUT`            | Timeout in seconds for each Pulp upload command. Defaults to `1800`. |
+| `PULP_CHUNK_SIZE`                | Chunk size in bytes for Pulp uploads. Defaults to `10000000`. Values that are not positive integers use the default. |
+| `PULP_CLI_PUBLISH`               | Set to `false` to upload RPM packages with `--no-publish`, so the `pulp` CLI does not publish the Pulp repository after each upload. The Pulp RPM repositories have `autopublish` enabled, so Pulp still publishes them during the upload. Defaults to `true`. |
+| `PULP_USER_RO`                   | Read-only Pulp user name. The package availability check jobs (`gitlab-ci-config/check-packages.yml`) use it as `PULP_USER`. |
+| `PULP_PASSWORD_RO`               | Read-only Pulp password. The package availability check jobs (`gitlab-ci-config/check-packages.yml`) use it as `PULP_PASSWORD`. |
 
 ## Unknown/outdated variables
 
