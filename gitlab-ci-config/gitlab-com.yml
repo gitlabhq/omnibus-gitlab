@@ -918,6 +918,7 @@ pages:
   CACHE_EDITION: ${EDITION}
   ee: ${ee}
   UBT_TEST_BUILD: ${UBT_TEST_BUILD}
+  GITLAB_ASSETS_TAG: ${GITLAB_ASSETS_TAG}
 
 build-package-on-all-os:
   stage: package
