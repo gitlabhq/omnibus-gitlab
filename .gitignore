@@ -21,7 +21,7 @@ tags
 gitlab-licenses/*
 public/*
 config/projects/simple.rb
-.markdownlintrc
+.rumdl_cache
 .DS_Store
 .yardoc
 yard

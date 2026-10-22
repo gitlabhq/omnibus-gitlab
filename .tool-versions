@@ -4,3 +4,4 @@ ruby 3.3.12
 markdownlint-cli2 0.23.2
 lychee 0.24.2
 vale 3.21.0
+rumdl 0.2.69

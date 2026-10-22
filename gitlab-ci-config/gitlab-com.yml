@@ -268,6 +268,7 @@ docs-lint markdown:
     - printf "outputFormatters\u003A\n  -\n    - 'markdownlint-cli2-formatter-codequality'\n    - severity\u003A 'blocker'\n" >> .markdownlint-cli2.yaml
     # Lint Markdown
     - markdownlint-cli2 'doc/**/*.md'
+    - rumdl check --config doc/.rumdl.toml doc
   artifacts:
     when: always
     expire_in: 2 weeks
