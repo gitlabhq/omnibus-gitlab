@@ -311,7 +311,7 @@ further support.
 ## Error: `certificate signed by unknown authority`
 
 Besides getting the errors mentioned in
-[Using an internal CA certificate with GitLab](ssl_troubleshooting.md#using-an-internal-ca-certificate-with-gitlab),
+[Using an internal CA certificate with GitLab](#using-an-internal-ca-certificate-with-gitlab),
 your CI pipelines may get stuck in `Pending` status. In the runner logs you may
 see the following error message:
 
