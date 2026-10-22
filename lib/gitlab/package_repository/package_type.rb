@@ -1,3 +1,5 @@
+require_relative '../util'
+
 class PackageRepository
   class PulpRepository < Base
     # Base class for package types
@@ -126,13 +128,19 @@ class PackageRepository
 
       # Builds the upload command for RPM packages
       # Does not include --distribution and --component flags, as compared to the deb upload command
+      #
+      # With PULP_CLI_PUBLISH=false, adds --no-publish, so the pulp CLI does not start a separate
+      # publish task after the upload. The RPM repositories have autopublish enabled, so Pulp
+      # publishes them during the upload. By default, the pulp CLI publishes after each upload.
       def build_upload_command(file_path:, repository_name:, distribution_version:, component:, chunk_size:)
-        [
+        cmd = [
           "pulp", type_name, "content", "-t", "package", "upload",
           "--file", file_path,
           "--repository", repository_name,
           "--chunk-size", chunk_size.to_s
         ]
+        cmd << "--no-publish" if Gitlab::Util.get_env('PULP_CLI_PUBLISH') == 'false'
+        cmd
       end
     end
   end
