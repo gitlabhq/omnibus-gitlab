@@ -145,6 +145,15 @@ build do
 
   patches += %w[regexp-repeat-id-overflow] if version.satisfies?('>= 3.3.0', '< 4.1.0')
 
+  # Backport both commits of https://github.com/ruby/ruby/pull/10899 to stop
+  # major GC from forcing Copy-on-Write when it marks iseq call caches
+  # (iseq-callcache-cow) and block environments (imemo-env-cow), which adds
+  # ~115 MiB of private memory per Puma worker. The call-cache write is a
+  # Ruby 3.3 regression; the block-environment write predates 3.2. Both are
+  # included upstream in Ruby 3.4, so these patches are only needed for 3.3.
+  # See https://gitlab.com/gitlab-org/gitlab/-/work_items/634879.
+  patches += %w[iseq-callcache-cow imemo-env-cow] if version.satisfies?('>= 3.3.0', '< 3.4.0')
+
   ruby_version = Gem::Version.new(version).canonical_segments[0..1].join('.')
 
   patches.each do |patch_name|
